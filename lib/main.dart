@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:petland/modules/authentication/splash.dart';
-import 'package:petland/modules/home/home_page.dart';
 import 'package:petland/themes/dartTheme.dart';
 import 'package:petland/themes/lightTheme.dart';
 import 'package:petland/utils/app_internalization.dart';
@@ -28,9 +27,15 @@ void main() {
   );
 }
 
+Image splash = Image.asset(
+  'assets/image/splash.png',
+  fit: BoxFit.fill,
+);
+
 class PetLand extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    precacheImage(splash.image, context);
     return LayoutBuilder(builder: (context, constraints) {
       return OrientationBuilder(builder: (context, orientation) {
         Responsive.init(constraints, orientation);

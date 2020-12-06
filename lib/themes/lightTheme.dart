@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:petland/themes/color.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:petland/themes/font.dart';
 
 final lightTheme = ThemeData(
   primarySwatch: Colors.blue,
@@ -22,12 +23,9 @@ final lightTheme = ThemeData(
   iconTheme: IconThemeData(size: 21, color: HexColor('#444444')),
   dividerColor: Colors.black.withOpacity(0.2),
   textTheme: TextTheme(
-    bodyText2: GoogleFonts.rubik(
-        letterSpacing: 0.15, fontSize: 13.5, fontWeight: FontWeight.w400),
-    bodyText1: GoogleFonts.rubik(
-        letterSpacing: 0.1, fontSize: 12.5, fontWeight: FontWeight.w400),
-    button: GoogleFonts.rubik(
-        letterSpacing: 0.2, fontSize: 14, fontWeight: FontWeight.w400),
+    bodyText2: ptBody(),
+    bodyText1: ptSmall(),
+    button: ptButton(),
   ),
   visualDensity: VisualDensity.adaptivePlatformDensity,
 );
