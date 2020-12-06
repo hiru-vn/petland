@@ -45,7 +45,7 @@ class AppInternalization {
     print('locale ${lc.languageCode} country ${lc.countryCode}');
     _conditionLastUserSelectLanguage(lc);
     String jsonContent =
-        await rootBundle.loadString("assets/internalization.json");
+        await rootBundle.loadString("assets/language/internalization.json");
     _internalizationData = json.decode(jsonContent);
     return this;
   }

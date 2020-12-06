@@ -37,7 +37,7 @@ dev_dependencies:
   sentry: ">=3.0.0 <4.0.0"
   google_fonts: ^1.1.1
   shared_preferences: ^0.5.12+2
-
+  flutter_spinkit: "^4.1.2"
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -50,7 +50,8 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/
+    - assets/language/
+    - assets/image/
     
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
