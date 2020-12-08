@@ -8,7 +8,7 @@ class WelcomePage extends StatelessWidget {
       body: Container(
         child: Column(
           children: [
-            SpacingBox(h: 5)
+            SpacingBox(h: 5),
           ],
         ),
       ),
