@@ -3,8 +3,7 @@ import 'package:petland/themes/color.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 final darkTheme = ThemeData(
-  primarySwatch: Colors.blue,
-  primaryColor: HexColor('#347af0'),
+  primaryColor: HexColor('#48da9c'),
   accentColor: HexColor('#f1f8fe'),
   bottomAppBarColor: HexColor('#0E2036'),
   scaffoldBackgroundColor: HexColor('#ffffff'),

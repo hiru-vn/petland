@@ -3,6 +3,18 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+Color ptPrimaryColor(BuildContext context) => Theme.of(context).primaryColor;
+Color ptSecondaryColor(BuildContext context) => Theme.of(context).accentColor;
+Color ptPrimaryColorLight(BuildContext context) =>
+    Theme.of(context).primaryColorLight;
+Color ptPrimaryColorDark(BuildContext context) =>
+    Theme.of(context).primaryColorDark;
+Color ptBackgroundColor(BuildContext context) =>
+    Theme.of(context).backgroundColor;
+Color ptAccentColor(BuildContext context) => HexColor('#ffe7e7');
+Color ptLineColor(BuildContext context) => Colors.black.withOpacity(0.2);
+Color ptGreyColor(BuildContext context) => HexColor('#c4c4c4');
+
 class HexColor extends Color {
   static const MethodChannel _channel = const MethodChannel('hexcolor');
 
