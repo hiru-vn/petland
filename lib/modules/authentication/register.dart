@@ -6,9 +6,7 @@ import 'package:petland/share/widgets/expand_btn.dart';
 import 'package:petland/share/widgets/input.dart';
 import 'package:petland/share/widgets/page_builder.dart';
 import 'package:petland/share/widgets/spacing_box.dart';
-import 'package:petland/themes/color.dart';
-import 'package:petland/themes/font.dart';
-import 'package:petland/utils/constants.dart';
+import 'package:petland/share/import.dart';
 
 class RegisterPage extends StatelessWidget {
   static navigate(BuildContext context) {
@@ -22,7 +20,7 @@ class RegisterPage extends StatelessWidget {
       extendBodyBehindAppBar: true,
       appBar: MyAppBar(
         leading: BackBtn(),
-        bgColor: HexColor('#21323A'),
+        bgColor: ptDartColor(context),
       ),
       backgroundColor: HexColor('#21323A'),
       body: SingleChildScrollView(

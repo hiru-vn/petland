@@ -1,9 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:petland/main.dart';
 import 'package:petland/modules/authentication/welcome.dart';
-import 'package:petland/navigator.dart';
-import 'package:petland/share/widgets/page_builder.dart';
-import 'package:petland/utils/constants.dart';
+import 'package:petland/share/import.dart';
+
 
 class SplashPage extends StatelessWidget {
   static navigate(BuildContext context) {

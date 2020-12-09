@@ -5,6 +5,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:petland/modules/authentication/login.dart';
 import 'package:petland/modules/authentication/register.dart';
 import 'package:petland/modules/authentication/splash.dart';
+import 'package:petland/modules/home/home_page.dart';
 import 'package:petland/navigator.dart';
 import 'package:petland/themes/dartTheme.dart';
 import 'package:petland/themes/lightTheme.dart';
@@ -63,7 +64,7 @@ class PetLand extends StatelessWidget {
             darkTheme: darkTheme,
             themeMode: ThemeMode.light,
             navigatorKey: navigatorKey,
-            home: SplashPage(),
+            home: HomePage(),
           ),
         );
       });

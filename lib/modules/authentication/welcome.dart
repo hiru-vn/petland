@@ -1,12 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:petland/modules/authentication/login.dart';
 import 'package:petland/modules/authentication/register.dart';
-import 'package:petland/navigator.dart';
-import 'package:petland/share/widgets/expand_btn.dart';
-import 'package:petland/share/widgets/page_builder.dart';
-import 'package:petland/share/widgets/spacing_box.dart';
-import 'package:petland/themes/color.dart';
-import 'package:petland/themes/font.dart';
+import 'package:petland/share/import.dart';
+
 
 class WelcomePage extends StatelessWidget {
   static navigate(BuildContext context) {
@@ -16,7 +11,7 @@ class WelcomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: HexColor('#21323A'),
+      backgroundColor: ptDartColor(context),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32),

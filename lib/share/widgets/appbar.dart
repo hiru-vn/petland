@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:petland/themes/color.dart';
@@ -23,7 +22,9 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           SizedBox(
-              height: 27, width: 27, child: Image.asset('assets/image/logo.png')),
+              height: 27,
+              width: 27,
+              child: Image.asset('assets/image/logo.png')),
           SizedBox(width: 6),
           Padding(
             padding: const EdgeInsets.only(top: 4),
