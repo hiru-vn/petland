@@ -13,3 +13,4 @@ export 'package:petland/share/widgets/page_builder.dart';
 export 'package:petland/share/widgets/expand_btn.dart';
 export 'package:petland/share/widgets/back_btn.dart';
 export 'package:petland/share/widgets/input.dart';
+export 'package:material_design_icons_flutter/material_design_icons_flutter.dart';

@@ -15,7 +15,7 @@ import 'package:sentry/sentry.dart';
 
 final _sentry = SentryClient(
     dsn:
-        "https://1fdc4ecf3fd142a8b1a846610ac95994@o396604.ingest.sentry.io/5498833");
+        "https://43006013b62342d59158fea27e020902@o396604.ingest.sentry.io/5538831");
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 

@@ -1,3 +1,5 @@
+import 'package:petland/modules/home/bottom_navigator.dart';
+import 'package:petland/modules/story/story_page.dart';
 import 'package:petland/share/import.dart';
 
 class HomePage extends StatefulWidget {
@@ -8,14 +10,12 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
   int _selectedIndex = 0;
-  List<Widget> _widgetOptions = <Widget>[];
-  List<BottomNavigationBarItem> _listBottomNavBarItems =
-      <BottomNavigationBarItem>[];
+  List<Widget> _pages = <Widget>[];
 
   @override
   void initState() {
-    _widgetOptions.addAll([
-      Container(),
+    _pages.addAll([
+      StoryPage(),
       Container(),
       Container(),
       Container(),
@@ -31,16 +31,6 @@ class _HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
-    _listBottomNavBarItems = [
-      BottomNavigationBarItem(
-        icon: Icon(Icons.home),
-        label: 'Transaction',
-      ),
-      BottomNavigationBarItem(
-        icon: Icon(Icons.settings),
-        label: 'Setting',
-      )
-    ];
     return WillPopScope(
       onWillPop: () async {
         final bool flag = await showConfirmDialog(context, 'Close the app?',
@@ -50,26 +40,16 @@ class _HomePageState extends State<HomePage>
       child: Scaffold(
         body: IndexedStack(
           index: _selectedIndex,
-          children: _widgetOptions,
+          children: _pages,
         ),
-        bottomNavigationBar: ClipRRect(
-          borderRadius: BorderRadius.only(
-            topRight: Radius.circular(30),
-            topLeft: Radius.circular(30),
-          ),
-          child: BottomNavigationBar(
-            backgroundColor: ptDartColor(context),
-            selectedItemColor: ptPrimaryColor(context),
-            unselectedItemColor: Colors.grey,
-            type: BottomNavigationBarType.fixed,
-            items: _listBottomNavBarItems,
-            currentIndex: _selectedIndex,
-            onTap: (index) {
-              setState(() {
-                _selectedIndex = index;
-              });
-            },
-          ),
+        bottomNavigationBar: BottomNavigator(
+          selectedIndex: _selectedIndex,
+          listIcons: [MdiIcons.heart, MdiIcons.home, MdiIcons.bell, Icons.pets],
+          onSelect: (index) {
+            setState(() {
+              _selectedIndex = index;
+            });
+          },
         ),
       ),
     );
