@@ -38,20 +38,40 @@ class BottomNavigator extends StatelessWidget {
           ),
         )
         .toList();
-    return ClipRRect(
+    return Material(
+      elevation: 4,
       borderRadius: BorderRadius.only(
         topRight: Radius.circular(30),
         topLeft: Radius.circular(30),
       ),
-      child: BottomNavigationBar(
-        elevation: 3,
-        backgroundColor: ptDartColor(context),
-        selectedItemColor: ptPrimaryColor(context),
-        unselectedItemColor: Colors.grey,
-        type: BottomNavigationBarType.fixed,
-        items: bottomNavBarItems,
-        currentIndex: selectedIndex,
-        onTap: onSelect,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 0.15, left: 0.1, right: 0.1),
+        child: Container(
+          height: 66,
+          width: deviceWidth(context),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topRight: Radius.circular(30),
+              topLeft: Radius.circular(30),
+            ),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.only(
+              topRight: Radius.circular(30),
+              topLeft: Radius.circular(30),
+            ),
+            child: BottomNavigationBar(
+              elevation: 3,
+              backgroundColor: ptDarkColor(context),
+              selectedItemColor: ptPrimaryColor(context),
+              unselectedItemColor: Colors.grey,
+              type: BottomNavigationBarType.fixed,
+              items: bottomNavBarItems,
+              currentIndex: selectedIndex,
+              onTap: onSelect,
+            ),
+          ),
+        ),
       ),
     );
   }

@@ -13,7 +13,7 @@ class LoginPage extends StatelessWidget {
       extendBodyBehindAppBar: true,
       appBar: MyAppBar(
         leading: BackBtn(),
-        bgColor: ptDartColor(context),
+        bgColor: ptDarkColor(context),
       ),
       backgroundColor: HexColor('#21323A'),
       body: SingleChildScrollView(

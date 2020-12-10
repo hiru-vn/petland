@@ -38,18 +38,30 @@ class _HomePageState extends State<HomePage>
         return flag;
       },
       child: Scaffold(
-        body: IndexedStack(
-          index: _selectedIndex,
-          children: _pages,
-        ),
-        bottomNavigationBar: BottomNavigator(
-          selectedIndex: _selectedIndex,
-          listIcons: [MdiIcons.heart, MdiIcons.home, MdiIcons.bell, Icons.pets],
-          onSelect: (index) {
-            setState(() {
-              _selectedIndex = index;
-            });
-          },
+        body: Stack(
+          children: [
+            IndexedStack(
+              index: _selectedIndex,
+              children: _pages,
+            ),
+            Positioned(
+              bottom: 0,
+              child: BottomNavigator(
+                selectedIndex: _selectedIndex,
+                listIcons: [
+                  MdiIcons.heart,
+                  MdiIcons.home,
+                  MdiIcons.bell,
+                  Icons.pets
+                ],
+                onSelect: (index) {
+                  setState(() {
+                    _selectedIndex = index;
+                  });
+                },
+              ),
+            )
+          ],
         ),
       ),
     );
