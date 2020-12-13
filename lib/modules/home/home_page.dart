@@ -1,3 +1,4 @@
+import 'package:petland/modules/dashboard/dashboard_page.dart';
 import 'package:petland/modules/home/bottom_navigator.dart';
 import 'package:petland/modules/story/story_page.dart';
 import 'package:petland/share/import.dart';
@@ -16,7 +17,7 @@ class _HomePageState extends State<HomePage>
   void initState() {
     _pages.addAll([
       StoryPage(),
-      Container(),
+      DashboardPage(),
       Container(),
       Container(),
     ]);

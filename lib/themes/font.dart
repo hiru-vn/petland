@@ -14,10 +14,13 @@ TextStyle ptHeadLineSmall() => TextStyle(
     letterSpacing: 1.3);
 
 TextStyle ptBigTitle() =>
-    TextStyle(fontWeight: FontWeight.w500, fontSize: 17, letterSpacing: 0.5);
+    TextStyle(fontWeight: FontWeight.w600, fontSize: 17, letterSpacing: 0.5);
 
-TextStyle ptTitle() =>
-    TextStyle(fontSize: 14.5, fontWeight: FontWeight.w500, letterSpacing: 0.3);
+TextStyle ptTitle() => TextStyle(
+    fontSize: 14.5,
+    fontWeight: FontWeight.w600,
+    letterSpacing: 0.3,
+    color: Colors.black87);
 
 TextStyle ptButton() => GoogleFonts.nunito(
     letterSpacing: 0.2, fontSize: 15.5, fontWeight: FontWeight.w500);
