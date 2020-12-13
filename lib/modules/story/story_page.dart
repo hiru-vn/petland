@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:petland/model/post.dart';
 import 'package:petland/modules/story/story_appbar.dart';
+import 'package:petland/modules/story/story_widget.dart';
 import 'package:petland/share/import.dart';
 
 class StoryPage extends StatelessWidget {
@@ -17,17 +19,9 @@ class StoryPage extends StatelessWidget {
                 bottom: 0,
                 child: PageView(
                   scrollDirection: Axis.vertical,
-                  children: [
-                    Container(
-                      color: Colors.red,
-                    ),
-                    Container(
-                      color: Colors.yellow,
-                    ),
-                    Container(
-                      color: ptDarkColor(context),
-                    ),
-                  ],
+                  children: postData.map((e) => StoryWidget(
+                    post:e
+                  )).toList(),
                 )),
           ],
         ),

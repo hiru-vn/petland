@@ -26,7 +26,7 @@ TextStyle ptBody() => GoogleFonts.nunito(
     letterSpacing: 0.15, fontSize: 14, fontWeight: FontWeight.w400);
 
 TextStyle ptSmall() => GoogleFonts.nunito(
-    letterSpacing: 0.1, fontSize: 13.5, fontWeight: FontWeight.w400);
+    letterSpacing: 0.1, fontSize: 13, fontWeight: FontWeight.w400);
 
 TextStyle ptTiny() => GoogleFonts.nunito(
-    letterSpacing: 0.5, fontSize: 12.5, fontWeight: FontWeight.w400);
+    letterSpacing: 0.05, fontSize: 12, fontWeight: FontWeight.w400);

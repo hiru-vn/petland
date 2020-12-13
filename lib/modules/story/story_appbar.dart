@@ -5,7 +5,7 @@ import 'package:petland/themes/color.dart';
 enum StoryOptions { Following, Popular }
 
 class StoryAppbar extends StatefulWidget implements PreferredSizeWidget {
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => Size.fromHeight(kToolbarHeight-10);
   final Widget leading;
   final Function(StoryOptions) optionChange;
 
