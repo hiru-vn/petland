@@ -20,7 +20,7 @@ class MyPetWidget extends StatelessWidget {
         InkWell(
           borderRadius: BorderRadius.circular(15),
           onTap: () {
-            PickPet.navigate(context);
+            PickPet.navigate();
           },
           child: Container(
             decoration: BoxDecoration(

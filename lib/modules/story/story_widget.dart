@@ -1,4 +1,5 @@
 import 'package:petland/model/post.dart';
+import 'package:petland/modules/story/post_story.dart';
 import 'package:petland/share/import.dart';
 
 class StoryWidget extends StatelessWidget {
@@ -90,10 +91,15 @@ class StoryWidget extends StatelessWidget {
                 size: 27,
               ),
               SizedBox(height: 20),
-              Icon(
-                Icons.add_circle,
-                color: Colors.white,
-                size: 29,
+              GestureDetector(
+                onTap: () {
+                  PostStory.navigate();
+                },
+                child: Icon(
+                  Icons.add_circle,
+                  color: Colors.white,
+                  size: 29,
+                ),
               ),
             ],
           ),

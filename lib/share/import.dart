@@ -18,3 +18,5 @@ export 'package:petland/share/widgets/appbar.dart';
 export 'package:petland/modules/dashboard/my_pet_widget.dart';
 export 'package:petland/share/widgets/search_bar.dart';
 export 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+export 'package:petland/share/functions/image_picker.dart';
+export 'package:petland/share/widgets/list_img_picker.dart';

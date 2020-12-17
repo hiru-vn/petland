@@ -4,7 +4,7 @@ import 'package:petland/share/import.dart';
 
 
 class WelcomePage extends StatelessWidget {
-  static navigate(BuildContext context) {
+  static navigate() {
     navigatorKey.currentState.push(pageBuilder(WelcomePage()));
   }
 
@@ -32,7 +32,7 @@ class WelcomePage extends StatelessWidget {
               ),
               SpacingBox(h: 35),
               ExpandBtn(text: 'Đăng ký tài khoản', onPress: () {
-                RegisterPage.navigate(context);
+                RegisterPage.navigate();
               }),
               Spacer(),
               Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -41,7 +41,7 @@ class WelcomePage extends StatelessWidget {
                   style: TextStyle(color: Colors.white70),
                 ),
                 GestureDetector(
-                  onTap: () => LoginPage.navigate(context),
+                  onTap: () => LoginPage.navigate(),
                   child: Text(
                     'LOG IN',
                     style: TextStyle(color: Colors.white),

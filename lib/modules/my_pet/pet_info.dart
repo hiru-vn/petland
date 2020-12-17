@@ -7,7 +7,7 @@ import 'package:petland/utils/app_internalization.dart';
 import 'package:textfield_tags/textfield_tags.dart';
 
 class PetInfoPage extends StatefulWidget {
-  static navigate(BuildContext context) {
+  static navigate() {
     navigatorKey.currentState.push(pageBuilder(PetInfoPage()));
   }
 
@@ -115,7 +115,7 @@ class _PetInfoPageState extends State<PetInfoPage> {
           highlightColor: ptAccentColor(context),
           splashColor: ptPrimaryColor(context),
           onTap: () {
-            PetRacePage.navigate(context);
+            PetRacePage.navigate();
           },
           child: ListTile(
             title: Text(
@@ -169,19 +169,21 @@ class _PetInfoPageState extends State<PetInfoPage> {
                     PickerPage(
                   list: [
                     PickerPageModel(
-                        Icon(
-                          MdiIcons.genderMale,
-                          color: ptPrimaryColor(context),
-                        ),
-                        'Male',
-                        'male'),
+                      Icon(
+                        MdiIcons.genderMale,
+                        color: ptPrimaryColor(context),
+                      ),
+                      'Male',
+                      'male',
+                    ),
                     PickerPageModel(
-                        Icon(
-                          MdiIcons.genderFemale,
-                          color: Colors.pink,
-                        ),
-                        'Female',
-                        'female'),
+                      Icon(
+                        MdiIcons.genderFemale,
+                        color: Colors.pink,
+                      ),
+                      'Female',
+                      'female',
+                    ),
                   ],
                   initialValue:
                       AppInternalization.instance.selectLocale ?? 'en',

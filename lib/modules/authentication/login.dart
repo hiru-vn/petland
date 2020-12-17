@@ -2,7 +2,7 @@ import 'package:petland/modules/authentication/register.dart';
 import 'package:petland/share/import.dart';
 
 class LoginPage extends StatelessWidget {
-  static navigate(BuildContext context) {
+  static navigate() {
     navigatorKey.currentState.push(pageBuilder(LoginPage()));
   }
 
@@ -78,7 +78,7 @@ class LoginPage extends StatelessWidget {
                     style: TextStyle(color: Colors.white70),
                   ),
                   GestureDetector(
-                    onTap: () => RegisterPage.navigate(context),
+                    onTap: () => RegisterPage.navigate(),
                     child: Text(
                       ' SIGN UP',
                       style: TextStyle(color: Colors.white),

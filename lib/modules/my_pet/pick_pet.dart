@@ -2,7 +2,7 @@ import 'package:petland/modules/my_pet/pet_info.dart';
 import 'package:petland/share/import.dart';
 
 class PickPet extends StatelessWidget {
-  static navigate(BuildContext context) {
+  static navigate() {
     navigatorKey.currentState.push(pageBuilder(PickPet()));
   }
 
@@ -49,7 +49,7 @@ class PetCard extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 12),
       child: GestureDetector(
         onTap: () {
-          PetInfoPage.navigate(context);
+          PetInfoPage.navigate();
         },
         child: Card(
           elevation: 6,

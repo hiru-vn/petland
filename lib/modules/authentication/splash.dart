@@ -4,7 +4,7 @@ import 'package:petland/share/import.dart';
 
 
 class SplashPage extends StatelessWidget {
-  static navigate(BuildContext context) {
+  static navigate() {
     navigatorKey.currentState.pushReplacement(pageBuilder(SplashPage()));
   }
 
@@ -12,7 +12,7 @@ class SplashPage extends StatelessWidget {
   Widget build(BuildContext context) {
     Future.delayed(
       Duration(seconds: 1),
-      () => WelcomePage.navigate(context),
+      () => WelcomePage.navigate(),
     );
     return Scaffold(
       body: Container(

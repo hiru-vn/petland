@@ -1,7 +1,7 @@
 import 'package:petland/share/import.dart';
 
 class PetRacePage extends StatelessWidget {
-  static navigate(BuildContext context) {
+  static navigate() {
     return navigatorKey.currentState.push(pageBuilder(PetRacePage()));
   }
 
