@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:petland/share/import.dart';
+import 'package:textfield_tags/textfield_tags.dart';
 
 class PetInfoPage extends StatefulWidget {
   static navigate(BuildContext context) {
@@ -20,6 +21,11 @@ class _PetInfoPageState extends State<PetInfoPage> {
           _buildHead(),
           SpacingBox(h: 3),
           _buildForm(),
+          SpacingBox(h: 3),
+          Padding(
+            padding: const EdgeInsets.all(15),
+            child: ExpandBtn(text: 'Save', onPress: () {}),
+          )
         ]),
       ),
     );
@@ -172,14 +178,41 @@ class _PetInfoPageState extends State<PetInfoPage> {
           height: 3,
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: TextFormField(
-            style: ptBigTitle(),
-            decoration: InputDecoration(
-              hintText: 'Pet name',
-              isDense: true,
+          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+          child: TextFieldTags(
+            onTag: (val) {},
+            onDelete: (val) {},
+            textFieldStyler: TextFieldStyler(
+              hintText: 'CHARACTER',
+              textStyle: ptTitle(),
+              helperText: null,
+              textFieldBorder: OutlineInputBorder(
+                borderSide: BorderSide(width: 0, color: Colors.transparent),
+              ),
+              textFieldEnabledBorder:  OutlineInputBorder(
+                borderSide: BorderSide(width: 0, color: Colors.transparent),
+              ),
+              textFieldFocusedBorder:  OutlineInputBorder(
+                borderSide: BorderSide(width: 0, color: Colors.transparent),
+              ),
+            ),
+            tagsStyler: TagsStyler(
+              tagTextStyle: ptTitle(),
+              tagDecoration: BoxDecoration(
+                color: ptPrimaryColor(context),
+                borderRadius: BorderRadius.circular(4),
+              ),
+              tagCancelIcon:
+                  Padding(
+                    padding: const EdgeInsets.only(left: 5),
+                    child: Icon(Icons.cancel, size: 18.0, color: Colors.pink),
+                  ),
+              tagPadding: const EdgeInsets.all(8),
             ),
           ),
+        ),
+        Divider(
+          height: 3,
         ),
       ],
     );

@@ -40,6 +40,7 @@ dev_dependencies:
   flutter_spinkit: "^4.1.2"
   material_design_icons_flutter: ^4.0.5755
   flutter_launcher_icons: ^0.8.1
+  textfield_tags: ^1.1.0+1
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 flutter_icons:
