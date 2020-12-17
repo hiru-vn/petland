@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:petland/modules/my_pet/pet_race.dart';
 import 'package:petland/share/import.dart';
+import 'package:petland/share/widgets/pick_list_page.dart';
+import 'package:petland/share/widgets/transitions.dart';
+import 'package:petland/utils/app_internalization.dart';
 import 'package:textfield_tags/textfield_tags.dart';
 
 class PetInfoPage extends StatefulWidget {
@@ -110,10 +114,12 @@ class _PetInfoPageState extends State<PetInfoPage> {
         InkWell(
           highlightColor: ptAccentColor(context),
           splashColor: ptPrimaryColor(context),
-          onTap: () {},
+          onTap: () {
+            PetRacePage.navigate(context);
+          },
           child: ListTile(
             title: Text(
-              'BREED',
+              'RACE',
               style: ptTitle(),
             ),
             trailing: Icon(
@@ -129,7 +135,14 @@ class _PetInfoPageState extends State<PetInfoPage> {
         InkWell(
           highlightColor: ptAccentColor(context),
           splashColor: ptPrimaryColor(context),
-          onTap: () {},
+          onTap: () {
+            showDatePicker(
+              context: context,
+              initialDate: DateTime.now(),
+              firstDate: DateTime.now(),
+              lastDate: DateTime.now(),
+            );
+          },
           child: ListTile(
             title: Text(
               'BIRTHDAY',
@@ -148,7 +161,39 @@ class _PetInfoPageState extends State<PetInfoPage> {
         InkWell(
           highlightColor: ptAccentColor(context),
           splashColor: ptPrimaryColor(context),
-          onTap: () {},
+          onTap: () {
+            navigatorKey.currentState
+                .push(
+              PageRouteBuilder(
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    PickerPage(
+                  list: [
+                    PickerPageModel(
+                        Icon(
+                          MdiIcons.genderMale,
+                          color: ptPrimaryColor(context),
+                        ),
+                        'Male',
+                        'male'),
+                    PickerPageModel(
+                        Icon(
+                          MdiIcons.genderFemale,
+                          color: Colors.pink,
+                        ),
+                        'Female',
+                        'female'),
+                  ],
+                  initialValue:
+                      AppInternalization.instance.selectLocale ?? 'en',
+                  title: 'Pet gender',
+                ),
+                transitionsBuilder: transitionUpBuilder,
+              ),
+            )
+                .then((value) {
+              setState(() {});
+            });
+          },
           child: ListTile(
             title: Text(
               'GENDER',
@@ -189,10 +234,10 @@ class _PetInfoPageState extends State<PetInfoPage> {
               textFieldBorder: OutlineInputBorder(
                 borderSide: BorderSide(width: 0, color: Colors.transparent),
               ),
-              textFieldEnabledBorder:  OutlineInputBorder(
+              textFieldEnabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(width: 0, color: Colors.transparent),
               ),
-              textFieldFocusedBorder:  OutlineInputBorder(
+              textFieldFocusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(width: 0, color: Colors.transparent),
               ),
             ),
@@ -202,11 +247,10 @@ class _PetInfoPageState extends State<PetInfoPage> {
                 color: ptPrimaryColor(context),
                 borderRadius: BorderRadius.circular(4),
               ),
-              tagCancelIcon:
-                  Padding(
-                    padding: const EdgeInsets.only(left: 5),
-                    child: Icon(Icons.cancel, size: 18.0, color: Colors.pink),
-                  ),
+              tagCancelIcon: Padding(
+                padding: const EdgeInsets.only(left: 5),
+                child: Icon(Icons.cancel, size: 18.0, color: Colors.pink),
+              ),
               tagPadding: const EdgeInsets.all(8),
             ),
           ),
