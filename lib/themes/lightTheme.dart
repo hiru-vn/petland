@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:petland/themes/color.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:petland/themes/font.dart';
 
 final lightTheme = ThemeData(
