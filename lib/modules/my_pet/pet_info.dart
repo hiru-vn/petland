@@ -1,9 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:petland/modules/my_pet/pet_race.dart';
 import 'package:petland/share/import.dart';
-import 'package:petland/share/widgets/pick_list_page.dart';
-import 'package:petland/share/widgets/transitions.dart';
-import 'package:petland/utils/app_internalization.dart';
 import 'package:textfield_tags/textfield_tags.dart';
 
 class PetInfoPage extends StatefulWidget {
@@ -28,7 +24,11 @@ class _PetInfoPageState extends State<PetInfoPage> {
           SpacingBox(h: 3),
           Padding(
             padding: const EdgeInsets.all(15),
-            child: ExpandBtn(text: 'Save', onPress: () {}),
+            child: ExpandBtn(
+                text: 'Save',
+                onPress: () {
+                  navigatorKey.currentState.maybePop();
+                }),
           )
         ]),
       ),
@@ -185,8 +185,7 @@ class _PetInfoPageState extends State<PetInfoPage> {
                       'female',
                     ),
                   ],
-                  initialValue:
-                      AppInternalization.instance.selectLocale ?? 'en',
+                  
                   title: 'Pet gender',
                 ),
                 transitionsBuilder: transitionUpBuilder,

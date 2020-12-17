@@ -1,27 +1,18 @@
 import 'package:petland/share/import.dart';
 
-class PetRacePage extends StatelessWidget {
+class PickMyPetListpage extends StatelessWidget {
   static navigate() {
-    return navigatorKey.currentState.push(pageBuilder(PetRacePage()));
+    return navigatorKey.currentState.push(pageBuilder(PickMyPetListpage()));
   }
 
   @override
   Widget build(BuildContext context) {
     final list = [
-      {"name": "Brishtish short-hair", "img": "assets/image/cat_race_1.jpg"},
-      {
-        "name": "Brishtish short-hair golden",
-        "img": "assets/image/cat_race_2.jpg"
-      },
-      {"name": "Brishtish long-hair", "img": "assets/image/cat_race_3.jpg"},
-      {"name": "beganli", "img": "assets/image/cat_race_4.jpg"},
-      {"name": "Burmilla", "img": "assets/image/cat_race_5.jpeg"},
-      {"name": "Exotic short hair", "img": "assets/image/cat_race_6.jpg"},
-      {"name": "Yellow cat", "img": "assets/image/cat_race_7.png"},
-      {"name": "Muchin", "img": "assets/image/cat_race_8.png"}
+      {"name": "Mick", "img": "assets/image/cat1.png"},
+      {"name": "Tô", "img": "assets/image/cat_race_2.jpg"},
     ];
     return Scaffold(
-      appBar: innerAppBar(context, 'Pet race'),
+      appBar: innerAppBar(context, 'My pets'),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -73,6 +64,7 @@ class PetRaceCard extends StatelessWidget {
                 ),
                 child: SizedBox(
                   width: deviceWidth(context) / 2,
+                  height: deviceWidth(context) / 2 - 20,
                   child: Image.asset(
                     image,
                     fit: BoxFit.fitWidth,

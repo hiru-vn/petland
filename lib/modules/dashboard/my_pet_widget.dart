@@ -4,38 +4,48 @@ import 'package:petland/share/import.dart';
 class MyPetWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Petcard(
-          image: 'assets/image/cat1.png',
-          name: 'Mick',
+        Text(
+          'My pets',
+          style: ptBigTitle(),
         ),
-        SizedBox(width: 6),
-        Petcard(
-          image: 'assets/image/cat2.png',
-          name: 'Tô',
-        ),
-        Spacer(),
-        InkWell(
-          borderRadius: BorderRadius.circular(15),
-          onTap: () {
-            PickPet.navigate();
-          },
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.orange),
+        SpacingBox(h: 2),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Petcard(
+              image: 'assets/image/cat1.png',
+              name: 'Mick',
+            ),
+            SizedBox(width: 6),
+            Petcard(
+              image: 'assets/image/cat2.png',
+              name: 'Tô',
+            ),
+            Spacer(),
+            InkWell(
               borderRadius: BorderRadius.circular(15),
-              color: Colors.orange.withOpacity(0.1),
-            ),
-            width: 44,
-            height: 35,
-            child: Icon(
-              Icons.add,
-              color: Colors.orange,
-            ),
-          ),
-        )
+              onTap: () {
+                PickPet.navigate();
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.orange),
+                  borderRadius: BorderRadius.circular(15),
+                  color: Colors.orange.withOpacity(0.1),
+                ),
+                width: 44,
+                height: 35,
+                child: Icon(
+                  Icons.add,
+                  color: Colors.orange,
+                ),
+              ),
+            )
+          ],
+        ),
       ],
     );
   }
