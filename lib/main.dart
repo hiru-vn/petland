@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:petland/modules/home/home_page.dart';
+import 'package:petland/modules/home_page.dart';
 import 'package:petland/navigator.dart';
 import 'package:petland/themes/dartTheme.dart';
 import 'package:petland/themes/lightTheme.dart';

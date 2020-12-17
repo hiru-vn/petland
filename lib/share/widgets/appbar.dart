@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:petland/themes/color.dart';
+import 'package:petland/share/import.dart';
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
@@ -43,3 +42,32 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 }
+
+innerAppBar(BuildContext context, String title,
+        {List<Widget> actions, Function(String) onSearch}) =>
+    AppBar(
+      elevation: 0,
+      backgroundColor: ptPrimaryColor(context),
+      title: Text(
+        title,
+        style: GoogleFonts.nunito(
+            color: Colors.white, fontWeight: FontWeight.w400),
+      ),
+      leading: GestureDetector(
+        onTap: () {
+          navigatorKey.currentState.maybePop();
+        },
+        child: SizedBox(
+          width: 40,
+          height: 40,
+          child: Center(
+              child: Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          )),
+        ),
+      ),
+      centerTitle: true,
+      actions: actions,
+      bottom: onSearch != null ? SearchBar() : null,
+    );

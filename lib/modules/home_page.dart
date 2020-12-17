@@ -1,5 +1,5 @@
 import 'package:petland/modules/dashboard/dashboard_page.dart';
-import 'package:petland/modules/home/bottom_navigator.dart';
+import 'package:petland/modules/bottom_navigator.dart';
 import 'package:petland/modules/story/story_page.dart';
 import 'package:petland/share/import.dart';
 

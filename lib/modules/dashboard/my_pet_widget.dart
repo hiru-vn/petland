@@ -1,3 +1,4 @@
+import 'package:petland/modules/my_pet/pick_pet.dart';
 import 'package:petland/share/import.dart';
 
 class MyPetWidget extends StatelessWidget {
@@ -18,7 +19,9 @@ class MyPetWidget extends StatelessWidget {
         Spacer(),
         InkWell(
           borderRadius: BorderRadius.circular(15),
-          onTap: () {},
+          onTap: () {
+            PickPet.navigate(context);
+          },
           child: Container(
             decoration: BoxDecoration(
               border: Border.all(color: Colors.orange),
@@ -78,3 +81,5 @@ class Petcard extends StatelessWidget {
     );
   }
 }
+
+
