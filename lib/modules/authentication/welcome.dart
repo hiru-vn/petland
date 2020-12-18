@@ -5,7 +5,7 @@ import 'package:petland/share/import.dart';
 
 class WelcomePage extends StatelessWidget {
   static navigate() {
-    navigatorKey.currentState.push(pageBuilder(WelcomePage()));
+    navigatorKey.currentState.pushReplacement(pageBuilder(WelcomePage()));
   }
 
   @override

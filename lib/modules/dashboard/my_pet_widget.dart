@@ -1,4 +1,4 @@
-import 'package:petland/modules/my_pet/pet_data_update.dart';
+import 'package:petland/modules/my_pet/pet_profile.dart';
 import 'package:petland/modules/my_pet/pick_pet.dart';
 import 'package:petland/share/import.dart';
 
@@ -61,7 +61,7 @@ class Petcard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        PetDataUpdatePage.navigate(
+        PetProfilePage.navigate(
             race: 'Bristish short-hair',
             birthdate: DateTime.now(),
             gender: 'male',
