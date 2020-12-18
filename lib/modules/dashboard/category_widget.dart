@@ -1,3 +1,4 @@
+import 'package:petland/modules/zoo/zoo_page.dart';
 import 'package:petland/share/import.dart';
 
 class CategoryWidget extends StatelessWidget {
@@ -18,6 +19,9 @@ class CategoryWidget extends StatelessWidget {
               child: CategoryItemWidget(
                 image: 'assets/image/zoo.png',
                 title: 'Pet zoo',
+                onTap: () {
+                  ZooPage.navigate();
+                },
               ),
             ),
             Padding(
@@ -69,25 +73,30 @@ class CategoryWidget extends StatelessWidget {
 class CategoryItemWidget extends StatelessWidget {
   final String image;
   final String title;
+  final Function onTap;
 
-  const CategoryItemWidget({Key key, this.image, this.title}) : super(key: key);
+  const CategoryItemWidget({Key key, this.image, this.title, this.onTap})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        SizedBox(
-          width: deviceWidth(context)/3 -25,
-          height: deviceWidth(context)/3 -25,
-          child: Image.asset(image, fit: BoxFit.cover),
-        ),
-        SizedBox(height: 5),
-        Text(
-          title,
-          style: ptTitle(),
-        )
-      ],
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            width: deviceWidth(context) / 3 - 25,
+            height: deviceWidth(context) / 3 - 25,
+            child: Image.asset(image, fit: BoxFit.cover),
+          ),
+          SizedBox(height: 5),
+          Text(
+            title,
+            style: ptTitle(),
+          )
+        ],
+      ),
     );
   }
 }

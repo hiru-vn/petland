@@ -14,6 +14,7 @@ class PostStory extends StatefulWidget {
 
 class _PostStoryState extends State<PostStory> {
   bool _makePublic = true;
+  FocusNode _activityNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -88,20 +89,28 @@ class _PostStoryState extends State<PostStory> {
             Positioned(
               bottom: 0,
               width: deviceWidth(context),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _buildForm(),
-                  SizedBox(
-                    height: 3,
-                  ),
-                  ExpandRectangleButton(
-                    text: 'Post',
-                    onTap: () {
-                      navigatorKey.currentState.maybePop();
-                    },
-                  )
-                ],
+              child: Container(
+                color: Colors.white,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _buildForm(),
+                    SizedBox(
+                      height: 3.0,
+                    ),
+                    ExpandRectangleButton(
+                      text: 'Post',
+                      onTap: () {
+                        navigatorKey.currentState.maybePop();
+                      },
+                    ),
+                    SizedBox(
+                      height: _activityNode.hasFocus
+                          ? MediaQuery.of(context).viewInsets.bottom
+                          : 0,
+                    ),
+                  ],
+                ),
               ),
             )
           ],
@@ -143,7 +152,7 @@ class _PostStoryState extends State<PostStory> {
           height: 3,
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 4),
           child: Row(
             children: [
               Padding(
@@ -156,6 +165,7 @@ class _PostStoryState extends State<PostStory> {
               Expanded(
                 child: TextFieldTags(
                   onTag: (val) {},
+                  focusNode: _activityNode,
                   onDelete: (val) {},
                   textFieldStyler: TextFieldStyler(
                     hintText: 'Tags, activities, ...',
