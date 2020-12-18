@@ -53,6 +53,7 @@ class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
   String _imgUrl;
   String _bgUrl;
   String _petName;
+  bool _isUpdate = false;
 
   @override
   void initState() {
@@ -63,13 +64,22 @@ class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
     _imgUrl = widget.imgUrl;
     _bgUrl = widget.bgUrl;
     _petName = widget.petName;
+    if (_petName != null) _isUpdate = true;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: innerAppBar(context, 'Update Pet\'s data'),
+      appBar: innerAppBar(context, 'Update Pet\'s data', actions: [
+        if (_isUpdate)
+          IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.delete_forever,
+                color: Colors.white,
+              ))
+      ]),
       body: SingleChildScrollView(
         child: Column(children: [
           _buildHead(imgUrl: _imgUrl, imageCover: _bgUrl, petName: _petName),
