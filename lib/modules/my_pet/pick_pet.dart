@@ -1,4 +1,4 @@
-import 'package:petland/modules/my_pet/pet_info.dart';
+import 'package:petland/modules/my_pet/pet_data_update.dart';
 import 'package:petland/share/import.dart';
 
 class PickPet extends StatelessWidget {
@@ -49,7 +49,7 @@ class PetCard extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 12),
       child: GestureDetector(
         onTap: () {
-          PetInfoPage.navigate();
+          PetDataUpdatePage.navigate();
         },
         child: Card(
           elevation: 6,

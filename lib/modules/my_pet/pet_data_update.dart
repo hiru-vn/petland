@@ -2,23 +2,77 @@ import 'package:petland/modules/my_pet/pet_race.dart';
 import 'package:petland/share/import.dart';
 import 'package:textfield_tags/textfield_tags.dart';
 
-class PetInfoPage extends StatefulWidget {
-  static navigate() {
-    navigatorKey.currentState.push(pageBuilder(PetInfoPage()));
+class PetDataUpdatePage extends StatefulWidget {
+  final String race;
+  final DateTime birthdate;
+  final String gender;
+  final List<String> characters;
+  final String imgUrl;
+  final String bgUrl;
+  final String petName;
+
+  const PetDataUpdatePage(
+      {Key key,
+      this.race,
+      this.birthdate,
+      this.gender,
+      this.characters,
+      this.bgUrl,
+      this.imgUrl,
+      this.petName})
+      : super(key: key);
+
+  static navigate(
+      {String race,
+      DateTime birthdate,
+      String gender,
+      List<String> characters,
+      String imgUrl,
+      String bgUrl,
+      String petName}) {
+    navigatorKey.currentState.push(pageBuilder(PetDataUpdatePage(
+      race: race,
+      birthdate: birthdate,
+      gender: gender,
+      characters: characters,
+      imgUrl: imgUrl,
+      bgUrl: bgUrl,
+      petName: petName,
+    )));
   }
 
   @override
-  _PetInfoPageState createState() => _PetInfoPageState();
+  _PetDataUpdatePageState createState() => _PetDataUpdatePageState();
 }
 
-class _PetInfoPageState extends State<PetInfoPage> {
+class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
+  String _race;
+  DateTime _birthdate;
+  String _gender;
+  List<String> _characters;
+  String _imgUrl;
+  String _bgUrl;
+  String _petName;
+
+  @override
+  void initState() {
+    _race = widget.race;
+    _birthdate = widget.birthdate;
+    _gender = widget.gender;
+    _characters = widget.characters ?? <String>[];
+    _imgUrl = widget.imgUrl;
+    _bgUrl = widget.bgUrl;
+    _petName = widget.petName;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: innerAppBar(context, 'Update Pet\'s info'),
+      appBar: innerAppBar(context, 'Update Pet\'s data'),
       body: SingleChildScrollView(
         child: Column(children: [
-          _buildHead(),
+          _buildHead(imgUrl: _imgUrl, imageCover: _bgUrl, petName: _petName),
           SpacingBox(h: 3),
           _buildForm(),
           SpacingBox(h: 3),
@@ -35,7 +89,7 @@ class _PetInfoPageState extends State<PetInfoPage> {
     );
   }
 
-  _buildHead({String imageCover}) {
+  _buildHead({String imageCover, String imgUrl, String petName}) {
     return Container(
       height: 180,
       child: Stack(
@@ -61,7 +115,9 @@ class _PetInfoPageState extends State<PetInfoPage> {
                   ),
                 ),
                 if (imageCover != null)
-                  Image.network(imageCover, fit: BoxFit.cover),
+                  SizedBox(
+                      width: deviceWidth(context),
+                      child: Image.network(imageCover, fit: BoxFit.cover)),
               ],
             ),
           ),
@@ -76,11 +132,15 @@ class _PetInfoPageState extends State<PetInfoPage> {
                 color: ptPrimaryColor(context),
                 border: Border.all(width: 2.5, color: Colors.white),
               ),
-              child: Icon(
-                MdiIcons.camera,
-                size: 70,
-                color: Colors.white30,
-              ),
+              child: imgUrl != null
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.circular(55),
+                      child: Image.network(imgUrl, fit: BoxFit.cover))
+                  : Icon(
+                      MdiIcons.camera,
+                      size: 70,
+                      color: Colors.white30,
+                    ),
             ),
           ),
           Positioned(
@@ -88,6 +148,7 @@ class _PetInfoPageState extends State<PetInfoPage> {
             left: deviceWidth(context) / 10 + 125,
             bottom: 10,
             child: TextFormField(
+              initialValue: petName,
               style: ptBigTitle().copyWith(fontSize: 19.5),
               decoration: InputDecoration(
                 hintText: 'Pet name',
@@ -122,10 +183,21 @@ class _PetInfoPageState extends State<PetInfoPage> {
               'RACE',
               style: ptTitle(),
             ),
-            trailing: Icon(
-              MdiIcons.arrowRightCircle,
-              size: 20,
-              color: ptPrimaryColor(context),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (_race != null) ...[
+                  Text(
+                    _race,
+                  ),
+                  SizedBox(width: 10),
+                ],
+                Icon(
+                  MdiIcons.arrowRightCircle,
+                  size: 20,
+                  color: ptPrimaryColor(context),
+                ),
+              ],
             ),
           ),
         ),
@@ -148,10 +220,19 @@ class _PetInfoPageState extends State<PetInfoPage> {
               'BIRTHDAY',
               style: ptTitle(),
             ),
-            trailing: Icon(
-              MdiIcons.calendar,
-              size: 20,
-              color: ptPrimaryColor(context),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (_birthdate != null) ...[
+                  Text(Formart.formatToDate(_birthdate)),
+                  SizedBox(width: 10),
+                ],
+                Icon(
+                  MdiIcons.calendar,
+                  size: 20,
+                  color: ptPrimaryColor(context),
+                ),
+              ],
             ),
           ),
         ),
@@ -185,7 +266,6 @@ class _PetInfoPageState extends State<PetInfoPage> {
                       'female',
                     ),
                   ],
-                  
                   title: 'Pet gender',
                 ),
                 transitionsBuilder: transitionUpBuilder,
@@ -203,19 +283,22 @@ class _PetInfoPageState extends State<PetInfoPage> {
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(
-                  MdiIcons.genderFemale,
-                  size: 20,
-                  color: Colors.pink,
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Icon(
-                  MdiIcons.genderMale,
-                  size: 20,
-                  color: ptPrimaryColor(context),
-                ),
+                if (_gender == 'female' || _gender == null)
+                  Icon(
+                    MdiIcons.genderFemale,
+                    size: 20,
+                    color: Colors.pink,
+                  ),
+                if (_gender != 'female')
+                  SizedBox(
+                    width: 10,
+                  ),
+                if (_gender == 'male' || _gender == null)
+                  Icon(
+                    MdiIcons.genderMale,
+                    size: 20,
+                    color: ptPrimaryColor(context),
+                  ),
               ],
             ),
           ),
@@ -228,6 +311,7 @@ class _PetInfoPageState extends State<PetInfoPage> {
           child: TextFieldTags(
             onTag: (val) {},
             onDelete: (val) {},
+            initialTags: _characters,
             textFieldStyler: TextFieldStyler(
               hintText: 'CHARACTER',
               textStyle: ptTitle(),
