@@ -1,6 +1,8 @@
 import 'package:petland/modules/my_pet/pet_data_update.dart';
 import 'package:petland/modules/my_pet/pet_race.dart';
+import 'package:petland/modules/my_pet/records/vaccine_page.dart';
 import 'package:petland/share/import.dart';
+import 'package:petland/share/widgets/custom_list_tile.dart';
 import 'package:petland/share/widgets/image_view.dart';
 import 'package:textfield_tags/textfield_tags.dart';
 
@@ -128,7 +130,7 @@ class _PetProfilePageState extends State<PetProfilePage>
         ),
         Expanded(
           child: Container(
-            color: Colors.grey[100],
+            color: Colors.grey.withOpacity(0.1),
             child: TabBarView(
               controller: _tabController,
               children: [
@@ -140,7 +142,7 @@ class _PetProfilePageState extends State<PetProfilePage>
                 ),
                 PetPictureWidget(),
                 PetVideoWidget(),
-                Container(),
+                PetRecordWidget(),
               ],
             ),
           ),
@@ -442,5 +444,58 @@ class PetVideoWidget extends StatelessWidget {
               SpacingBox(h: 5),
             ],
           );
+  }
+}
+
+class PetRecordWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Divider(
+            height: 3,
+          ),
+          _buildRecordTile(context, 'VACCINES', () {
+            VaccinePage.navigate();
+          }),
+          Divider(
+            height: 3,
+          ),
+          _buildRecordTile(context, 'BIRTHDAYS', () {}),
+          Divider(
+            height: 3,
+          ),
+          _buildRecordTile(context, 'WEIGHTS', () {}),
+          Divider(
+            height: 3,
+          ),
+          _buildRecordTile(context, 'BATHS', () {}),
+          Divider(
+            height: 3,
+          ),
+        ],
+      ),
+    );
+  }
+
+  _buildRecordTile(BuildContext context, String title, Function onTap) {
+    return InkWell(
+      highlightColor: ptAccentColor(context),
+      splashColor: ptPrimaryColor(context),
+      onTap: onTap,
+      child: ListTile(
+        title: Text(
+          title,
+          style: ptTitle().copyWith(
+              fontWeight: FontWeight.w900, color: Colors.black54, fontSize: 14),
+        ),
+        trailing: Icon(
+          MdiIcons.arrowRightCircle,
+          size: 20,
+          color: ptPrimaryColor(context),
+        ),
+      ),
+    );
   }
 }

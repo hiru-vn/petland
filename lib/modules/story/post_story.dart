@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:petland/modules/my_pet/pick_my_pet_list.dart';
 import 'package:petland/share/import.dart';
-import 'package:petland/share/widgets/custom_list_tile.dart';
 import 'package:textfield_tags/textfield_tags.dart';
 
 class PostStory extends StatefulWidget {
@@ -96,24 +95,12 @@ class _PostStoryState extends State<PostStory> {
                   SizedBox(
                     height: 3,
                   ),
-                  GestureDetector(
+                  ExpandRectangleButton(
+                    text: 'Post',
                     onTap: () {
                       navigatorKey.currentState.maybePop();
                     },
-                    child: Container(
-                      height: 53,
-                      width: deviceWidth(context),
-                      color: ptPrimaryColor(context),
-                      child: Center(
-                        child: Text(
-                          'Post',
-                          style: ptBigTitle().copyWith(
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  )
                 ],
               ),
             )
