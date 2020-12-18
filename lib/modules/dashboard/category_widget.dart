@@ -11,24 +11,24 @@ class CategoryWidget extends StatelessWidget {
           style: ptBigTitle(),
         ),
         SpacingBox(h: 2),
-        Wrap(
+        Row(
           children: [
             Padding(
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.all(5),
               child: CategoryItemWidget(
                 image: 'assets/image/zoo.png',
                 title: 'Pet zoo',
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.all(5),
               child: CategoryItemWidget(
                 image: 'assets/image/tinder.png',
                 title: 'Pet tinder',
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.all(5),
               child: CategoryItemWidget(
                 image: 'assets/image/wiki.png',
                 title: 'Cẩm nang',
@@ -78,8 +78,8 @@ class CategoryItemWidget extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         SizedBox(
-          width: 100,
-          height: 100,
+          width: deviceWidth(context)/3 -25,
+          height: deviceWidth(context)/3 -25,
           child: Image.asset(image, fit: BoxFit.cover),
         ),
         SizedBox(height: 5),

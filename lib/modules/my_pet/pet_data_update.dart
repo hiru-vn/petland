@@ -337,7 +337,7 @@ class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
               ),
             ),
             tagsStyler: TagsStyler(
-              tagTextStyle: ptTitle(),
+              tagTextStyle: ptTitle().copyWith(color: Colors.white),
               tagDecoration: BoxDecoration(
                 color: ptPrimaryColor(context),
                 borderRadius: BorderRadius.circular(4),

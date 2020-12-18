@@ -15,7 +15,9 @@ class VaccineTypePage extends StatelessWidget {
           InkWell(
             highlightColor: ptAccentColor(context),
             splashColor: ptPrimaryColor(context),
-            onTap: () {},
+            onTap: () {
+              navigatorKey.currentState.maybePop();
+            },
             child: ListTile(
               title: Text(
                 'Vaccine phòng bệnh Dại',
@@ -28,7 +30,9 @@ class VaccineTypePage extends StatelessWidget {
           InkWell(
             highlightColor: ptAccentColor(context),
             splashColor: ptPrimaryColor(context),
-            onTap: () {},
+            onTap: () {
+              navigatorKey.currentState.maybePop();
+            },
             child: ListTile(
               title: Text(
                 'Vaccine phòng bệnh Giảm Bạch Cầu',
@@ -41,7 +45,9 @@ class VaccineTypePage extends StatelessWidget {
           InkWell(
             highlightColor: ptAccentColor(context),
             splashColor: ptPrimaryColor(context),
-            onTap: () {},
+            onTap: () {
+              navigatorKey.currentState.maybePop();
+            },
             child: ListTile(
               title: Text(
                 'Vaccine phòng bệnh Viêm mũi',
@@ -54,7 +60,9 @@ class VaccineTypePage extends StatelessWidget {
           InkWell(
             highlightColor: ptAccentColor(context),
             splashColor: ptPrimaryColor(context),
-            onTap: () {},
+            onTap: () {
+              navigatorKey.currentState.maybePop();
+            },
             child: ListTile(
               title: Text(
                 'Vaccine phòng bệnh do Herpervirus',
@@ -70,7 +78,9 @@ class VaccineTypePage extends StatelessWidget {
           InkWell(
             highlightColor: ptAccentColor(context),
             splashColor: ptPrimaryColor(context),
-            onTap: () {},
+            onTap: () {
+              navigatorKey.currentState.maybePop();
+            },
             child: ListTile(
               title: Text(
                 'Vắc xin tổng hợp',

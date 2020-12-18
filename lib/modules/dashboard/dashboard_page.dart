@@ -6,8 +6,8 @@ class DashboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: SafeArea(
+      body: SafeArea(
+        child: SingleChildScrollView(
           child: Column(
             children: [
               SizedBox(
@@ -27,7 +27,10 @@ class DashboardPage extends StatelessWidget {
                     CategoryWidget(),
                   ],
                 ),
-              )
+              ),
+              SizedBox(
+                height: 60,
+              ),
             ],
           ),
         ),
