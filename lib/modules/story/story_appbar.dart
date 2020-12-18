@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:petland/modules/story/post_story.dart';
 import 'package:petland/share/import.dart';
 import 'package:petland/themes/color.dart';
 
 enum StoryOptions { Following, Popular }
 
 class StoryAppbar extends StatefulWidget implements PreferredSizeWidget {
-  Size get preferredSize => Size.fromHeight(kToolbarHeight-8);
+  Size get preferredSize => Size.fromHeight(kToolbarHeight - 8);
   final Widget leading;
   final Function(StoryOptions) optionChange;
 
@@ -25,7 +26,10 @@ class _StoryAppbarState extends State<StoryAppbar> {
       centerTitle: true,
       elevation: 0,
       automaticallyImplyLeading: false,
-      leading: widget.leading,
+      leading: widget.leading ??
+          SizedBox(
+            width: 10,
+          ),
       title: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -77,8 +81,17 @@ class _StoryAppbarState extends State<StoryAppbar> {
       ),
       actions: [
         IconButton(
-          onPressed: () {},
-          icon: Image.asset('assets/image/chat.png'),
+          onPressed: () {
+            PostStory.navigate();
+          },
+          icon: Icon(
+            Icons.add_circle,
+            color: Colors.white,
+            size: 30,
+          ),
+        ),
+        SizedBox(
+          width: 5,
         ),
       ],
     );

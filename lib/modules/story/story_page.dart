@@ -8,7 +8,9 @@ class StoryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: StoryAppbar(),
+      appBar: StoryAppbar(
+       
+      ),
       body: SafeArea(
         child: Stack(
           children: [
@@ -19,9 +21,7 @@ class StoryPage extends StatelessWidget {
                 bottom: 0,
                 child: PageView(
                   scrollDirection: Axis.vertical,
-                  children: postData.map((e) => StoryWidget(
-                    post:e
-                  )).toList(),
+                  children: postData.map((e) => StoryWidget(post: e)).toList(),
                 )),
           ],
         ),

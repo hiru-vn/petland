@@ -70,7 +70,7 @@ class _PostStoryState extends State<PostStory> {
                     ),
                     Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.all(6),
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
                         child: TextField(
                           maxLength: 200,
                           maxLines: null,

@@ -139,7 +139,7 @@ class _PetProfilePageState extends State<PetProfilePage>
                   characters: _characters,
                 ),
                 PetPictureWidget(),
-                Container(),
+                PetVideoWidget(),
                 Container(),
               ],
             ),
@@ -398,5 +398,49 @@ class PetPictureWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class PetVideoWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final list = [];
+    return list.length != 0
+        ? SingleChildScrollView(
+            child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: StaggeredGridView.count(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  crossAxisCount: 3,
+                  staggeredTiles:
+                      list.map((_) => StaggeredTile.fit(1)).toList(),
+                  children: List.generate(list.length, (index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 2, vertical: 4),
+                      child: ImageViewNetwork(url: list[index]),
+                    );
+                  }),
+                )),
+          )
+        : Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                  width: deviceWidth(context) / 4,
+                  child: Image.asset('assets/image/logo.png')),
+              SpacingBox(h: 2),
+              SizedBox(
+                width: deviceWidth(context) / 1.4,
+                child: Text(
+                  'Mick does not have any videos yet',
+                  style: ptBigBody(),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              SpacingBox(h: 5),
+            ],
+          );
   }
 }
