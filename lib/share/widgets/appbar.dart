@@ -7,34 +7,30 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Widget> actions;
   final Color bgColor;
   final Widget leading;
+  final String title;
 
-  MyAppBar({this.actions, this.bgColor, this.leading});
+  MyAppBar({this.actions, this.bgColor, this.leading, this.title});
   @override
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: bgColor ?? Colors.transparent,
-      centerTitle: true,
       elevation: 0,
       automaticallyImplyLeading: false,
       leading: leading,
       title: Row(
-        mainAxisSize: MainAxisSize.min,
         children: [
+          Image.asset(
+            'assets/image/logo.png',
+            height: 27,
+            width: 27,
+          ),
           SizedBox(
-              height: 27,
-              width: 27,
-              child: Image.asset('assets/image/logo.png')),
-          SizedBox(width: 6),
-          Padding(
-            padding: const EdgeInsets.only(top: 4),
-            child: Text(
-              'PetLand',
-              style: GoogleFonts.allertaStencil(
-                  letterSpacing: 0.2,
-                  fontSize: 15,
-                  fontWeight: FontWeight.w400,
-                  color: ptPrimaryColor(context)),
-            ),
+            width: 7,
+          ),
+          Text(
+            title ?? 'PetLand',
+            style: ptBigTitle().copyWith(
+                color: bgColor != null ? Colors.white : Colors.black87),
           ),
         ],
       ),

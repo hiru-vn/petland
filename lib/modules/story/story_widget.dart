@@ -27,14 +27,28 @@ class _StoryWidgetState extends State<StoryWidget> {
                     const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
                 child: Row(
                   children: [
-                    Image.asset('assets/image/avatar.png'),
+                    CircleAvatar(
+                      backgroundImage: AssetImage('assets/image/cat1.png'),
+                    ),
                     SizedBox(width: 10),
                     Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            widget.post.ownerName,
-                            style: ptTitle().copyWith(color: Colors.white),
+                          RichText(
+                            text: TextSpan(children: [
+                              TextSpan(
+                                text: widget.post.ownerName,
+                                style: ptTitle().copyWith(color: Colors.white),
+                              ),
+                              TextSpan(
+                                text: ' with ',
+                                style: ptBody().copyWith(color: Colors.white),
+                              ),
+                              TextSpan(
+                                text: widget.post.petName,
+                                style: ptTitle().copyWith(color: Colors.white),
+                              ),
+                            ]),
                           ),
                           Text(
                             '3 giờ trước',

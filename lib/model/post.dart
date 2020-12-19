@@ -1,10 +1,11 @@
 class Post {
   String ownerName;
+  String petName;
   DateTime time;
   String content;
   List<String> images;
 
-  Post({this.content, this.images, this.ownerName, this.time});
+  Post({this.content, this.images, this.ownerName, this.time, this.petName});
 }
 
 var postData = [
@@ -16,6 +17,7 @@ var postData = [
         'assets/image/cat2.png',
         'assets/image/cat3.png'
       ],
+      petName: 'Fat man',
       ownerName: 'PetChoy'),
   Post(
       content:
@@ -25,6 +27,7 @@ var postData = [
         'assets/image/cat2.png',
         'assets/image/cat3.png'
       ],
+      petName: 'Fat man',
       ownerName: 'PetChoy'),
   Post(
       content:
@@ -34,5 +37,6 @@ var postData = [
         'assets/image/cat2.png',
         'assets/image/cat3.png'
       ],
+      petName: 'Fat man',
       ownerName: 'PetChoy'),
 ];
