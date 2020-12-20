@@ -2,9 +2,7 @@ import 'package:petland/modules/my_pet/pet_data_update.dart';
 import 'package:petland/modules/my_pet/pet_race.dart';
 import 'package:petland/modules/my_pet/records/vaccine_page.dart';
 import 'package:petland/share/import.dart';
-import 'package:petland/share/widgets/custom_list_tile.dart';
 import 'package:petland/share/widgets/image_view.dart';
-import 'package:textfield_tags/textfield_tags.dart';
 
 class PetProfilePage extends StatefulWidget {
   final String race;

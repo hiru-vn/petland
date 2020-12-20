@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:petland/modules/my_pet/pick_my_pet_list.dart';
 import 'package:petland/share/import.dart';
-import 'package:textfield_tags/textfield_tags.dart';
+import 'package:petland/share/widgets/textfield_tag/lib/src/main.dart';
 
 class PostStory extends StatefulWidget {
   static navigate() {

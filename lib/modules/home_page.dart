@@ -1,4 +1,4 @@
-import 'package:petland/modules/Category/category_page.dart';
+import 'package:petland/modules/category/category_page.dart';
 import 'package:petland/modules/dashboard/dashboard_page.dart';
 import 'package:petland/modules/bottom_navigator.dart';
 import 'package:petland/modules/notification/notification_page.dart';
