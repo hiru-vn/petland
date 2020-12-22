@@ -1,3 +1,4 @@
+import 'package:petland/modules/inbox/inbox_chat.dart';
 import 'package:petland/share/import.dart';
 
 class NotificationPage extends StatelessWidget {
@@ -18,7 +19,9 @@ class NotificationPage extends StatelessWidget {
                 Icons.message,
                 size: 21,
               ),
-              onPressed: () {}),
+              onPressed: () {
+                SupportChat.navigate();
+              }),
         ],
       ),
       body: SingleChildScrollView(

@@ -45,6 +45,8 @@ dev_dependencies:
   permission_handler: ^5.0.1+1
   image_picker: ^0.6.7+15
   photo_view: ^0.10.3
+  dash_chat: ^1.1.15
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 flutter_icons:
