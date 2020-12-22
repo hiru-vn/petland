@@ -1,6 +1,5 @@
 import 'package:petland/modules/my_pet/pet_race.dart';
 import 'package:petland/share/import.dart';
-import 'package:textfield_tags/textfield_tags.dart';
 
 class PetDataUpdatePage extends StatefulWidget {
   final String race;
