@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:petland/share/import.dart';
 
-class CategoryPage extends StatelessWidget {
+class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppBar(
-        title: 'Category',
+        title: 'Profile',
         actions: [
           IconButton(
               icon: Icon(
