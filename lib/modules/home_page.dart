@@ -40,32 +40,32 @@ class _HomePageState extends State<HomePage>
             confirmTap: () {}, navigatorKey: navigatorKey);
         return flag;
       },
-      child: Scaffold(
-        body: Stack(
-          children: [
-            IndexedStack(
+      child: Stack(
+        children: [
+          Scaffold(
+            body: IndexedStack(
               index: _selectedIndex,
               children: _pages,
             ),
-            Positioned(
-              bottom: 0,
-              child: BottomNavigator(
-                selectedIndex: _selectedIndex,
-                listIcons: [
-                  MdiIcons.heart,
-                  MdiIcons.home,
-                  MdiIcons.bell,
-                  Icons.pets
-                ],
-                onSelect: (index) {
-                  setState(() {
-                    _selectedIndex = index;
-                  });
-                },
-              ),
-            )
-          ],
-        ),
+          ),
+          Positioned(
+            bottom: 0,
+            child: BottomNavigator(
+              selectedIndex: _selectedIndex,
+              listIcons: [
+                MdiIcons.heart,
+                MdiIcons.home,
+                MdiIcons.bell,
+                Icons.pets
+              ],
+              onSelect: (index) {
+                setState(() {
+                  _selectedIndex = index;
+                });
+              },
+            ),
+          )
+        ],
       ),
     );
   }
