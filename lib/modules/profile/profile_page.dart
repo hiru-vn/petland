@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:petland/modules/my_pet/pick_my_pet_list.dart';
 import 'package:petland/share/import.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -153,7 +154,9 @@ class ProfilePage extends StatelessWidget {
                   return ProfileItemCard(
                     title: list[index]['name'],
                     image: list[index]['img'],
-                    onTap: () => navigatorKey.currentState.maybePop(),
+                    onTap: () {
+                      PickMyPetListpage.navigate();
+                    },
                   );
                 }),
               ),

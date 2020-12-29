@@ -19,6 +19,7 @@ final lightTheme = ThemeData(
     buttonColor: HexColor('#2D9B7A'),
     textTheme: ButtonTextTheme.primary,
   ),
+  primaryColorLight: Colors.white,
   iconTheme: IconThemeData(size: 21, color: HexColor('#444444')),
   dividerColor: Colors.black.withOpacity(0.2),
   textTheme: TextTheme(

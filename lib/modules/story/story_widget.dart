@@ -1,5 +1,6 @@
 import 'package:petland/model/post.dart';
 import 'package:petland/modules/story/post_story.dart';
+import 'package:petland/share/functions/share_to.dart';
 import 'package:petland/share/import.dart';
 
 class StoryWidget extends StatefulWidget {
@@ -121,7 +122,9 @@ class _StoryWidgetState extends State<StoryWidget> {
               ),
               SizedBox(height: 20),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  shareTo(context);
+                },
                 child: Icon(
                   MdiIcons.share,
                   color: Colors.white,
