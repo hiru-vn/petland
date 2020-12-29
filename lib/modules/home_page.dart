@@ -1,7 +1,7 @@
-import 'package:petland/modules/category/category_page.dart';
 import 'package:petland/modules/dashboard/dashboard_page.dart';
 import 'package:petland/modules/bottom_navigator.dart';
 import 'package:petland/modules/notification/notification_page.dart';
+import 'package:petland/modules/profile/profile_page.dart';
 import 'package:petland/modules/story/story_page.dart';
 import 'package:petland/share/import.dart';
 
@@ -25,7 +25,7 @@ class _HomePageState extends State<HomePage>
       StoryPage(),
       DashboardPage(),
       NotificationPage(),
-      CategoryPage(),
+      ProfilePage(),
     ]);
 
     super.initState();
@@ -44,32 +44,32 @@ class _HomePageState extends State<HomePage>
             confirmTap: () {}, navigatorKey: navigatorKey);
         return flag;
       },
-      child: Scaffold(
-        body: Stack(
-          children: [
-            IndexedStack(
+      child: Stack(
+        children: [
+          Scaffold(
+            body: IndexedStack(
               index: _selectedIndex,
               children: _pages,
             ),
-            Positioned(
-              bottom: 0,
-              child: BottomNavigator(
-                selectedIndex: _selectedIndex,
-                listIcons: [
-                  MdiIcons.heart,
-                  MdiIcons.home,
-                  MdiIcons.bell,
-                  Icons.pets
-                ],
-                onSelect: (index) {
-                  setState(() {
-                    _selectedIndex = index;
-                  });
-                },
-              ),
-            )
-          ],
-        ),
+          ),
+          Positioned(
+            bottom: 0,
+            child: BottomNavigator(
+              selectedIndex: _selectedIndex,
+              listIcons: [
+                MdiIcons.heart,
+                MdiIcons.home,
+                MdiIcons.bell,
+                Icons.pets
+              ],
+              onSelect: (index) {
+                setState(() {
+                  _selectedIndex = index;
+                });
+              },
+            ),
+          )
+        ],
       ),
     );
   }

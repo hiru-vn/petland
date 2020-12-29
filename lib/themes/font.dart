@@ -25,14 +25,14 @@ TextStyle ptTitle() => TextStyle(
 TextStyle ptButton() => GoogleFonts.nunito(
     letterSpacing: 0.2, fontSize: 18, fontWeight: FontWeight.w500);
 
-TextStyle ptBigBody() => GoogleFonts.nunito(
-    letterSpacing: 0.15, fontSize: 16, fontWeight: FontWeight.w400);
+TextStyle ptBigBody() =>
+    GoogleFonts.nunito(fontSize: 16, fontWeight: FontWeight.w400);
 
-TextStyle ptBody() => GoogleFonts.nunito(
-    letterSpacing: 0.15, fontSize: 14, fontWeight: FontWeight.w400);
+TextStyle ptBody() =>
+    GoogleFonts.nunito(fontSize: 14, fontWeight: FontWeight.w400);
 
-TextStyle ptSmall() => GoogleFonts.nunito(
-    letterSpacing: 0.1, fontSize: 13, fontWeight: FontWeight.w400);
+TextStyle ptSmall() =>
+    GoogleFonts.nunito(fontSize: 13, fontWeight: FontWeight.w400);
 
-TextStyle ptTiny() => GoogleFonts.nunito(
-    letterSpacing: 0.05, fontSize: 12, fontWeight: FontWeight.w400);
+TextStyle ptTiny() =>
+    GoogleFonts.nunito(fontSize: 12, fontWeight: FontWeight.w400);
