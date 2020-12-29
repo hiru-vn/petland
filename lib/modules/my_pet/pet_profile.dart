@@ -1,5 +1,6 @@
 import 'package:petland/modules/my_pet/pet_data_update.dart';
 import 'package:petland/modules/my_pet/pet_race.dart';
+import 'package:petland/modules/my_pet/records/birthday_page.dart';
 import 'package:petland/modules/my_pet/records/vaccine_page.dart';
 import 'package:petland/share/import.dart';
 import 'package:petland/share/widgets/image_view.dart';
@@ -460,7 +461,9 @@ class PetRecordWidget extends StatelessWidget {
           Divider(
             height: 3,
           ),
-          _buildRecordTile(context, 'BIRTHDAYS', () {}),
+          _buildRecordTile(context, 'BIRTHDAYS', () {
+            BirthdayPage.navigate();
+          }),
           Divider(
             height: 3,
           ),

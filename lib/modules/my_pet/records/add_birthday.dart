@@ -2,23 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:petland/modules/my_pet/records/vaccine_type.dart';
 import 'package:petland/share/import.dart';
 
-class AddVaccinePage extends StatefulWidget {
+class AddBirthdayPage extends StatefulWidget {
   static navigate() {
-    return navigatorKey.currentState.push(pageBuilder(AddVaccinePage()));
+    return navigatorKey.currentState.push(pageBuilder(AddBirthdayPage()));
   }
 
   @override
-  _AddVaccinePageState createState() => _AddVaccinePageState();
+  _AddBirthdayPageState createState() => _AddBirthdayPageState();
 }
 
-class _AddVaccinePageState extends State<AddVaccinePage> {
-  bool _checkRemider = false;
+class _AddBirthdayPageState extends State<AddBirthdayPage> {
   bool _checkCreatePost = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: innerAppBar(context, 'New vaccine'),
+      appBar: innerAppBar(context, 'This birthday'),
       body: Column(
         children: [
           Expanded(
@@ -126,27 +125,6 @@ class _AddVaccinePageState extends State<AddVaccinePage> {
                       onChanged: (val) {
                         setState(() {
                           _checkCreatePost = val;
-                        });
-                      },
-                    ),
-                  ),
-                  Divider(
-                    height: 3,
-                  ),
-                  ListTile(
-                    title: Text(
-                      'REMIDER',
-                      style: ptTitle().copyWith(
-                          fontWeight: FontWeight.w800,
-                          color: Colors.black54,
-                          fontSize: 14),
-                    ),
-                    trailing: Switch(
-                      activeColor: ptPrimaryColor(context),
-                      value: _checkRemider,
-                      onChanged: (val) {
-                        setState(() {
-                          _checkRemider = val;
                         });
                       },
                     ),
