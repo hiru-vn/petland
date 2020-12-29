@@ -5,17 +5,13 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final list = [
-      {"name": "Brishtish short-hair", "img": "assets/image/cat_race_1.jpg"},
-      {
-        "name": "Brishtish short-hair golden",
-        "img": "assets/image/cat_race_2.jpg"
-      },
-      {"name": "Brishtish long-hair", "img": "assets/image/cat_race_3.jpg"},
-      {"name": "beganli", "img": "assets/image/cat_race_4.jpg"},
-      {"name": "Burmilla", "img": "assets/image/cat_race_5.jpeg"},
-      {"name": "Exotic short hair", "img": "assets/image/cat_race_6.jpg"},
-      {"name": "Yellow cat", "img": "assets/image/cat_race_7.png"},
-      {"name": "Muchin", "img": "assets/image/cat_race_8.png"}
+      {"name": "My Pets", "img": "assets/image/my_pet_icon.png"},
+      {"name": "Invite Friends", "img": "assets/image/invite_friend.jpg"},
+      {"name": "Save Images", "img": "assets/image/save_post.png"},
+      {"name": "Language", "img": "assets/image/language.png"},
+      {"name": "Night Mode", "img": "assets/image/night_mode.png"},
+      {"name": "Terms & Policy", "img": "assets/image/policy.png"},
+      {"name": "About Petland", "img": "assets/image/logo.png"},
     ];
     return Scaffold(
       appBar: MyAppBar(
@@ -79,21 +75,67 @@ class ProfilePage extends StatelessWidget {
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
                       children: [
-                        Container(
-                          height: 40,
-                          width: 40,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                          ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.all(10).copyWith(bottom: 5),
+                              child: Text(
+                                'Create a Profile for your pet',
+                                maxLines: null,
+                                style: ptBody().copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w900,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.all(10).copyWith(top: 0),
+                              child: Text(
+                                'Add your cute friend profile to PetLand',
+                                maxLines: null,
+                                style: ptTiny().copyWith(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
+                        Spacer(),
                         Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Text(
-                            'Create a Profile for your pet',
-                            maxLines: null,
-                            style: ptBody().copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w900,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 5),
+                          child: Container(
+                            height: 45,
+                            width: 45,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle, color: Colors.white),
+                            child: Center(
+                              child: Container(
+                                height: 41,
+                                width: 41,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: ptDarkColor(context)),
+                                child: Center(
+                                  child: Container(
+                                    height: 38,
+                                    width: 38,
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Colors.white),
+                                    child: Center(
+                                      child: Icon(
+                                        Icons.add,
+                                        color: ptDarkColor(context),
+                                        size: 27,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -115,6 +157,23 @@ class ProfilePage extends StatelessWidget {
                   );
                 }),
               ),
+              SizedBox(height: 15),
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: ExpandBtn(
+                  text: 'Logout',
+                  onPress: () {},
+                  color: ptGreyColor(context).withOpacity(0.6),
+                  height: 45,
+                  textColor: Colors.black,
+                ),
+              ),
+              SizedBox(height: 10),
+              Text(
+                'v1.0.21',
+                style: ptSmall().copyWith(color: Colors.black54),
+              ),
+              SizedBox(height: 70),
             ],
           ),
         ),
@@ -145,30 +204,39 @@ class ProfileItemCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  topRight: Radius.circular(10),
-                ),
-                child: SizedBox(
-                  width: deviceWidth(context) / 2,
-                  child: Image.asset(
-                    image,
-                    fit: BoxFit.fitWidth,
+              SizedBox(
+                width: deviceWidth(context) / 2,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10),
+                  ),
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(15).copyWith(bottom: 5),
+                      child: SizedBox(
+                        width: deviceWidth(context) / 7,
+                        child: Image.asset(
+                          image,
+                          fit: BoxFit.fitWidth,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: Text(
-                  title,
-                  maxLines: null,
-                  style: ptTitle().copyWith(
-                    color: ptPrimaryColor(context),
-                    fontWeight: FontWeight.w900,
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Text(
+                    title,
+                    maxLines: null,
+                    style: ptTitle().copyWith(
+                      fontWeight: FontWeight.w900,
+                    ),
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),

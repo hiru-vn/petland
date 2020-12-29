@@ -13,7 +13,7 @@ Color ptBackgroundColor(BuildContext context) =>
     Theme.of(context).backgroundColor;
 Color ptAccentColor(BuildContext context) => HexColor('#ffe7e7');
 Color ptLineColor(BuildContext context) => Colors.black.withOpacity(0.2);
-Color ptGreyColor(BuildContext context) => HexColor('#c4c4c4');
+Color ptGreyColor(BuildContext context) => HexColor('#d1d1d1');
 Color ptDarkColor(BuildContext context) => HexColor('#21323A');
 
 class HexColor extends Color {

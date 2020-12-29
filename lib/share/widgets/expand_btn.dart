@@ -6,23 +6,32 @@ import 'package:petland/utils/constants.dart';
 class ExpandBtn extends StatelessWidget {
   final String text;
   final Function onPress;
+  final Color color;
+  final Color textColor;
+  final double height;
 
-  const ExpandBtn({Key key, @required this.text, @required this.onPress})
+  const ExpandBtn(
+      {Key key,
+      @required this.text,
+      @required this.onPress,
+      this.color,
+      this.textColor,
+      this.height})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: 55,
+      height: height ?? 55,
       child: FlatButton(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(6),
         ),
-        color: ptPrimaryColor(context),
+        color: color ?? ptPrimaryColor(context),
         onPressed: onPress,
         child: Text(
           text,
-          style: ptButton().copyWith(color: Colors.white),
+          style: ptButton().copyWith(color: textColor?? Colors.white),
         ),
       ),
     );

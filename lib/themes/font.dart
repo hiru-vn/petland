@@ -23,7 +23,7 @@ TextStyle ptTitle() => TextStyle(
     color: Colors.black87);
 
 TextStyle ptButton() => GoogleFonts.nunito(
-    letterSpacing: 0.2, fontSize: 18, fontWeight: FontWeight.w500);
+    letterSpacing: 0.2, fontSize: 17, fontWeight: FontWeight.w600);
 
 TextStyle ptBigBody() =>
     GoogleFonts.nunito(fontSize: 16, fontWeight: FontWeight.w400);
