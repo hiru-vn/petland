@@ -24,7 +24,9 @@ class CategoryPage extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Column(
-          children: [],
+          children: [
+            
+          ],
         ),
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:petland/modules/home_page.dart';
 import 'package:petland/navigator.dart';
 import 'package:petland/share/widgets/appbar.dart';
 import 'package:petland/share/widgets/back_btn.dart';
@@ -61,7 +62,9 @@ class RegisterPage extends StatelessWidget {
                   textStyle: ptTitle().copyWith(color: Colors.white70),
                 ),
                 SpacingBox(h: 8),
-                ExpandBtn(text: 'Let\'s get started', onPress: () {}),
+                ExpandBtn(text: 'Let\'s get started', onPress: () {
+                  HomePage.navigate();
+                }),
               ],
             ),
           ),

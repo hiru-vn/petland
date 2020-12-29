@@ -1,4 +1,5 @@
 import 'package:petland/modules/authentication/register.dart';
+import 'package:petland/modules/home_page.dart';
 import 'package:petland/share/import.dart';
 
 class LoginPage extends StatelessWidget {
@@ -62,7 +63,9 @@ class LoginPage extends StatelessWidget {
                   iconColor: HexColor('#fb565e'),
                 ),
                 SpacingBox(h: 4),
-                ExpandBtn(text: 'Đăng nhập', onPress: () {}),
+                ExpandBtn(text: 'Đăng nhập', onPress: () {
+                  HomePage.navigate();
+                }),
                 SpacingBox(h: 2),
                 Center(
                   child: Text(
