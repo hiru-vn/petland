@@ -55,17 +55,18 @@ class FacebookBtn extends StatelessWidget {
         onPressed: onPress,
         child: Row(
           children: [
+            SizedBox(width: 10),
             SizedBox(
-              width: deviceWidth(context) / 10,
-              child: Center(
+              width: 45,
+              child: Align(
+                alignment: Alignment.centerLeft,
                 child: Image.asset('assets/image/facebook.png'),
               ),
             ),
-            SizedBox(width: deviceWidth(context) / 15),
             Expanded(
               child: Text(
                 'Đăng nhập bằng Facebook',
-                style: ptButton().copyWith(color: Colors.white),
+                style: ptTitle().copyWith(color: Colors.white),
               ),
             ),
           ],
@@ -92,15 +93,18 @@ class GoogleBtn extends StatelessWidget {
         onPressed: onPress,
         child: Row(
           children: [
+            SizedBox(width: 5),
             SizedBox(
-              width: deviceWidth(context) / 10,
-              child: Image.asset('assets/image/google.png'),
+              width: 50,
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Image.asset('assets/image/google.png'),
+              ),
             ),
-            SizedBox(width: deviceWidth(context) / 15),
             Expanded(
               child: Text(
                 'Đăng nhập bằng Google',
-                style: ptButton().copyWith(color: Colors.black),
+                style: ptTitle().copyWith(color: Colors.black),
               ),
             ),
           ],

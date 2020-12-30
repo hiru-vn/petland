@@ -32,7 +32,7 @@ class RegisterPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 100),
+                SizedBox(height: kToolbarHeight + 65),
                 Text(
                   'Create your account',
                   style: ptHeadLineSmall().copyWith(color: Colors.white),
@@ -62,9 +62,11 @@ class RegisterPage extends StatelessWidget {
                   textStyle: ptTitle().copyWith(color: Colors.white70),
                 ),
                 SpacingBox(h: 8),
-                ExpandBtn(text: 'Let\'s get started', onPress: () {
-                  HomePage.navigate();
-                }),
+                ExpandBtn(
+                    text: 'Let\'s get started',
+                    onPress: () {
+                      HomePage.navigate();
+                    }),
               ],
             ),
           ),
