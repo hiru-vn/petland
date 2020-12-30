@@ -52,6 +52,20 @@ class _CommentPageState extends State<CommentPage>
     return Scaffold(
       appBar: MyAppBar(
         title: 'Comments',
+        actions: [
+          Center(
+            child: Text(
+              'Mới nhất',
+              style: ptSmall(),
+            ),
+          ),
+          Center(
+            child: Icon(Icons.arrow_drop_down),
+          ),
+          SizedBox(
+            width: 15,
+          )
+        ],
       ),
       body: Stack(
         fit: StackFit.expand,
