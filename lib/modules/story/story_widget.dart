@@ -1,4 +1,5 @@
 import 'package:petland/model/post.dart';
+import 'package:petland/modules/story/comment_page.dart';
 import 'package:petland/modules/story/post_story.dart';
 import 'package:petland/share/functions/share_to.dart';
 import 'package:petland/share/import.dart';
@@ -115,10 +116,44 @@ class _StoryWidgetState extends State<StoryWidget> {
                 '32',
                 style: ptTiny().copyWith(color: Colors.white),
               ),
-              Icon(
-                MdiIcons.comment,
-                color: Colors.white,
-                size: 27,
+              GestureDetector(
+                onTap: () {
+                  showModalBottomSheet(
+                      useRootNavigator: true,
+                      context: context,
+                      backgroundColor: Colors.transparent,
+                      isScrollControlled: true,
+                      builder: (context) {
+                        return SizedBox(
+                            height: deviceHeight(context) - kToolbarHeight - 10,
+                            child: Column(
+                              children: [
+                                Container(
+                                  height: 10,
+                                  width: deviceWidth(context),
+                                  color: Colors.white,
+                                  child: Align(
+                                    alignment: Alignment.bottomCenter,
+                                    child: Container(
+                                      height: 4,
+                                      width: 50,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(2),
+                                        color: Colors.black54,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(child: CommentPage()),
+                              ],
+                            ));
+                      });
+                },
+                child: Icon(
+                  MdiIcons.comment,
+                  color: Colors.white,
+                  size: 27,
+                ),
               ),
               SizedBox(height: 20),
               GestureDetector(

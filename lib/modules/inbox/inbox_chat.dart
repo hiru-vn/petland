@@ -102,7 +102,7 @@ class _SupportChatState extends State<SupportChat> {
         },
         inputToolbarPadding: EdgeInsets.all(4),
         inputDecoration:
-            InputDecoration.collapsed(hintText: "Add message here..."),
+            InputDecoration.collapsed(hintText: "Send message..."),
         dateFormat: DateFormat('yyyy-MMM-dd'),
         timeFormat: DateFormat('HH:mm'),
         messages: messages,
