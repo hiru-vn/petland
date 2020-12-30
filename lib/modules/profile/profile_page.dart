@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:petland/modules/inbox/inbox_list.dart';
 import 'package:petland/modules/my_pet/pick_my_pet_list.dart';
 import 'package:petland/modules/my_pet/pick_pet.dart';
 import 'package:petland/share/import.dart';
@@ -30,7 +31,9 @@ class ProfilePage extends StatelessWidget {
                 Icons.message,
                 size: 21,
               ),
-              onPressed: () {}),
+              onPressed: () {
+                InboxList.navigate();
+              }),
         ],
       ),
       body: SingleChildScrollView(

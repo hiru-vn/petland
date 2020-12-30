@@ -1,4 +1,5 @@
 import 'package:petland/modules/inbox/inbox_chat.dart';
+import 'package:petland/modules/inbox/inbox_list.dart';
 import 'package:petland/share/import.dart';
 
 class NotificationPage extends StatefulWidget {
@@ -34,7 +35,7 @@ class _NotificationPageState extends State<NotificationPage>
                 size: 21,
               ),
               onPressed: () {
-                SupportChat.navigate();
+                InboxList.navigate();
               }),
         ],
       ),
