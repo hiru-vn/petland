@@ -1,4 +1,3 @@
-import 'package:petland/modules/inbox/inbox_chat.dart';
 import 'package:petland/modules/inbox/inbox_list.dart';
 import 'package:petland/share/import.dart';
 
@@ -23,12 +22,7 @@ class _NotificationPageState extends State<NotificationPage>
       appBar: MyAppBar(
         title: 'Notification',
         actions: [
-          IconButton(
-              icon: Icon(
-                Icons.search,
-                size: 21,
-              ),
-              onPressed: () {}),
+          Center(child: AnimatedSearchBar()),
           IconButton(
               icon: Icon(
                 Icons.message,

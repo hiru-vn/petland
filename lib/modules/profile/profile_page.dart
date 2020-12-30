@@ -20,12 +20,7 @@ class ProfilePage extends StatelessWidget {
       appBar: MyAppBar(
         title: 'Profile',
         actions: [
-          IconButton(
-              icon: Icon(
-                Icons.search,
-                size: 21,
-              ),
-              onPressed: () {}),
+          Center(child: AnimatedSearchBar()),
           IconButton(
               icon: Icon(
                 Icons.message,

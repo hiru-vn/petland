@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:petland/themes/color.dart';
 import 'package:petland/themes/font.dart';
-import 'package:petland/utils/constants.dart';
 
 class ExpandBtn extends StatelessWidget {
   final String text;
