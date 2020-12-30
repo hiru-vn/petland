@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:petland/modules/my_pet/pick_my_pet_list.dart';
+import 'package:petland/modules/my_pet/pick_pet.dart';
 import 'package:petland/share/import.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -67,71 +68,76 @@ class ProfilePage extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Card(
-                  color: ptDarkColor(context),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.all(10).copyWith(bottom: 5),
-                              child: Text(
-                                'Create a Profile for your pet',
-                                maxLines: null,
-                                style: ptBody().copyWith(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w900,
+                child: GestureDetector(
+                  onTap: () {
+                    PickPet.navigate();
+                  },
+                  child: Card(
+                    color: ptDarkColor(context),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(10)
+                                    .copyWith(bottom: 5),
+                                child: Text(
+                                  'Create a Profile for your pet',
+                                  maxLines: null,
+                                  style: ptBody().copyWith(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w900,
+                                  ),
                                 ),
                               ),
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.all(10).copyWith(top: 0),
-                              child: Text(
-                                'Add your cute friend profile to PetLand',
-                                maxLines: null,
-                                style: ptTiny().copyWith(
-                                  color: Colors.white,
+                              Padding(
+                                padding:
+                                    const EdgeInsets.all(10).copyWith(top: 0),
+                                child: Text(
+                                  'Add your cute friend profile to PetLand',
+                                  maxLines: null,
+                                  style: ptTiny().copyWith(
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        Spacer(),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 5),
-                          child: Container(
-                            height: 45,
-                            width: 45,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle, color: Colors.white),
-                            child: Center(
-                              child: Container(
-                                height: 41,
-                                width: 41,
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: ptDarkColor(context)),
-                                child: Center(
-                                  child: Container(
-                                    height: 38,
-                                    width: 38,
-                                    decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Colors.white),
-                                    child: Center(
-                                      child: Icon(
-                                        Icons.add,
-                                        color: ptDarkColor(context),
-                                        size: 27,
+                            ],
+                          ),
+                          Spacer(),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 5),
+                            child: Container(
+                              height: 45,
+                              width: 45,
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle, color: Colors.white),
+                              child: Center(
+                                child: Container(
+                                  height: 41,
+                                  width: 41,
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: ptDarkColor(context)),
+                                  child: Center(
+                                    child: Container(
+                                      height: 38,
+                                      width: 38,
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.white),
+                                      child: Center(
+                                        child: Icon(
+                                          Icons.add,
+                                          color: ptDarkColor(context),
+                                          size: 27,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -139,8 +145,8 @@ class ProfilePage extends StatelessWidget {
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
