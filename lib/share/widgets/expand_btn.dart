@@ -54,9 +54,9 @@ class FacebookBtn extends StatelessWidget {
         onPressed: onPress,
         child: Row(
           children: [
-            SizedBox(width: 10),
+            SizedBox(width: 5),
             SizedBox(
-              width: 45,
+              width: 35,
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Image.asset('assets/image/facebook.png'),
@@ -92,9 +92,8 @@ class GoogleBtn extends StatelessWidget {
         onPressed: onPress,
         child: Row(
           children: [
-            SizedBox(width: 5),
             SizedBox(
-              width: 50,
+              width: 40,
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Image.asset('assets/image/google.png'),

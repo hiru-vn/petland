@@ -151,7 +151,7 @@ class _CommentPageState extends State<CommentPage>
             bottom: 0,
             child: Container(
               width: deviceWidth(context),
-              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
               color: ptBackgroundColor(context),
               child: Center(
                 child: TextField(

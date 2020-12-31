@@ -40,9 +40,19 @@ class ProfilePage extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
                   children: [
-                    CircleAvatar(
-                      radius: 28,
-                      backgroundImage: AssetImage('assets/image/cat1.png'),
+                    Container(
+                      width: 57,
+                      height: 57,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(width: 1.5, color: ptDarkColor(context)),
+                      ),
+                      child: Center(
+                        child: CircleAvatar(
+                          radius: 26,
+                          backgroundImage: AssetImage('assets/image/cat1.png'),
+                        ),
+                      ),
                     ),
                     SizedBox(width: 20),
                     Column(
