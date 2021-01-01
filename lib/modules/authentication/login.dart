@@ -25,7 +25,7 @@ class LoginPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 100),
+                SizedBox(height: kToolbarHeight + 65),
                 Text(
                   'Wellcome Back!',
                   style: ptHeadLine().copyWith(color: Colors.white),

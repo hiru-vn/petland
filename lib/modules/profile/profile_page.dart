@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:petland/modules/inbox/inbox_list.dart';
 import 'package:petland/modules/my_pet/pick_my_pet_list.dart';
 import 'package:petland/modules/my_pet/pick_pet.dart';
+import 'package:petland/modules/profile/profile_owner.dart';
 import 'package:petland/share/import.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -66,9 +67,25 @@ class ProfilePage extends StatelessWidget {
                               ptTitle().copyWith(fontWeight: FontWeight.w900),
                         ),
                         SizedBox(height: 3),
-                        Text(
-                          'Change profile infomation',
-                          style: ptSmall().copyWith(color: Colors.black54),
+                        GestureDetector(
+                          onTap: () {
+                            OwnerProfilePage.navigate(
+                                birthdate: DateTime.now(),
+                                gender: 'male',
+                                characters: ['cute', 'overweight', 'fat'],
+                                bgUrl:
+                                    'https://www.coversden.com/images/covers/1/690.jpg',
+                                imgUrl:
+                                    'https://ca-times.brightspotcdn.com/dims4/default/33c083b/2147483647/strip/true/crop/1611x906+0+0/resize/840x472!/quality/90/?url=https%3A%2F%2Fcalifornia-times-brightspot.s3.amazonaws.com%2Ffd%2Fef%2F05c1aab3e76c3d902aa0548c0046%2Fla-la-hm-pet-issue-18-jpg-20150615',
+                                name: 'John Carlar',
+                                nickName: 'Brocat',
+                                country: 'Viet Nam',
+                                description: 'I love cats a lot');
+                          },
+                          child: Text(
+                            'Change profile infomation',
+                            style: ptSmall().copyWith(color: Colors.black54),
+                          ),
                         ),
                       ],
                     )
