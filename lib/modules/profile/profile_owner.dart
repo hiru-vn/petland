@@ -133,7 +133,8 @@ class _OwnerProfilePageState extends State<OwnerProfilePage>
                     width: deviceWidth(context) / 4.5,
                     child: Tab(text: 'Profile')),
                 SizedBox(
-                    width: deviceWidth(context) / 4.5, child: Tab(text: 'Pets')),
+                    width: deviceWidth(context) / 4.5,
+                    child: Tab(text: 'Pets')),
                 SizedBox(
                     width: deviceWidth(context) / 4.5,
                     child: Tab(text: 'Follow')),
