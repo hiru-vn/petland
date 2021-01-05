@@ -28,7 +28,17 @@ class ProfilePage extends StatelessWidget {
         "img": "assets/image/save_post.png",
         "action": () {}
       },
-      {"name": "Language", "img": "assets/image/language.png", "action": () {}},
+      {
+        "name": "Language",
+        "img": "assets/image/language.png",
+        "action": () {
+          pickList(context,
+              title: 'Chọn ngôn ngữ',
+              onPicked: (value) {},
+              options: ['Tiếng Việt', 'English'],
+              closeText: 'Xong');
+        }
+      },
       {
         "name": "Night Mode",
         "img": "assets/image/night_mode.png",
