@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 
 class AnimatedSearchBar extends StatefulWidget {
+  final double width;
+  final double height;
+
+  const AnimatedSearchBar({Key key, this.width, this.height}) : super(key: key);
+
   @override
   _AnimatedSearchBarState createState() => _AnimatedSearchBarState();
 }
@@ -8,9 +13,13 @@ class AnimatedSearchBar extends StatefulWidget {
 class _AnimatedSearchBarState extends State<AnimatedSearchBar> {
   bool _folded = true;
   FocusNode _focusNode = FocusNode();
+  double _width = 180;
+  double _height = 48;
 
   @override
   void initState() {
+    _width = widget.width;
+    _height = widget.height;
     _focusNode.addListener(() {
       if (!_focusNode.hasFocus) {
         setState(() {
@@ -25,10 +34,10 @@ class _AnimatedSearchBarState extends State<AnimatedSearchBar> {
   Widget build(BuildContext context) {
     return AnimatedContainer(
       duration: Duration(milliseconds: 400),
-      width: _folded ? 48 : 180,
-      height: 48,
+      width: _folded ? _height : _width,
+      height: _height,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(_height / 2),
         boxShadow: _folded ? null : kElevationToShadow[1],
         color: Colors.white,
       ),
@@ -53,13 +62,14 @@ class _AnimatedSearchBarState extends State<AnimatedSearchBar> {
               type: MaterialType.transparency,
               child: InkWell(
                 borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(_folded ? 24 : 0),
-                  topRight: Radius.circular(24),
-                  bottomLeft: Radius.circular(_folded ? 24 : 0),
+                  topLeft: Radius.circular(_folded ? _height / 2 : 0),
+                  topRight: Radius.circular(_height / 2),
+                  bottomLeft: Radius.circular(_folded ? _height / 2 : 0),
                   bottomRight: Radius.circular(24),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(12.0),
+                  padding:
+                      const EdgeInsets.only(right: 12.0, top: 10, bottom: 10),
                   child: Icon(
                     _folded ? Icons.search : Icons.close,
                     color: _folded ? Colors.black87 : Colors.black45,

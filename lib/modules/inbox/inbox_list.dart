@@ -50,17 +50,14 @@ class _InboxListState extends State<InboxList>
         automaticallyImplyLeading: true,
         title: 'Messages',
         actions: [
-          IconButton(
-              icon: Icon(
-                Icons.search,
-                size: 21,
-              ),
-              onPressed: () {}),
+          Center(child: AnimatedSearchBar(
+            width: deviceWidth(context)/2,
+            height: 40,
+          )),
         ],
       ),
       body: ListView.separated(
         shrinkWrap: true,
-        
         itemCount: list.length,
         itemBuilder: (context, index) => ListTile(
           onTap: () {
@@ -78,7 +75,6 @@ class _InboxListState extends State<InboxList>
                 color: list[index]['isRead'] ? Colors.black54 : Colors.black87,
                 fontSize: list[index]['isRead'] ? 15 : 16),
           ),
-          
           subtitle: Text(
             list[index]['text'],
             style: ptTiny().copyWith(
