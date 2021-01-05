@@ -12,11 +12,11 @@ class InboxList extends StatefulWidget {
 
 class _InboxListState extends State<InboxList>
     with SingleTickerProviderStateMixin {
-  TabController _tabController;
+  // TabController _tabController;
 
   @override
   void initState() {
-    _tabController = TabController(length: 2, vsync: this);
+    // _tabController = TabController(length: 2, vsync: this);
     super.initState();
   }
 

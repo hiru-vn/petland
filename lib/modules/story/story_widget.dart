@@ -1,6 +1,5 @@
 import 'package:petland/model/post.dart';
 import 'package:petland/modules/story/comment_page.dart';
-import 'package:petland/modules/story/post_story.dart';
 import 'package:petland/share/functions/share_to.dart';
 import 'package:petland/share/import.dart';
 

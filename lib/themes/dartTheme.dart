@@ -6,10 +6,10 @@ final darkTheme = ThemeData(
   primaryColor: HexColor('#48da9c'),
   accentColor: HexColor('#f1f8fe'),
   bottomAppBarColor: HexColor('#0E2036'),
-  scaffoldBackgroundColor: HexColor('#ffffff'),
+  scaffoldBackgroundColor: HexColor('#333333'),
   cardTheme: CardTheme(
-    color: HexColor('#FEFEFE'),
-    shadowColor: HexColor('#FEFEFE'),
+    color: HexColor('#232323'),
+    shadowColor: HexColor('#111111'),
   ),
   primaryIconTheme: IconThemeData(
     color: HexColor('#444444'),
