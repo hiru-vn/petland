@@ -18,8 +18,8 @@ class _AnimatedSearchBarState extends State<AnimatedSearchBar> {
 
   @override
   void initState() {
-    _width = widget.width;
-    _height = widget.height;
+    _width = widget.width??180;
+    _height = widget.height??48;
     _focusNode.addListener(() {
       if (!_focusNode.hasFocus) {
         setState(() {

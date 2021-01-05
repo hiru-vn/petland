@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:petland/modules/inbox/inbox_list.dart';
 import 'package:petland/modules/my_pet/pick_my_pet_list.dart';
 import 'package:petland/modules/my_pet/pick_pet.dart';
+import 'package:petland/modules/profile/about.dart';
+import 'package:petland/modules/profile/policy.dart';
 import 'package:petland/modules/profile/profile_owner.dart';
 import 'package:petland/share/import.dart';
 
@@ -9,13 +11,43 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final list = [
-      {"name": "My Pets", "img": "assets/image/my_pet_icon.png"},
-      {"name": "Invite Friends", "img": "assets/image/invite_friend.jpg"},
-      {"name": "Save Images", "img": "assets/image/save_post.png"},
-      {"name": "Language", "img": "assets/image/language.png"},
-      {"name": "Night Mode", "img": "assets/image/night_mode.png"},
-      {"name": "Terms & Policy", "img": "assets/image/policy.png"},
-      {"name": "About Petland", "img": "assets/image/logo.png"},
+      {
+        "name": "My Pets",
+        "img": "assets/image/my_pet_icon.png",
+        "action": () {
+          PickMyPetListpage.navigate();
+        }
+      },
+      {
+        "name": "Invite Friends",
+        "img": "assets/image/invite_friend.jpg",
+        "action": () {}
+      },
+      {
+        "name": "Save Images",
+        "img": "assets/image/save_post.png",
+        "action": () {}
+      },
+      {"name": "Language", "img": "assets/image/language.png", "action": () {}},
+      {
+        "name": "Night Mode",
+        "img": "assets/image/night_mode.png",
+        "action": () {}
+      },
+      {
+        "name": "Terms & Policy",
+        "img": "assets/image/policy.png",
+        "action": () {
+          PolicyPage.navigate();
+        }
+      },
+      {
+        "name": "About Petland",
+        "img": "assets/image/logo.png",
+        "action": () {
+          AboutPage.navigate();
+        }
+      },
     ];
     return Scaffold(
       appBar: MyAppBar(
@@ -186,9 +218,7 @@ class ProfilePage extends StatelessWidget {
                   return ProfileItemCard(
                     title: list[index]['name'],
                     image: list[index]['img'],
-                    onTap: () {
-                      PickMyPetListpage.navigate();
-                    },
+                    onTap: list[index]['action'],
                   );
                 }),
               ),

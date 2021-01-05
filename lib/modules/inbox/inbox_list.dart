@@ -50,10 +50,12 @@ class _InboxListState extends State<InboxList>
         automaticallyImplyLeading: true,
         title: 'Messages',
         actions: [
-          Center(child: AnimatedSearchBar(
-            width: deviceWidth(context)/2,
-            height: 40,
-          )),
+          Center(
+            child: AnimatedSearchBar(
+              width: deviceWidth(context) / 2,
+              height: 40,
+            ),
+          ),
         ],
       ),
       body: ListView.separated(
