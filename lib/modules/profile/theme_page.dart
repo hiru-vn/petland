@@ -2,6 +2,7 @@ import 'package:petland/share/import.dart';
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:petland/themes/dartTheme.dart';
 import 'package:petland/themes/lightTheme.dart';
+import 'package:petland/utils/spref.dart';
 
 class ThemePage extends StatefulWidget {
   static Future navigate() {
@@ -13,10 +14,13 @@ class ThemePage extends StatefulWidget {
 }
 
 class _ThemePageState extends State<ThemePage> {
-  bool isLightMode = true;
+  bool isLightMode;
 
   @override
   void initState() {
+    SPref.instance
+        .get('isLightMode')
+        .then((value) => isLightMode = value ?? true);
     super.initState();
   }
 
@@ -33,17 +37,18 @@ class _ThemePageState extends State<ThemePage> {
             child: Transform.scale(
               scale: 2.5,
               child: ThemeSwitcher(
-                builder: (context) => Switch(
+                builder: (context2) => Switch(
                   value: isLightMode,
                   activeColor: ptPrimaryColor(context),
                   onChanged: (val) {
                     ThemeData theme = val ? lightTheme : darkTheme;
-                    ThemeSwitcher.of(context).changeTheme(
+                    ThemeSwitcher.of(context2).changeTheme(
                         theme: theme, reverseAnimation: false // default: false
                         );
                     setState(() {
                       isLightMode = val;
                     });
+                    SPref.instance.setBool('isLightMode', val);
                   },
                 ),
               ),
