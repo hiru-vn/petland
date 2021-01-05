@@ -18,9 +18,12 @@ class _ThemePageState extends State<ThemePage> {
 
   @override
   void initState() {
-    SPref.instance
-        .get('isLightMode')
-        .then((value) => isLightMode = value ?? true);
+    SPref.instance.get('isLightMode').then((value) async {
+      if (!mounted) await Future.delayed(Duration(milliseconds: 50));
+      setState(() {
+        isLightMode = value ?? true;
+      });
+    });
     super.initState();
   }
 
