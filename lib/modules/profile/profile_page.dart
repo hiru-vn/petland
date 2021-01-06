@@ -3,10 +3,12 @@ import 'package:petland/modules/inbox/inbox_list.dart';
 import 'package:petland/modules/my_pet/pick_my_pet_list.dart';
 import 'package:petland/modules/my_pet/pick_pet.dart';
 import 'package:petland/modules/profile/about_page.dart';
+import 'package:petland/modules/profile/feedback_page.dart';
 import 'package:petland/modules/profile/policy_page.dart';
 import 'package:petland/modules/profile/profile_owner.dart';
 import 'package:petland/modules/profile/theme_page.dart';
 import 'package:petland/share/import.dart';
+import 'package:open_appstore/open_appstore.dart';
 
 class ProfilePage extends StatelessWidget {
   @override
@@ -59,6 +61,21 @@ class ProfilePage extends StatelessWidget {
         "img": "assets/image/logo.png",
         "action": () {
           AboutPage.navigate();
+        }
+      },
+      {
+        "name": "Feedback",
+        "img": "assets/image/feedback.png",
+        "action": () {
+          FeedbackPage.navigate();
+        }
+      },
+      {
+        "name": "Rate Petland",
+        "img": "assets/image/rate_us.png",
+        "action": () {
+          OpenAppstore.launch(
+              androidAppId: "io.payvin.ex", iOSAppId: "284882215");
         }
       },
     ];

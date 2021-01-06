@@ -48,10 +48,10 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
 }
 
 innerAppBar(BuildContext context, String title,
-        {List<Widget> actions, Function(String) onSearch}) =>
+        {List<Widget> actions, Function(String) onSearch, final Color bgColor}) =>
     AppBar(
       elevation: 0,
-      backgroundColor: ptPrimaryColor(context),
+      backgroundColor: bgColor??ptPrimaryColor(context),
       title: Text(
         title,
         style: GoogleFonts.nunito(
