@@ -63,9 +63,11 @@ class LoginPage extends StatelessWidget {
                   iconColor: HexColor('#fb565e'),
                 ),
                 SpacingBox(h: 4),
-                ExpandBtn(text: 'Đăng nhập', onPress: () {
-                  HomePage.navigate();
-                }),
+                ExpandBtn(
+                    text: 'Đăng nhập',
+                    onPress: () {
+                      HomePage.navigate();
+                    }),
                 SpacingBox(h: 2),
                 Center(
                   child: Text(

@@ -54,8 +54,11 @@ class _NotificationPageState extends State<NotificationPage>
                       fontWeight: FontWeight.bold),
                   tabs: [
                     SizedBox(
-                        width: deviceWidth(context) / 2 - 50,
-                        child: Tab(text: 'All')),
+                      width: deviceWidth(context) / 2 - 50,
+                      child: Tab(
+                        text: 'All',
+                      ),
+                    ),
                     SizedBox(
                       width: deviceWidth(context) / 2 - 50,
                       child: Tab(text: 'Unread'),
