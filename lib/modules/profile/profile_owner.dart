@@ -13,6 +13,7 @@ class OwnerProfilePage extends StatefulWidget {
   final String nickName;
   final String country;
   final String description;
+  final String email;
 
   const OwnerProfilePage(
       {Key key,
@@ -23,19 +24,20 @@ class OwnerProfilePage extends StatefulWidget {
       this.name,
       this.nickName,
       this.description,
-      this.country})
+      this.country,
+      this.email})
       : super(key: key);
 
   static navigate(
       {DateTime birthdate,
       String gender,
-      List<String> characters,
       String imgUrl,
       String bgUrl,
       String name,
       String nickName,
       String country,
-      String description}) {
+      String description,
+      String email}) {
     navigatorKey.currentState.push(
       pageBuilder(
         OwnerProfilePage(
@@ -47,6 +49,7 @@ class OwnerProfilePage extends StatefulWidget {
           nickName: nickName,
           description: description,
           country: country,
+          email: email,
         ),
       ),
     );
@@ -60,13 +63,13 @@ class _OwnerProfilePageState extends State<OwnerProfilePage>
     with SingleTickerProviderStateMixin {
   DateTime _birthdate;
   String _gender;
-  List<String> _characters;
   String _imgUrl;
   String _bgUrl;
   String _name;
   String _description;
   String _nickName;
   String _country;
+  String _email;
   TabController _tabController;
 
   @override
@@ -80,29 +83,30 @@ class _OwnerProfilePageState extends State<OwnerProfilePage>
     _nickName = widget.nickName;
     _country = widget.country;
     _tabController = TabController(length: 3, vsync: this);
+    _email = widget.email;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: innerAppBar(context, 'Pet\'s profile', actions: [
+      appBar: innerAppBar(context, 'My profile', actions: [
         IconButton(
-            onPressed: () {
-              // PetDataUpdatePage.navigate(
-              //     race: 'Bristish short-hair',
-              //     birthdate: DateTime.now(),
-              //     gender: 'male',
-              //     characters: ['cute', 'overweight', 'fat'],
-              //     bgUrl: 'https://www.coversden.com/images/covers/1/690.jpg',
-              //     imgUrl:
-              //         'https://ca-times.brightspotcdn.com/dims4/default/33c083b/2147483647/strip/true/crop/1611x906+0+0/resize/840x472!/quality/90/?url=https%3A%2F%2Fcalifornia-times-brightspot.s3.amazonaws.com%2Ffd%2Fef%2F05c1aab3e76c3d902aa0548c0046%2Fla-la-hm-pet-issue-18-jpg-20150615',
-              //     petName: 'Mick');
-            },
-            icon: Icon(
-              Icons.settings,
-              color: Colors.white,
-            ))
+          onPressed: () {
+            // OwnerDataUpdatePage.navigate(
+            //     race: 'Bristish short-hair',
+            //     birthdate: DateTime.now(),
+            //     gender: 'male',
+            //     bgUrl: 'https://www.coversden.com/images/covers/1/690.jpg',
+            //     imgUrl:
+            //         'https://ca-times.brightspotcdn.com/dims4/default/33c083b/2147483647/strip/true/crop/1611x906+0+0/resize/840x472!/quality/90/?url=https%3A%2F%2Fcalifornia-times-brightspot.s3.amazonaws.com%2Ffd%2Fef%2F05c1aab3e76c3d902aa0548c0046%2Fla-la-hm-pet-issue-18-jpg-20150615',
+            //     petName: 'Mick');
+          },
+          icon: Icon(
+            Icons.settings,
+            color: Colors.white,
+          ),
+        ),
       ]),
       body: Column(children: [
         OwnerProfileHeader(
@@ -144,7 +148,17 @@ class _OwnerProfilePageState extends State<OwnerProfilePage>
             color: Colors.grey.withOpacity(0.1),
             child: TabBarView(
               controller: _tabController,
-              children: [Container(), Container(), Container()],
+              children: [
+                OwnerDataWidget(
+                  nickName: _nickName,
+                  birthdate: _birthdate,
+                  gender: _gender,
+                  country: _country,
+                  email: _email,
+                ),
+                Container(),
+                Container()
+              ],
             ),
           ),
         ),
@@ -242,13 +256,19 @@ class OwnerProfileHeader extends StatelessWidget {
 }
 
 class OwnerDataWidget extends StatelessWidget {
-  final String race;
+  final String nickName;
   final DateTime birthdate;
   final String gender;
-  final List<String> characters;
+  final String country;
+  final String email;
 
   const OwnerDataWidget(
-      {Key key, this.race, this.birthdate, this.gender, this.characters})
+      {Key key,
+      this.nickName,
+      this.birthdate,
+      this.gender,
+      this.country,
+      this.email})
       : super(key: key);
 
   @override
@@ -256,28 +276,18 @@ class OwnerDataWidget extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          SizedBox(height: 20),
-          Text(
-            'BASIC DATA',
-            style: ptBigTitle(),
-          ),
-          SpacingBox(h: 3),
-          Divider(
-            height: 3,
-          ),
+          SizedBox(height: 3),
           InkWell(
             highlightColor: ptAccentColor(context),
             splashColor: ptPrimaryColor(context),
-            onTap: () {
-              PetRacePage.navigate();
-            },
+            onTap: () {},
             child: ListTile(
               title: Text(
-                'RACE',
+                'NICK NAME',
                 style: ptTitle(),
               ),
               trailing: Text(
-                race ?? '',
+                nickName ?? '',
               ),
             ),
           ),
@@ -324,38 +334,34 @@ class OwnerDataWidget extends StatelessWidget {
           Divider(
             height: 3,
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-            child: TextFieldTags(
-              onTag: (val) {},
-              onDelete: (val) {},
-              initialTags: characters,
-              textFieldStyler: TextFieldStyler(
-                textFieldEnabled: false,
-                hintText: 'CHARACTER',
-                textStyle: ptTitle(),
-                helperText: null,
-                textFieldBorder: OutlineInputBorder(
-                  borderSide: BorderSide(width: 0, color: Colors.transparent),
-                ),
-                textFieldEnabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(width: 0, color: Colors.transparent),
-                ),
-                textFieldFocusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(width: 0, color: Colors.transparent),
-                ),
-                textFieldDisabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(width: 0, color: Colors.transparent),
-                ),
+          InkWell(
+            highlightColor: ptAccentColor(context),
+            splashColor: ptPrimaryColor(context),
+            onTap: () {},
+            child: ListTile(
+              title: Text(
+                'COUNTRY',
+                style: ptTitle(),
               ),
-              tagsStyler: TagsStyler(
-                tagTextStyle: ptTitle().copyWith(color: Colors.white),
-                tagDecoration: BoxDecoration(
-                  color: ptPrimaryColor(context),
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                tagCancelIcon: SizedBox.shrink(),
-                tagPadding: const EdgeInsets.all(8),
+              trailing: Text(
+                country ?? '',
+              ),
+            ),
+          ),
+          Divider(
+            height: 3,
+          ),
+          InkWell(
+            highlightColor: ptAccentColor(context),
+            splashColor: ptPrimaryColor(context),
+            onTap: () {},
+            child: ListTile(
+              title: Text(
+                'EMAIL',
+                style: ptTitle(),
+              ),
+              trailing: Text(
+                email ?? '',
               ),
             ),
           ),
@@ -368,7 +374,7 @@ class OwnerDataWidget extends StatelessWidget {
   }
 }
 
-class PetPictureWidget extends StatelessWidget {
+class OwnerPictureWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final list = [
@@ -404,7 +410,7 @@ class PetPictureWidget extends StatelessWidget {
   }
 }
 
-class PetVideoWidget extends StatelessWidget {
+class OwnerVideoWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final list = [];
@@ -448,7 +454,7 @@ class PetVideoWidget extends StatelessWidget {
   }
 }
 
-class PetRecordWidget extends StatelessWidget {
+class OwnerRecordWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(

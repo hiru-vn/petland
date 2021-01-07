@@ -134,7 +134,6 @@ class ProfilePage extends StatelessWidget {
                             OwnerProfilePage.navigate(
                                 birthdate: DateTime.now(),
                                 gender: 'male',
-                                characters: ['cute', 'overweight', 'fat'],
                                 bgUrl:
                                     'https://www.coversden.com/images/covers/1/690.jpg',
                                 imgUrl:
@@ -142,7 +141,8 @@ class ProfilePage extends StatelessWidget {
                                 name: 'John Carlar',
                                 nickName: 'Brocat',
                                 country: 'Viet Nam',
-                                description: 'I love cats a lot');
+                                description: 'I love cats a lot',
+                                email: 'carla123love@gmail.com');
                           },
                           child: Text(
                             'Change profile infomation',
