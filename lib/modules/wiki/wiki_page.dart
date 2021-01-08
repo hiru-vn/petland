@@ -1,8 +1,8 @@
 import 'package:petland/share/import.dart';
 
-class ZooPage extends StatelessWidget {
+class WikiPage extends StatelessWidget {
   static navigate() {
-    return navigatorKey.currentState.push(pageBuilder(ZooPage()));
+    return navigatorKey.currentState.push(pageBuilder(WikiPage()));
   }
 
   @override

@@ -1,4 +1,4 @@
-package com.example.petland
+package app.petland.io
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,4 +1,4 @@
-import 'package:petland/modules/inbox/inbox_chat.dart';
+import 'package:petland/modules/inbox/inbox_list.dart';
 import 'package:petland/share/import.dart';
 
 class NotificationPage extends StatefulWidget {
@@ -22,19 +22,14 @@ class _NotificationPageState extends State<NotificationPage>
       appBar: MyAppBar(
         title: 'Notification',
         actions: [
-          IconButton(
-              icon: Icon(
-                Icons.search,
-                size: 21,
-              ),
-              onPressed: () {}),
+          Center(child: AnimatedSearchBar()),
           IconButton(
               icon: Icon(
                 Icons.message,
                 size: 21,
               ),
               onPressed: () {
-                SupportChat.navigate();
+                InboxList.navigate();
               }),
         ],
       ),
@@ -59,8 +54,11 @@ class _NotificationPageState extends State<NotificationPage>
                       fontWeight: FontWeight.bold),
                   tabs: [
                     SizedBox(
-                        width: deviceWidth(context) / 2 - 50,
-                        child: Tab(text: 'All')),
+                      width: deviceWidth(context) / 2 - 50,
+                      child: Tab(
+                        text: 'All',
+                      ),
+                    ),
                     SizedBox(
                       width: deviceWidth(context) / 2 - 50,
                       child: Tab(text: 'Unread'),

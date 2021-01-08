@@ -8,25 +8,33 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Color bgColor;
   final Widget leading;
   final String title;
+  final bool automaticallyImplyLeading;
 
-  MyAppBar({this.actions, this.bgColor, this.leading, this.title});
+  MyAppBar(
+      {this.actions,
+      this.bgColor,
+      this.leading,
+      this.title,
+      this.automaticallyImplyLeading = false});
   @override
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: bgColor ?? Colors.transparent,
       elevation: 0,
-      automaticallyImplyLeading: false,
+      automaticallyImplyLeading: automaticallyImplyLeading,
       leading: leading,
       title: Row(
         children: [
-          Image.asset(
-            'assets/image/logo.png',
-            height: 27,
-            width: 27,
-          ),
-          SizedBox(
-            width: 7,
-          ),
+          if (!automaticallyImplyLeading) ...[
+            Image.asset(
+              'assets/image/logo.png',
+              height: 27,
+              width: 27,
+            ),
+            SizedBox(
+              width: 7,
+            ),
+          ],
           Text(
             title ?? 'PetLand',
             style: ptBigTitle().copyWith(
@@ -40,10 +48,10 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
 }
 
 innerAppBar(BuildContext context, String title,
-        {List<Widget> actions, Function(String) onSearch}) =>
+        {List<Widget> actions, Function(String) onSearch, final Color bgColor}) =>
     AppBar(
       elevation: 0,
-      backgroundColor: ptPrimaryColor(context),
+      backgroundColor: bgColor??ptPrimaryColor(context),
       title: Text(
         title,
         style: GoogleFonts.nunito(

@@ -1,35 +1,97 @@
 import 'package:flutter/material.dart';
+import 'package:petland/modules/inbox/inbox_list.dart';
 import 'package:petland/modules/my_pet/pick_my_pet_list.dart';
+import 'package:petland/modules/my_pet/pick_pet.dart';
+import 'package:petland/modules/profile/about_page.dart';
+import 'package:petland/modules/profile/feedback_page.dart';
+import 'package:petland/modules/profile/policy_page.dart';
+import 'package:petland/modules/profile/profile_owner.dart';
+import 'package:petland/modules/profile/theme_page.dart';
 import 'package:petland/share/import.dart';
+import 'package:open_appstore/open_appstore.dart';
 
 class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final list = [
-      {"name": "My Pets", "img": "assets/image/my_pet_icon.png"},
-      {"name": "Invite Friends", "img": "assets/image/invite_friend.jpg"},
-      {"name": "Save Images", "img": "assets/image/save_post.png"},
-      {"name": "Language", "img": "assets/image/language.png"},
-      {"name": "Night Mode", "img": "assets/image/night_mode.png"},
-      {"name": "Terms & Policy", "img": "assets/image/policy.png"},
-      {"name": "About Petland", "img": "assets/image/logo.png"},
+      {
+        "name": "My Pets",
+        "img": "assets/image/my_pet_icon.png",
+        "action": () {
+          PickMyPetListpage.navigate();
+        }
+      },
+      {
+        "name": "Invite Friends",
+        "img": "assets/image/invite_friend.jpg",
+        "action": () {}
+      },
+      {
+        "name": "Save Images",
+        "img": "assets/image/save_post.png",
+        "action": () {}
+      },
+      {
+        "name": "Language",
+        "img": "assets/image/language.png",
+        "action": () {
+          pickList(context,
+              title: 'Chọn ngôn ngữ',
+              onPicked: (value) {},
+              options: ['Tiếng Việt', 'English'],
+              closeText: 'Xong');
+        }
+      },
+      {
+        "name": "Night Mode",
+        "img": "assets/image/night_mode.png",
+        "action": () {
+          ThemePage.navigate();
+        }
+      },
+      {
+        "name": "Terms & Policy",
+        "img": "assets/image/policy.png",
+        "action": () {
+          PolicyPage.navigate();
+        }
+      },
+      {
+        "name": "About Petland",
+        "img": "assets/image/logo.png",
+        "action": () {
+          AboutPage.navigate();
+        }
+      },
+      {
+        "name": "Feedback",
+        "img": "assets/image/feedback.png",
+        "action": () {
+          FeedbackPage.navigate();
+        }
+      },
+      {
+        "name": "Rate Petland",
+        "img": "assets/image/rate_us.png",
+        "action": () {
+          OpenAppstore.launch(
+              androidAppId: "io.payvin.ex", iOSAppId: "284882215");
+        }
+      },
     ];
     return Scaffold(
       appBar: MyAppBar(
         title: 'Profile',
         actions: [
-          IconButton(
-              icon: Icon(
-                Icons.search,
-                size: 21,
-              ),
-              onPressed: () {}),
+          Center(child: AnimatedSearchBar()),
           IconButton(
               icon: Icon(
                 Icons.message,
                 size: 21,
               ),
-              onPressed: () {}),
+              onPressed: () {
+                InboxList.navigate();
+              }),
         ],
       ),
       body: SingleChildScrollView(
@@ -41,9 +103,20 @@ class ProfilePage extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
                   children: [
-                    CircleAvatar(
-                      radius: 28,
-                      backgroundImage: AssetImage('assets/image/cat1.png'),
+                    Container(
+                      width: 57,
+                      height: 57,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border:
+                            Border.all(width: 1.5, color: ptDarkColor(context)),
+                      ),
+                      child: Center(
+                        child: CircleAvatar(
+                          radius: 26,
+                          backgroundImage: AssetImage('assets/image/cat1.png'),
+                        ),
+                      ),
                     ),
                     SizedBox(width: 20),
                     Column(
@@ -56,9 +129,25 @@ class ProfilePage extends StatelessWidget {
                               ptTitle().copyWith(fontWeight: FontWeight.w900),
                         ),
                         SizedBox(height: 3),
-                        Text(
-                          'Change profile infomation',
-                          style: ptSmall().copyWith(color: Colors.black54),
+                        GestureDetector(
+                          onTap: () {
+                            OwnerProfilePage.navigate(
+                                birthdate: DateTime.now(),
+                                gender: 'male',
+                                bgUrl:
+                                    'https://www.coversden.com/images/covers/1/690.jpg',
+                                imgUrl:
+                                    'https://ca-times.brightspotcdn.com/dims4/default/33c083b/2147483647/strip/true/crop/1611x906+0+0/resize/840x472!/quality/90/?url=https%3A%2F%2Fcalifornia-times-brightspot.s3.amazonaws.com%2Ffd%2Fef%2F05c1aab3e76c3d902aa0548c0046%2Fla-la-hm-pet-issue-18-jpg-20150615',
+                                name: 'John Carlar',
+                                nickName: 'Brocat',
+                                country: 'Viet Nam',
+                                description: 'I love cats a lot',
+                                email: 'carla123love@gmail.com');
+                          },
+                          child: Text(
+                            'Change profile infomation',
+                            style: ptSmall().copyWith(color: Colors.black54),
+                          ),
                         ),
                       ],
                     )
@@ -67,71 +156,77 @@ class ProfilePage extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Card(
-                  color: ptDarkColor(context),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.all(10).copyWith(bottom: 5),
-                              child: Text(
-                                'Create a Profile for your pet',
-                                maxLines: null,
-                                style: ptBody().copyWith(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w900,
+                child: GestureDetector(
+                  onTap: () {
+                    PickPet.navigate();
+                  },
+                  child: Card(
+                    color: ptDarkColor(context),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(10)
+                                    .copyWith(bottom: 5),
+                                child: Text(
+                                  'Create a Profile for your pet',
+                                  maxLines: null,
+                                  style: ptBody().copyWith(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w900,
+                                  ),
                                 ),
                               ),
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.all(10).copyWith(top: 0),
-                              child: Text(
-                                'Add your cute friend profile to PetLand',
-                                maxLines: null,
-                                style: ptTiny().copyWith(
-                                  color: Colors.white,
+                              Padding(
+                                padding:
+                                    const EdgeInsets.all(10).copyWith(top: 0),
+                                child: Text(
+                                  'Add your cute friend profile to PetLand',
+                                  maxLines: null,
+                                  style: ptTiny().copyWith(
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        Spacer(),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 5),
-                          child: Container(
-                            height: 45,
-                            width: 45,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle, color: Colors.white),
-                            child: Center(
-                              child: Container(
-                                height: 41,
-                                width: 41,
-                                decoration: BoxDecoration(
+                            ],
+                          ),
+                          Spacer(),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 5),
+                            child: Container(
+                              height: 45,
+                              width: 45,
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle, color: Colors.white),
+                              child: Center(
+                                child: Container(
+                                  height: 41,
+                                  width: 41,
+                                  decoration: BoxDecoration(
                                     shape: BoxShape.circle,
-                                    color: ptDarkColor(context)),
-                                child: Center(
-                                  child: Container(
-                                    height: 38,
-                                    width: 38,
-                                    decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Colors.white),
-                                    child: Center(
-                                      child: Icon(
-                                        Icons.add,
-                                        color: ptDarkColor(context),
-                                        size: 27,
+                                    color: ptDarkColor(context),
+                                  ),
+                                  child: Center(
+                                    child: Container(
+                                      height: 38,
+                                      width: 38,
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.white),
+                                      child: Center(
+                                        child: Icon(
+                                          Icons.add,
+                                          color: ptDarkColor(context),
+                                          size: 27,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -139,8 +234,8 @@ class ProfilePage extends StatelessWidget {
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -154,9 +249,7 @@ class ProfilePage extends StatelessWidget {
                   return ProfileItemCard(
                     title: list[index]['name'],
                     image: list[index]['img'],
-                    onTap: () {
-                      PickMyPetListpage.navigate();
-                    },
+                    onTap: list[index]['action'],
                   );
                 }),
               ),

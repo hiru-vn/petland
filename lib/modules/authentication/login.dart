@@ -1,4 +1,5 @@
 import 'package:petland/modules/authentication/register.dart';
+import 'package:petland/modules/firebaseDB/auth.dart';
 import 'package:petland/modules/home_page.dart';
 import 'package:petland/share/import.dart';
 
@@ -25,18 +26,26 @@ class LoginPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 100),
+                SizedBox(height: kToolbarHeight + 65),
                 Text(
                   'Wellcome Back!',
                   style: ptHeadLine().copyWith(color: Colors.white),
                 ),
                 SpacingBox(h: 3),
                 FacebookBtn(
-                  onPress: () {},
+                  onPress: () async {
+                    final check = await signInWithFacebook();
+                    if (check) HomePage.navigate();
+                    return true;
+                  },
                 ),
                 SpacingBox(h: 2),
                 GoogleBtn(
-                  onPress: () {},
+                  onPress: () async {
+                    final check = await signInWithGoogle();
+                    if (check) HomePage.navigate();
+                    return true;
+                  },
                 ),
                 SpacingBox(h: 4),
                 Center(
@@ -63,9 +72,11 @@ class LoginPage extends StatelessWidget {
                   iconColor: HexColor('#fb565e'),
                 ),
                 SpacingBox(h: 4),
-                ExpandBtn(text: 'Đăng nhập', onPress: () {
-                  HomePage.navigate();
-                }),
+                ExpandBtn(
+                    text: 'Đăng nhập',
+                    onPress: () {
+                      HomePage.navigate();
+                    }),
                 SpacingBox(h: 2),
                 Center(
                   child: Text(

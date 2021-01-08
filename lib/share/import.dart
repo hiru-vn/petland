@@ -26,3 +26,6 @@ export 'package:petland/utils/formart.dart';
 export 'package:petland/share/widgets/expand_rec_btn.dart';
 export 'package:petland/share/widgets/custom_list_tile.dart';
 export 'package:petland/share/widgets/textfield_tag/lib/textfield_tags.dart';
+export 'package:petland/share/widgets/animation_search.dart';
+export 'package:webview_flutter/webview_flutter.dart';
+export 'package:petland/share/widgets/pick_list.dart';

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:petland/themes/color.dart';
 import 'package:petland/themes/font.dart';
-import 'package:petland/utils/constants.dart';
 
 class ExpandBtn extends StatelessWidget {
   final String text;
@@ -55,17 +54,18 @@ class FacebookBtn extends StatelessWidget {
         onPressed: onPress,
         child: Row(
           children: [
+            SizedBox(width: 5),
             SizedBox(
-              width: deviceWidth(context) / 10,
-              child: Center(
+              width: 35,
+              child: Align(
+                alignment: Alignment.centerLeft,
                 child: Image.asset('assets/image/facebook.png'),
               ),
             ),
-            SizedBox(width: deviceWidth(context) / 15),
             Expanded(
               child: Text(
                 'Đăng nhập bằng Facebook',
-                style: ptButton().copyWith(color: Colors.white),
+                style: ptTitle().copyWith(color: Colors.white),
               ),
             ),
           ],
@@ -93,14 +93,16 @@ class GoogleBtn extends StatelessWidget {
         child: Row(
           children: [
             SizedBox(
-              width: deviceWidth(context) / 10,
-              child: Image.asset('assets/image/google.png'),
+              width: 40,
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Image.asset('assets/image/google.png'),
+              ),
             ),
-            SizedBox(width: deviceWidth(context) / 15),
             Expanded(
               child: Text(
                 'Đăng nhập bằng Google',
-                style: ptButton().copyWith(color: Colors.black),
+                style: ptTitle().copyWith(color: Colors.black),
               ),
             ),
           ],
