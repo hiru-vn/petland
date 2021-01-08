@@ -211,8 +211,9 @@ class ProfilePage extends StatelessWidget {
                                   height: 41,
                                   width: 41,
                                   decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: ptDarkColor(context)),
+                                    shape: BoxShape.circle,
+                                    color: ptDarkColor(context),
+                                  ),
                                   child: Center(
                                     child: Container(
                                       height: 38,

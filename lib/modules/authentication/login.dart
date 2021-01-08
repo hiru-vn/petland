@@ -1,4 +1,5 @@
 import 'package:petland/modules/authentication/register.dart';
+import 'package:petland/modules/firebaseDB/auth.dart';
 import 'package:petland/modules/home_page.dart';
 import 'package:petland/share/import.dart';
 
@@ -36,7 +37,11 @@ class LoginPage extends StatelessWidget {
                 ),
                 SpacingBox(h: 2),
                 GoogleBtn(
-                  onPress: () {},
+                  onPress: () async {
+                    final check = await signInWithGoogle();
+                    if (check) HomePage.navigate();
+                    return true;
+                  },
                 ),
                 SpacingBox(h: 4),
                 Center(

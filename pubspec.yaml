@@ -50,6 +50,13 @@ dev_dependencies:
   animated_theme_switcher: "^1.0.5"
   open_appstore: ^1.0.2
 
+  # firebase
+  firebase_auth: ^0.18.4+1
+  firebase_storage: ^5.2.0
+  google_sign_in: ^4.5.9
+  cloud_firestore: ^0.14.4
+  firebase_core: ^0.5.3
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 flutter_icons:
