@@ -49,6 +49,7 @@ dev_dependencies:
   webview_flutter: ^1.0.7
   animated_theme_switcher: "^1.0.5"
   open_appstore: ^1.0.2
+  flutter_facebook_login: ^3.0.0
 
   # firebase
   firebase_auth: ^0.18.4+1

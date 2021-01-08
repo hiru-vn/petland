@@ -33,7 +33,11 @@ class LoginPage extends StatelessWidget {
                 ),
                 SpacingBox(h: 3),
                 FacebookBtn(
-                  onPress: () {},
+                  onPress: () async {
+                    final check = await signInWithFacebook();
+                    if (check) HomePage.navigate();
+                    return true;
+                  },
                 ),
                 SpacingBox(h: 2),
                 GoogleBtn(
