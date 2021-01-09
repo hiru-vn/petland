@@ -4,11 +4,11 @@
 
 # Installation
 
-- Download [release apk](https://github.com/huynguyen1999kh/wallet-app-money-management-flutter/releases/tag/v1.0)
+- Download [release apk](https://drive.google.com/drive/u/0/folders/1NTpdjdrbaAerhSdNzggW_sLLZ0GkhyCT)
 
 or manually download the project:
 
-- Download [Flutter](https://drive.google.com/drive/u/0/folders/1NTpdjdrbaAerhSdNzggW_sLLZ0GkhyCT)
+- Download [Flutter](https://flutter.dev/)
 - Install this repository
 - The project should run on flutter version 1.22.5, channel stable
 ```
