@@ -50,6 +50,10 @@ dev_dependencies:
   animated_theme_switcher: "^1.0.5"
   open_appstore: ^1.0.2
   flutter_facebook_login: ^3.0.0
+  provider: ^4.3.2+3
+  graphql: ^3.0.2
+  toast: ^0.1.5
+  fluttertoast: ^7.1.5
 
   # firebase
   firebase_auth: ^0.18.4+1

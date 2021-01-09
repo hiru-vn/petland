@@ -1,11 +1,24 @@
 import 'package:petland/modules/authentication/register.dart';
-import 'package:petland/modules/firebaseDB/auth.dart';
+import 'package:petland/modules/authentication/auth.dart';
 import 'package:petland/modules/home_page.dart';
 import 'package:petland/share/import.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   static navigate() {
     navigatorKey.currentState.push(pageBuilder(LoginPage()));
+  }
+
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  AuthBloc _authBloc;
+
+  @override
+  void didChangeDependencies() {
+    _authBloc = Provider.of<AuthBloc>(context);
+    super.didChangeDependencies();
   }
 
   @override
@@ -34,7 +47,7 @@ class LoginPage extends StatelessWidget {
                 SpacingBox(h: 3),
                 FacebookBtn(
                   onPress: () async {
-                    final check = await signInWithFacebook();
+                    final check = await _authBloc.signInWithFacebook();
                     if (check) HomePage.navigate();
                     return true;
                   },
@@ -42,7 +55,7 @@ class LoginPage extends StatelessWidget {
                 SpacingBox(h: 2),
                 GoogleBtn(
                   onPress: () async {
-                    final check = await signInWithGoogle();
+                    final check = await _authBloc.signInWithFacebook();
                     if (check) HomePage.navigate();
                     return true;
                   },
