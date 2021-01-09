@@ -14,7 +14,7 @@ class PetRacePage extends StatelessWidget {
         "img": "assets/image/cat_race_2.jpg"
       },
       {"name": "Brishtish long-hair", "img": "assets/image/cat_race_3.jpg"},
-      {"name": "beganli", "img": "assets/image/cat_race_4.jpg"},
+      {"name": "Beganli", "img": "assets/image/cat_race_4.jpg"},
       {"name": "Burmilla", "img": "assets/image/cat_race_5.jpeg"},
       {"name": "Exotic short hair", "img": "assets/image/cat_race_6.jpg"},
       {"name": "Yellow cat", "img": "assets/image/cat_race_7.png"},

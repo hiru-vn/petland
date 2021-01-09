@@ -1,3 +1,4 @@
+import 'package:petland/modules/wiki/wiki_page.dart';
 import 'package:petland/modules/zoo/zoo_page.dart';
 import 'package:petland/share/import.dart';
 
@@ -36,6 +37,9 @@ class CategoryWidget extends StatelessWidget {
               child: CategoryItemWidget(
                 image: 'assets/image/wiki.png',
                 title: 'Cẩm nang',
+                onTap: () {
+                  WikiPage.navigate();
+                },
               ),
             ),
           ],
