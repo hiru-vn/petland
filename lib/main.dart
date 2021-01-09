@@ -18,7 +18,7 @@ void main() async {
   await Firebase.initializeApp();
 
   runZonedGuarded(
-    () => runApp(PetLand()),
+    () => runApp(Petland()),
     (error, stackTrace) async {
       await _sentry.captureException(
         exception: error,
@@ -33,7 +33,7 @@ Image splash = Image.asset(
   fit: BoxFit.fill,
 );
 
-class PetLand extends StatelessWidget {
+class Petland extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     precacheImage(splash.image, context);

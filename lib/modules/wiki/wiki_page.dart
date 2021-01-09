@@ -1,4 +1,5 @@
 import 'package:petland/modules/wiki/post_detail_page.dart';
+import 'package:petland/modules/wiki/post_list_page.dart';
 import 'package:petland/share/import.dart';
 
 class WikiPage extends StatelessWidget {
@@ -143,7 +144,7 @@ class WikiListCategory extends StatelessWidget {
               sub: list[index]['sub'],
               image: list[index]['img'],
               color: list[index]['color'],
-              onTap: () => PostDetailPage.navigate(),
+              onTap: () => PostListPage.navigate(),
             );
           }),
         ),

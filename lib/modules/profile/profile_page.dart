@@ -188,7 +188,7 @@ class ProfilePage extends StatelessWidget {
                                 padding:
                                     const EdgeInsets.all(10).copyWith(top: 0),
                                 child: Text(
-                                  'Add your cute friend profile to PetLand',
+                                  'Add your cute friend profile to Petland',
                                   maxLines: null,
                                   style: ptTiny().copyWith(
                                     color: Colors.white,
