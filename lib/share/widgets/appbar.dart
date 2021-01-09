@@ -42,7 +42,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
           Text(
             title ?? 'PetLand',
             style: ptBigTitle().copyWith(
-                color: bgColor != null ? Colors.white : Colors.black87),
+                color: (bgColor != null && bgColor != Colors.white) ? Colors.white : Colors.black87),
           ),
         ],
       ),

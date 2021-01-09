@@ -1,3 +1,4 @@
+import 'package:petland/modules/wiki/post_detail_page.dart';
 import 'package:petland/share/import.dart';
 
 class WikiPage extends StatelessWidget {
@@ -38,7 +39,6 @@ class WikiPage extends StatelessWidget {
         "sub": "12 bài viết",
         "color": "#00ee3a"
       },
-      
     ];
     final list2 = [
       {
@@ -65,7 +65,6 @@ class WikiPage extends StatelessWidget {
         "sub": "12 bài viết",
         "color": "#ee3ad1"
       },
-      
     ];
     return Scaffold(
       appBar: MyAppBar(
@@ -144,7 +143,7 @@ class WikiListCategory extends StatelessWidget {
               sub: list[index]['sub'],
               image: list[index]['img'],
               color: list[index]['color'],
-              onTap: () => navigatorKey.currentState.maybePop(),
+              onTap: () => PostDetailPage.navigate(),
             );
           }),
         ),
