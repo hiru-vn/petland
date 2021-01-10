@@ -9,11 +9,16 @@ import 'package:petland/share/widgets/page_builder.dart';
 import 'package:petland/share/widgets/spacing_box.dart';
 import 'package:petland/share/import.dart';
 
-class RegisterPage extends StatelessWidget {
+class RegisterPage extends StatefulWidget {
   static navigate() {
     navigatorKey.currentState.push(pageBuilder(RegisterPage()));
   }
+  
+  @override
+  _RegisterPageState createState() => _RegisterPageState();
+}
 
+class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
