@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:petland/modules/authentication/auth.dart';
+import 'package:petland/modules/authentication/auth_bloc.dart';
 import 'package:petland/modules/authentication/splash.dart';
 import 'package:petland/navigator.dart';
 import 'package:petland/share/import.dart';

@@ -1,5 +1,4 @@
-
-import 'package:petland/modules/authentication/auth.dart';
+import 'package:petland/modules/authentication/auth_bloc.dart';
 import 'package:graphql/client.dart';
 import 'package:petland/share/import.dart';
 
@@ -9,7 +8,7 @@ class BaseService {
   String _fragmentDefault;
 
   BaseService({String module, String fragment}) {
-    // print(module);
+    print(module);
     _module = module;
     _name = capitalizeModule();
     _fragmentDefault = parseFragment(fragment);
@@ -20,9 +19,9 @@ class BaseService {
   }
 
   showModule() {
-    // print('module $_module');
-    // print('Fragment $_fragmentDefault');
-    // print('Name $_name');
+    print('module $_module');
+    print('Fragment $_fragmentDefault');
+    print('Name $_name');
   }
 
   parseFragment(String fragment) {
@@ -36,13 +35,19 @@ class BaseService {
   }
 
   Future<dynamic> getList(
-      {int limit, String filter, String search, String order, int page = 1, int offset, String fragment}) async {
+      {int limit,
+      String filter,
+      String search,
+      String order,
+      int page = 1,
+      int offset,
+      String fragment}) async {
     fragment = fragment ?? _fragmentDefault;
     if (filter == null) filter = "";
     if (search == null) search = "";
     final String listNode =
         'query GetAll$_name{getAll$_name(q:{limit: $limit, page: ${page ?? 1}, offset: $offset, filter: {$filter}, search: "$search" , order: $order }){data{$fragment} pagination{limit offset page total} }}';
-    // print("Query: " + listNode);
+    print("Query: " + listNode);
 
     final QueryOptions options = QueryOptions(
       documentNode: gql(listNode),
@@ -51,16 +56,18 @@ class BaseService {
     final QueryResult result = await GraphQL.instance.client.query(options);
 
     if (result.hasException) {
-      // print('getAll$_name ${result.exception.toString()}');
-      await showToastNoContext(result.exception.graphqlErrors[0].message.toString());
-      if (result.exception.graphqlErrors[0].message == "Mã truy cập đã hết hạn") {
+      print('getAll$_name ${result.exception.toString()}');
+      await showToastNoContext(
+          result.exception.graphqlErrors[0].message.toString());
+      if (result.exception.graphqlErrors[0].message ==
+          "Mã truy cập đã hết hạn") {
         AuthBloc.instance.logout();
       }
       GraphQL.instance.client.cache.reset();
       throw (Exception(result.exception.graphqlErrors[0].message.toString()));
     }
     GraphQL.instance.client.cache.reset();
-    // print("getAll$_name : ${result.data['getAll$_name']}");
+    print("getAll$_name : ${result.data['getAll$_name']}");
     return result.data['getAll$_name'];
   }
 
@@ -71,9 +78,10 @@ class BaseService {
     } else {
       fragmentGetItem = parseFragment(fragment);
     }
-    final String listNode = 'query getItem{getOne$_name(id: "$id"){ $fragmentGetItem }}';
+    final String listNode =
+        'query getItem{getOne$_name(id: "$id"){ $fragmentGetItem }}';
 
-    // print("Query: " + listNode);
+    print("Query: " + listNode);
     final QueryOptions options = QueryOptions(
       documentNode: gql(listNode),
     );
@@ -81,10 +89,10 @@ class BaseService {
     final QueryResult result = await GraphQL.instance.client.query(options);
 
     if (result.hasException) {
-      // print('getItem ${result.exception.toString()}');
+      print('getItem ${result.exception.toString()}');
       throw result.exception.graphqlErrors[0].message.toString();
     }
-    // print("getOne$_name : ${result.data['getOne$_name']}");
+    print("getOne$_name : ${result.data['getOne$_name']}");
     GraphQL.instance.client.cache.reset();
     return result.data['getOne$_name'];
   }
@@ -96,9 +104,10 @@ class BaseService {
     } else {
       fragmentGetItem = parseFragment(fragment);
     }
-    final String listNode = 'query getItem{get${_name}Info{ $fragmentGetItem }}';
+    final String listNode =
+        'query getItem{get${_name}Info{ $fragmentGetItem }}';
 
-    // print("Query: " + listNode);
+    print("Query: " + listNode);
     final QueryOptions options = QueryOptions(
       documentNode: gql(listNode),
     );
@@ -106,10 +115,10 @@ class BaseService {
     final QueryResult result = await GraphQL.instance.client.query(options);
 
     if (result.hasException) {
-      // print('getItem ${result.exception.toString()}');
+      print('getItem ${result.exception.toString()}');
       throw (Exception(result.exception.graphqlErrors[0].message.toString()));
     }
-    // print("get$_name : ${result.data['get${_name}Info']}");
+    print("get$_name : ${result.data['get${_name}Info']}");
     GraphQL.instance.client.cache.reset();
     return result.data['get${_name}Info'];
   }
@@ -121,32 +130,36 @@ class BaseService {
     } else {
       fragmentGetItem = parseFragment(fragment);
     }
-    final String addNode = 'mutation { create$_name(data: {$data}) { $fragmentGetItem } }';
-    // print('addNode $addNode');
-    final MutationOptions optionsAdd = MutationOptions(documentNode: gql(addNode));
+    final String addNode =
+        'mutation { create$_name(data: {$data}) { $fragmentGetItem } }';
+    print('addNode $addNode');
+    final MutationOptions optionsAdd =
+        MutationOptions(documentNode: gql(addNode));
 
     final QueryResult result = await GraphQL.instance.client.mutate(optionsAdd);
     if (result.hasException) {
-      // print('add$_name ${result.exception.toString()}');
+      print('add$_name ${result.exception.toString()}');
       throw result.exception.graphqlErrors[0].message.toString();
     }
-    // print(result.data);
+    print(result.data);
     GraphQL.instance.client.cache.reset();
     return result.data['create$_name'];
   }
 
   Future delete(String id) async {
     final String deleteNode = 'mutation { deleteOne$_name(id: "$id") { id }}';
-    final MutationOptions optionsDelete = MutationOptions(documentNode: gql(deleteNode));
+    final MutationOptions optionsDelete =
+        MutationOptions(documentNode: gql(deleteNode));
 
-    final QueryResult result = await GraphQL.instance.client.mutate(optionsDelete);
+    final QueryResult result =
+        await GraphQL.instance.client.mutate(optionsDelete);
     if (result.hasException) {
-      // print('deleteOne$_name ${result.exception.toString()}');
+      print('deleteOne$_name ${result.exception.toString()}');
       throw result.exception.graphqlErrors[0].message.toString();
     }
 
     GraphQL.instance.client.cache.reset();
-    // print('deleteOne$_name result.data');
+    print('deleteOne$_name result.data');
     return result.data;
   }
 
@@ -157,20 +170,23 @@ class BaseService {
     } else {
       fragmentGetItem = parseFragment(fragment);
     }
-    final String deleteNode = 'mutation { update$_name(id: "$id", data: {$data}) {$fragmentGetItem} }';
+    final String deleteNode =
+        'mutation { update$_name(id: "$id", data: {$data}) {$fragmentGetItem} }';
     print(deleteNode);
-    final MutationOptions optionsDelete = MutationOptions(documentNode: gql(deleteNode));
+    final MutationOptions optionsDelete =
+        MutationOptions(documentNode: gql(deleteNode));
 
-    final QueryResult result = await GraphQL.instance.client.mutate(optionsDelete);
+    final QueryResult result =
+        await GraphQL.instance.client.mutate(optionsDelete);
     if (result.hasException) {
-      // print('delete$_name ${result.exception.toString()}');
+      print('delete$_name ${result.exception.toString()}');
       throw result.exception.graphqlErrors[0].message.toString();
     }
     if (result.data['update$_name'] == null) {
       throw 'Id không tồn tại';
     }
     GraphQL.instance.client.cache.reset();
-    // print('update ${result.data['update$_name']['id']}');
+    print('update ${result.data['update$_name']['id']}');
 
     return result.data['update$_name'];
   }
@@ -181,16 +197,17 @@ class BaseService {
       mutateNode = 'mutation { $name($data) }';
     else
       mutateNode = 'mutation { $name($data) { $fragment } }';
-    // print('MutateNode $mutateNode');
+    print('MutateNode $mutateNode');
 
-    final MutationOptions options = MutationOptions(documentNode: gql(mutateNode));
+    final MutationOptions options =
+        MutationOptions(documentNode: gql(mutateNode));
 
     final QueryResult result = await GraphQL.instance.client.mutate(options);
     if (result.hasException) {
-      // print('name ${result.exception.toString()}');
+      print('name ${result.exception.toString()}');
       throw (Exception(result.exception.graphqlErrors[0].message.toString()));
     }
-    // print(result.data);
+    print(result.data);
     GraphQL.instance.client.cache.reset();
     return result.data;
   }
@@ -203,14 +220,15 @@ class BaseService {
       queryNode = 'query { $name($data) { $fragment } }';
     print('$queryNode');
 
-    final MutationOptions options = MutationOptions(documentNode: gql(queryNode));
+    final MutationOptions options =
+        MutationOptions(documentNode: gql(queryNode));
 
     final QueryResult result = await GraphQL.instance.client.mutate(options);
     if (result.hasException) {
-      // print('name ${result.exception.toString()}');
+      print('name ${result.exception.toString()}');
       throw (Exception(result.exception.graphqlErrors[0].message.toString()));
     }
-    // print(result.data);
+    print(result.data);
     GraphQL.instance.client.cache.reset();
     return result.data;
   }
@@ -218,16 +236,17 @@ class BaseService {
   queryEnum(String name) async {
     String queryNode;
     queryNode = 'query { $name }';
-    // print('$queryNode');
+    print('$queryNode');
 
-    final MutationOptions options = MutationOptions(documentNode: gql(queryNode));
+    final MutationOptions options =
+        MutationOptions(documentNode: gql(queryNode));
 
     final QueryResult result = await GraphQL.instance.client.mutate(options);
     if (result.hasException) {
-      // print('name ${result.exception.toString()}');
+      print('name ${result.exception.toString()}');
       throw (Exception(result.exception.graphqlErrors[0].message.toString()));
     }
-    // print(result.data);
+    print(result.data);
     GraphQL.instance.client.cache.reset();
     return result.data;
   }
@@ -235,7 +254,7 @@ class BaseService {
 
 class GraphQL {
   static final HttpLink _httpLink = HttpLink(
-    uri: 'https://frozen-woodland-48252.herokuapp.com/graphql',
+    uri: 'https:frozen-woodland-48252.herokuapp.com/graphql',
   );
 
   static final AuthLink _authLink = AuthLink(getToken: () async {

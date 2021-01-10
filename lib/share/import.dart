@@ -33,3 +33,5 @@ export 'package:provider/provider.dart';
 export 'package:petland/share/functions/show_toast.dart';
 export 'package:petland/utils/spref.dart';
 export 'package:petland/services/base_graphql.dart';
+export 'package:petland/share/widgets/spin_loader.dart';
+export 'package:petland/model/user.dart';

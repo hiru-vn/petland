@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:petland/repo/user_repo.dart';
 import 'dart:async';
 
 import 'package:petland/share/import.dart';
@@ -9,29 +10,40 @@ class AuthBloc extends ChangeNotifier {
   AuthBloc._privateConstructor();
   static final AuthBloc instance = AuthBloc._privateConstructor();
 
+  UserRepo _userRepo = UserRepo();
+  UserModel userModel;
+
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
   final facebookLogin = FacebookLogin();
 
   //Sign in with email & password
-  Future signInWithEmailAndPassword(String email, String password) async{
-    try{
-      UserCredential result = await _auth.signInWithEmailAndPassword(email: email, password: password);
+  Future signInWithEmailAndPassword(String email, String password) async {
+    try {
+      UserCredential result = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
       User user = result.user;
-      return user;
-    }catch(e){
+      String fbToken = await user.getIdToken();
+      final res = await _userRepo.login(idToken: fbToken);
+      await SPref.instance.set('token', res['token']);
+      userModel = UserModel.fromJson(res['user']);
+      return res;
+    } catch (e) {
       print(e.toString());
       return null;
     }
   }
 
   //Register with email & password
-  Future registerWithEmailAndPassword(String email, String password) async{
-    try{
-      UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
-      User user = result.user;
-      return user;
-    }catch(e){
+  Future registerWithEmailAndPassword(
+      String email, String password, String name) async {
+    try {
+      await _userRepo.register(
+          name: name, email: email, password: password);
+      await Future.delayed(Duration(seconds: 1));
+      final loginRes = await signInWithEmailAndPassword(email, password);
+      return loginRes;
+    } catch (e) {
       print(e.toString());
       return null;
     }
