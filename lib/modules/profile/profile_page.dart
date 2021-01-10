@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:petland/modules/authentication/login.dart';
+import 'package:petland/modules/authentication/welcome.dart';
 import 'package:petland/modules/inbox/inbox_list.dart';
 import 'package:petland/modules/my_pet/pick_my_pet_list.dart';
 import 'package:petland/modules/my_pet/pick_pet.dart';
@@ -258,7 +260,9 @@ class ProfilePage extends StatelessWidget {
                 padding: const EdgeInsets.all(10),
                 child: ExpandBtn(
                   text: 'Logout',
-                  onPress: () {},
+                  onPress: () {
+                    WelcomePage.navigate();
+                  },
                   color: ptGreyColor(context).withOpacity(0.6),
                   height: 45,
                   textColor: Colors.black,

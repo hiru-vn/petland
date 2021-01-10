@@ -7,7 +7,7 @@ import 'package:petland/share/import.dart';
 
 class HomePage extends StatefulWidget {
   static navigate() {
-    navigatorKey.currentState.push(pageBuilder(HomePage()));
+    navigatorKey.currentState.pushReplacement(pageBuilder(HomePage()));
   }
 
   @override
