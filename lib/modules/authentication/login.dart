@@ -34,6 +34,10 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       isLoading = false;
     });
+    if (!res.isSuccess) {
+      showToast(res.errMessage, context);
+      return;
+    }
     HomePage.navigate();
   }
 

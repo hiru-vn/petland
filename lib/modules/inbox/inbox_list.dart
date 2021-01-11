@@ -63,7 +63,7 @@ class _InboxListState extends State<InboxList>
         itemCount: list.length,
         itemBuilder: (context, index) => ListTile(
           onTap: () {
-            SupportChat.navigate();
+            InboxChat.navigate('1');
           },
           tileColor:
               list[index]['isRead'] ? Colors.white : ptBackgroundColor(context),

@@ -18,15 +18,19 @@ class Formart {
     return num.parse(value.toStringAsFixed(digit));
   }
 
+  static String formatToDateTime(DateTime date) {
+    if (date == null) return null;
+    return '${formatToDate(date)} ${formatToTime(date)}';
+  }
+
   static String formatToDate(DateTime date) {
     if (date == null) return null;
     return '${date.day}/${date.month}/${date.year}';
   }
 
-  static String formatToTime(String time) {
+  static String formatToTime(DateTime time) {
     if (time == null) return null;
-    var result = DateTime.parse(time);
-    return '${result.hour}:${result.minute < 10 ? '0' : ''}${result.minute}';
+    return '${time.hour}:${time.minute < 10 ? '0' : ''}${time.minute}';
   }
 
   static String formatNumber(double number) {

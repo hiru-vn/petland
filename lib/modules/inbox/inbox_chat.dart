@@ -1,20 +1,23 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:path/path.dart' as path;
+import 'package:petland/modules/authentication/auth_bloc.dart';
+import 'package:petland/modules/inbox/inbox_bloc.dart';
 import 'package:petland/share/import.dart';
 import 'package:dash_chat/dash_chat.dart';
 
-class SupportChat extends StatefulWidget {
-  const SupportChat();
-  static Future navigate() {
-    return navigatorKey.currentState.push(pageBuilder(SupportChat()));
+class InboxChat extends StatefulWidget {
+  final String groupId;
+  InboxChat(this.groupId);
+  static Future navigate(String groupId) {
+    return navigatorKey.currentState.push(pageBuilder(InboxChat(groupId)));
   }
 
   @override
-  _SupportChatState createState() => _SupportChatState();
+  _InboxChatState createState() => _InboxChatState();
 }
 
-class _SupportChatState extends State<SupportChat> {
+class _InboxChatState extends State<InboxChat> {
   final GlobalKey<DashChatState> _chatViewKey = GlobalKey<DashChatState>();
   final ChatUser user = ChatUser(
     name: 'Huy',
@@ -25,29 +28,41 @@ class _SupportChatState extends State<SupportChat> {
     uid: 'Anh',
   );
   File _file;
+  InboxBloc _inboxBloc;
+  AuthBloc _authBloc;
 
   List<ChatMessage> messages = List<ChatMessage>();
 
   var i = 0;
 
   @override
+  void didChangeDependencies() {
+    _inboxBloc = Provider.of<InboxBloc>(context);
+    _authBloc = Provider.of<AuthBloc>(context);
+    super.didChangeDependencies();
+  }
+
+  @override
   void initState() {
     super.initState();
   }
 
-  void systemMessage() async {
-    if (i < 6) {
-      setState(() {
-        messages = [
-          ...messages,
-          ChatMessage(
-            user: userOther,
-            text: 'hey how it\'s going',
-          )
-        ];
+  Future<void> onSend(ChatMessage message) async {
+    String text = message.text;
+    if (text.length > 0) {
+      _file = null;
+      await _inboxBloc.getGroup(widget.groupId).collection("messages").add({
+        'text': text,
+        'email': _authBloc.userModel.email,
+        'date': DateTime.now().toIso8601String().toString(),
+        'from': _authBloc.userModel.email,
+        'uid': _authBloc.userModel.uid,
+        'fullName': _authBloc.userModel.name,
+        'picture': _authBloc.userModel.avatar,
       });
-      i++;
     }
+    _updateGroupPageText(widget.groupId, _authBloc.userModel.name, text,
+        Formart.formatToDateTime(message.createdAt));
     await Future.delayed(Duration(milliseconds: 100), () {
       _chatViewKey.currentState.scrollController
         ..animateTo(
@@ -58,19 +73,13 @@ class _SupportChatState extends State<SupportChat> {
     });
   }
 
-  void onSend(ChatMessage message) async {
-    print(message.toJson());
-    _file = null;
-    setState(() {
-      messages = [...messages, message];
-    });
-    if (i == 0) {
-      Future.delayed(Duration(milliseconds: 100), () {
-        systemMessage();
-      });
-    } else {
-      systemMessage();
+  _updateGroupPageText(
+      String groupid, String lastUser, String lastMessage, String time) {
+    if (lastMessage.length > 20) {
+      lastMessage = lastMessage.substring(0, 20) + "...";
     }
+    _inboxBloc.getGroup(groupid).update(
+        {'lastUser': lastUser, 'time': time, 'lastMessage': lastMessage});
   }
 
   @override
@@ -101,8 +110,7 @@ class _SupportChatState extends State<SupportChat> {
           );
         },
         inputToolbarPadding: EdgeInsets.all(4),
-        inputDecoration:
-            InputDecoration.collapsed(hintText: "Send message..."),
+        inputDecoration: InputDecoration.collapsed(hintText: "Send message..."),
         dateFormat: DateFormat('yyyy-MMM-dd'),
         timeFormat: DateFormat('HH:mm'),
         messages: messages,
@@ -139,15 +147,6 @@ class _SupportChatState extends State<SupportChat> {
                 curve: Curves.easeOut,
                 duration: const Duration(milliseconds: 300),
               );
-
-            if (i == 0) {
-              systemMessage();
-              Timer(Duration(milliseconds: 600), () {
-                systemMessage();
-              });
-            } else {
-              systemMessage();
-            }
           });
         },
         onLoadEarlier: () {

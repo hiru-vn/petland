@@ -13,6 +13,6 @@ class BaseResponse {
   }
 
   factory BaseResponse.fail(String err) {
-    return BaseResponse(message: err, isSuccess: false);
+    return BaseResponse(errMessage: err, isSuccess: false);
   }
 }

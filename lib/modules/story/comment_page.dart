@@ -74,7 +74,7 @@ class _CommentPageState extends State<CommentPage>
             itemCount: list.length,
             itemBuilder: (context, index) => ListTile(
               onTap: () {
-                SupportChat.navigate();
+                // InboxChat.navigate();
               },
               tileColor: Colors.white,
               leading: Container(

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:petland/repo/user_repo.dart';
+import 'package:petland/services/base_response.dart';
 import 'dart:async';
 
 import 'package:petland/share/import.dart';
@@ -18,7 +19,8 @@ class AuthBloc extends ChangeNotifier {
   final facebookLogin = FacebookLogin();
 
   //Sign in with email & password
-  Future signInWithEmailAndPassword(String email, String password) async {
+  Future<BaseResponse> signInWithEmailAndPassword(
+      String email, String password) async {
     try {
       UserCredential result = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
@@ -27,10 +29,9 @@ class AuthBloc extends ChangeNotifier {
       final res = await _userRepo.login(idToken: fbToken);
       await SPref.instance.set('token', res['token']);
       userModel = UserModel.fromJson(res['user']);
-      return res;
+      return BaseResponse.success(res);
     } catch (e) {
-      print(e.toString());
-      return null;
+      return BaseResponse.fail(e.message?.toString());
     }
   }
 
@@ -38,14 +39,12 @@ class AuthBloc extends ChangeNotifier {
   Future registerWithEmailAndPassword(
       String email, String password, String name) async {
     try {
-      await _userRepo.register(
-          name: name, email: email, password: password);
+      await _userRepo.register(name: name, email: email, password: password);
       await Future.delayed(Duration(seconds: 1));
       final loginRes = await signInWithEmailAndPassword(email, password);
-      return loginRes;
+      return BaseResponse.success(loginRes.data);
     } catch (e) {
-      print(e.toString());
-      return null;
+      return BaseResponse.fail(e.message?.toString());
     }
   }
 

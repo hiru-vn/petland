@@ -254,7 +254,7 @@ class BaseService {
 
 class GraphQL {
   static final HttpLink _httpLink = HttpLink(
-    uri: 'https:frozen-woodland-48252.herokuapp.com/graphql',
+    uri: 'https://frozen-woodland-48252.herokuapp.com/graphql',
   );
 
   static final AuthLink _authLink = AuthLink(getToken: () async {
