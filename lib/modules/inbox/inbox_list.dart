@@ -1,3 +1,5 @@
+import 'package:petland/modules/authentication/auth_bloc.dart';
+import 'package:petland/modules/inbox/inbox_bloc.dart';
 import 'package:petland/modules/inbox/inbox_chat.dart';
 import 'package:petland/share/import.dart';
 
@@ -12,12 +14,28 @@ class InboxList extends StatefulWidget {
 
 class _InboxListState extends State<InboxList>
     with SingleTickerProviderStateMixin {
-  // TabController _tabController;
+  InboxBloc _inboxBloc;
+  AuthBloc _authBloc;
+  bool isLoading = true;
 
   @override
   void initState() {
-    // _tabController = TabController(length: 2, vsync: this);
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_inboxBloc == null || _authBloc == null) {
+      _inboxBloc = Provider.of<InboxBloc>(context);
+      _authBloc = Provider.of<AuthBloc>(context);
+      init();
+    }
+    super.didChangeDependencies();
+  }
+
+  init() async {
+    _inboxBloc.createUser(_authBloc.userModel.id, _authBloc.userModel.name,
+        _authBloc.userModel.avatar);
   }
 
   @override
