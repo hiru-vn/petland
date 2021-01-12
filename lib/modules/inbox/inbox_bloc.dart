@@ -78,7 +78,7 @@ class InboxBloc extends ChangeNotifier {
     return;
   }
 
-  Future<List<String>> getUserGroupInboxList(String idUser) async {
+  Future<List<String>> get20UserGroupInboxList(String idUser) async {
     final snapShot =
         await firestore.collection(userCollection).doc(idUser).get();
     return FbInboxUserModel.fromJson(snapShot.data()).group;
@@ -100,8 +100,8 @@ class InboxBloc extends ChangeNotifier {
     return list;
   }
 
-  Future<List<FbInboxGroupModel>> getListInbox(String idUser) async {
-    final groups = await getUserGroupInboxList(idUser);
+  Future<List<FbInboxGroupModel>> getList20Inbox(String idUser) async {
+    final groups = await get20UserGroupInboxList(idUser);
     final inboxes = await getGroupInboxList(groups);
     return inboxes;
   }

@@ -37,7 +37,14 @@ class _InboxListState extends State<InboxList>
   init() async {
     await _inboxBloc.createUser(_authBloc.userModel.id,
         _authBloc.userModel.name, _authBloc.userModel.avatar);
-    final res = await _inboxBloc.getListInbox(_authBloc.userModel.id);
+    final res = await _inboxBloc.getList20Inbox(_authBloc.userModel.id);
+    setState(() {
+      groups = res;
+    });
+  }
+
+  reload() async {
+    final res = await _inboxBloc.getList20Inbox(_authBloc.userModel.id);
     setState(() {
       groups = res;
     });
@@ -45,7 +52,6 @@ class _InboxListState extends State<InboxList>
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       appBar: MyAppBar(
         automaticallyImplyLeading: true,
@@ -65,7 +71,8 @@ class _InboxListState extends State<InboxList>
               itemCount: groups.length,
               itemBuilder: (context, index) => ListTile(
                 onTap: () {
-                  InboxChat.navigate(groups[index].id, groups[index].lastUser);
+                  InboxChat.navigate(groups[index].id, groups[index].lastUser)
+                      .then((value) => reload());
                 },
                 tileColor: groups[index].reader.contains(_authBloc.userModel.id)
                     ? Colors.white
@@ -107,7 +114,7 @@ class _InboxListState extends State<InboxList>
                   children: [
                     SizedBox(height: 12),
                     Text(
-                     Formart.timeByDay(DateTime.tryParse(groups[index].time)),
+                      Formart.timeByDay(DateTime.tryParse(groups[index].time)),
                       style: ptSmall().copyWith(
                           fontWeight: groups[index]
                                   .reader
