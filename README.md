@@ -10,9 +10,11 @@ or manually download the project:
 
 - Download [Flutter](https://flutter.dev/)
 - Install this repository
+- Checkout branch ui-only-branch
 - The project should run on flutter version 1.22.5, channel stable
 ```
-git clone https://github.com/huynguyen1999kh/petland.git 
+git clone https://github.com/huynguyen1999kh/petland.git
+git checkout ui-only-branch
 flutter packages get
 flutter run # make sure your mobile device is connected
 ```
