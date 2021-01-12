@@ -50,6 +50,16 @@ class InboxBloc extends ChangeNotifier {
     });
   }
 
+  Future<List<FbInboxMessageModel>> get20Messages(String groupId) async {
+    final query = getGroup(groupId)
+        .collection("messages")
+        .orderBy('date', descending: true)
+        .limit(20);
+    final snapshot = await query.get();
+    final res = snapshot.docs.map((e) => FbInboxMessageModel.fromJson(e.data(), e.id)).toList();
+    return res;
+  }
+
   Future<void> createUser(String id, String name, String image) async {
     final snapShot = await firestore.collection(userCollection).doc(id).get();
     if (snapShot.exists) {
@@ -82,9 +92,9 @@ class InboxBloc extends ChangeNotifier {
     //   list.add(FbInboxGroupModel.fromJson(snapShot.data(), id));
     // });
     for (int i = 0; i < idGroups.length; i++) {
-      final snapShot =
+      final item =
           await firestore.collection(groupCollection).doc(idGroups[i]).get();
-      list.add(FbInboxGroupModel.fromJson(snapShot.data(), idGroups[i]));
+      list.add(FbInboxGroupModel.fromJson(item.data(), item.id));
     }
     return list;
   }

@@ -28,3 +28,20 @@ class FbInboxGroupModel {
         map["lastUser"], map['time'], map['reader'] ?? []);
   }
 }
+
+class FbInboxMessageModel {
+  final String id;
+  final String avatar;
+  final String date;
+  final String fullName;
+  final String text;
+  final String uid; //userId
+
+  FbInboxMessageModel(this.id, this.avatar, this.date, this.fullName,
+      this.text, this.uid);
+
+  factory FbInboxMessageModel.fromJson(Map<String, dynamic> map, String id) {
+    return FbInboxMessageModel(id, map['avatar'], map['date'],
+        map["fullName"], map['text'], map['uid']);
+  }
+}

@@ -8,9 +8,11 @@ import 'package:dash_chat/dash_chat.dart';
 
 class InboxChat extends StatefulWidget {
   final String groupId;
-  InboxChat(this.groupId);
-  static Future navigate(String groupId) {
-    return navigatorKey.currentState.push(pageBuilder(InboxChat(groupId)));
+  final String title;
+  InboxChat(this.groupId, this.title);
+  static Future navigate(String groupId, String title) {
+    return navigatorKey.currentState
+        .push(pageBuilder(InboxChat(groupId, title)));
   }
 
   @override
@@ -37,14 +39,26 @@ class _InboxChatState extends State<InboxChat> {
 
   @override
   void didChangeDependencies() {
-    _inboxBloc = Provider.of<InboxBloc>(context);
-    _authBloc = Provider.of<AuthBloc>(context);
+    if (_inboxBloc == null || _authBloc == null) {
+      _inboxBloc = Provider.of<InboxBloc>(context);
+      _authBloc = Provider.of<AuthBloc>(context);
+      init();
+    }
     super.didChangeDependencies();
   }
 
   @override
   void initState() {
     super.initState();
+  }
+
+  Future<void> init() async {
+    // get list first 20 message by group id
+    final fbMessages = await _inboxBloc.get20Messages(widget.groupId);
+    messages.addAll(fbMessages.map((element) {
+      return ChatMessage(user: user, text: element.text, id: element.id);
+    }).toList());
+    setState(() {});
   }
 
   Future<void> onSend(ChatMessage message) async {
@@ -84,7 +98,20 @@ class _InboxChatState extends State<InboxChat> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: innerAppBar(context, 'Lady Gaga'),
+      appBar: MyAppBar(
+        title: widget.title,
+        automaticallyImplyLeading: true,
+        bgColor: Colors.white,
+        actions: [
+          Center(
+            child: AnimatedSearchBar(
+              width: deviceWidth(context) / 2,
+              height: 40,
+            ),
+          ),
+        ],
+      ),
+      backgroundColor: Colors.grey[50],
       body: DashChat(
         key: _chatViewKey,
         inverted: false,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:petland/modules/authentication/login.dart';
+import 'package:petland/modules/authentication/auth_bloc.dart';
 import 'package:petland/modules/authentication/welcome.dart';
 import 'package:petland/modules/inbox/inbox_list.dart';
 import 'package:petland/modules/my_pet/pick_my_pet_list.dart';
@@ -12,7 +12,20 @@ import 'package:petland/modules/profile/theme_page.dart';
 import 'package:petland/share/import.dart';
 import 'package:open_appstore/open_appstore.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  AuthBloc _authBloc;
+
+  @override
+  void didChangeDependencies() {
+    _authBloc = Provider.of<AuthBloc>(context);
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     final list = [
@@ -126,7 +139,7 @@ class ProfilePage extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          'Pet Choy',
+                          _authBloc.userModel.name,
                           style:
                               ptTitle().copyWith(fontWeight: FontWeight.w900),
                         ),
