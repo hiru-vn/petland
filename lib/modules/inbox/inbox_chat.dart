@@ -42,7 +42,7 @@ class _InboxChatState extends State<InboxChat> {
     if (_inboxBloc == null || _authBloc == null) {
       _inboxBloc = Provider.of<InboxBloc>(context);
       _authBloc = Provider.of<AuthBloc>(context);
-      init();
+      loadFirst20();
     }
     super.didChangeDependencies();
   }
@@ -52,20 +52,25 @@ class _InboxChatState extends State<InboxChat> {
     super.initState();
   }
 
-  Future<void> init() async {
+  Future<void> loadFirst20() async {
     // get list first 20 message by group id
     final fbMessages = await _inboxBloc.get20Messages(widget.groupId);
-    messages.addAll(fbMessages.map((element) {
-      return ChatMessage(user: user, text: element.text, id: element.id);
-    }).toList());
+    messages.addAll(
+        fbMessages.map((element) {
+          return ChatMessage(
+              user: user,
+              text: element.text,
+              id: element.id,
+              createdAt: DateTime.tryParse(element.date));
+        }).toList());
     setState(() {});
   }
 
   Future<void> onSend(ChatMessage message) async {
     String text = message.text;
 
-    _updateGroupPageText(
-        widget.groupId, _authBloc.userModel.name, text, message.createdAt);
+    _updateGroupPageText(widget.groupId, _authBloc.userModel.name, text,
+        message.createdAt, message.user.avatar);
     if (text.length > 0) {
       _file = null;
       await _inboxBloc.addMessage(
@@ -76,6 +81,10 @@ class _InboxChatState extends State<InboxChat> {
           _authBloc.userModel.name,
           _authBloc.userModel.avatar);
     }
+
+    setState(() {
+      messages.add(message);
+    });
     await Future.delayed(Duration(milliseconds: 100), () {
       _chatViewKey.currentState.scrollController
         ..animateTo(
@@ -86,13 +95,14 @@ class _InboxChatState extends State<InboxChat> {
     });
   }
 
-  _updateGroupPageText(
-      String groupid, String lastUser, String lastMessage, DateTime time) {
+  _updateGroupPageText(String groupid, String lastUser, String lastMessage,
+      DateTime time, String image) {
     if (lastMessage.length > 20) {
       lastMessage = lastMessage.substring(0, 20) + "...";
     }
 
-    _inboxBloc.updateGroupOnMessage(groupid, lastUser, time, lastMessage);
+    _inboxBloc.updateGroupOnMessage(
+        groupid, lastUser, time, lastMessage, image);
   }
 
   @override

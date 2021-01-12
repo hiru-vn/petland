@@ -27,7 +27,7 @@ class InboxBloc extends ChangeNotifier {
   }
 
   Future<void> updateGroupOnMessage(String groupid, String lastUser,
-      DateTime time, String lastMessage) async {
+      DateTime time, String lastMessage, String image) async {
     final snapShot =
         await firestore.collection(groupCollection).doc(groupid).get();
     if (snapShot.exists) {
@@ -35,6 +35,7 @@ class InboxBloc extends ChangeNotifier {
         'lastUser': lastUser,
         'time': time.toIso8601String(),
         'lastMessage': lastMessage,
+        'image': image,
       });
     }
   }
@@ -53,7 +54,7 @@ class InboxBloc extends ChangeNotifier {
   Future<List<FbInboxMessageModel>> get20Messages(String groupId) async {
     final query = getGroup(groupId)
         .collection("messages")
-        .orderBy('date', descending: true)
+        .orderBy('date', descending: false)
         .limit(20);
     final snapshot = await query.get();
     final res = snapshot.docs.map((e) => FbInboxMessageModel.fromJson(e.data(), e.id)).toList();
