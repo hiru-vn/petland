@@ -34,8 +34,13 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   _register() async {
+    if (_passC.text.length < 6) {
+      showToast('Mật khẩu phải nhiều hơn 6 kí tự', context);
+      return;
+    }
     if (_passC.text != _repassC.text) {
       showToast('Mật khẩu không trùng khớp', context);
+      return;
     }
     setState(() {
       isLoading = true;

@@ -28,6 +28,7 @@ class AuthBloc extends ChangeNotifier {
       String fbToken = await user.getIdToken();
       final res = await _userRepo.login(idToken: fbToken);
       await SPref.instance.set('token', res['token']);
+      await SPref.instance.set('id', res['user']["id"]);
       userModel = UserModel.fromJson(res['user']);
       return BaseResponse.success(res);
     } catch (e) {
@@ -43,6 +44,17 @@ class AuthBloc extends ChangeNotifier {
       await Future.delayed(Duration(seconds: 1));
       final loginRes = await signInWithEmailAndPassword(email, password);
       return BaseResponse.success(loginRes.data);
+    } catch (e) {
+      return BaseResponse.fail(e.message?.toString());
+    }
+  }
+
+  Future<BaseResponse> getUserInfo() async {
+    try {
+      final id = await SPref.instance.get('id');
+      final res = await _userRepo.getOneUser(id: id);
+      userModel = UserModel.fromJson(res);
+      return BaseResponse.success(res);
     } catch (e) {
       return BaseResponse.fail(e.message?.toString());
     }
@@ -86,6 +98,12 @@ class AuthBloc extends ChangeNotifier {
         break;
     }
     return false;
+  }
+
+  Future<bool> checkToken() async {
+    final String token = await SPref.instance.get('token');
+    final String id = await SPref.instance.get('id');
+    return token != null && id != null;
   }
 
   void logout() async {

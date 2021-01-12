@@ -12,7 +12,7 @@ email: "$email"
 password: "$password"
 }
     ''',
-        fragment: 'token user { id uid name email phone }');
+        fragment: 'token user { id uid name email phone avatar}');
     return res['register'];
   }
 
@@ -22,7 +22,12 @@ password: "$password"
         '''
 idToken: "$idToken"
     ''',
-        fragment: 'token user { id uid name email phone }');
+        fragment: 'token user { id uid name email phone avatar}');
     return res['loginEmail'];
+  }
+
+  Future getOneUser({String id}) async {
+    final res = await UserSrv().getItem(id);
+    return res;
   }
 }
