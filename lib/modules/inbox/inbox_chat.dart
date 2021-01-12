@@ -49,20 +49,19 @@ class _InboxChatState extends State<InboxChat> {
 
   Future<void> onSend(ChatMessage message) async {
     String text = message.text;
+
+    _updateGroupPageText(
+        widget.groupId, _authBloc.userModel.name, text, message.createdAt);
     if (text.length > 0) {
       _file = null;
-      await _inboxBloc.getGroup(widget.groupId).collection("messages").add({
-        'text': text,
-        'email': _authBloc.userModel.email,
-        'date': DateTime.now().toIso8601String().toString(),
-        'from': _authBloc.userModel.email,
-        'uid': _authBloc.userModel.uid,
-        'fullName': _authBloc.userModel.name,
-        'picture': _authBloc.userModel.avatar,
-      });
+      await _inboxBloc.addMessage(
+          widget.groupId,
+          text,
+          message.createdAt,
+          _authBloc.userModel.uid,
+          _authBloc.userModel.name,
+          _authBloc.userModel.avatar);
     }
-    _updateGroupPageText(widget.groupId, _authBloc.userModel.name, text,
-        Formart.formatToDateTime(message.createdAt));
     await Future.delayed(Duration(milliseconds: 100), () {
       _chatViewKey.currentState.scrollController
         ..animateTo(
@@ -74,12 +73,12 @@ class _InboxChatState extends State<InboxChat> {
   }
 
   _updateGroupPageText(
-      String groupid, String lastUser, String lastMessage, String time) {
+      String groupid, String lastUser, String lastMessage, DateTime time) {
     if (lastMessage.length > 20) {
       lastMessage = lastMessage.substring(0, 20) + "...";
     }
-    _inboxBloc.getGroup(groupid).update(
-        {'lastUser': lastUser, 'time': time, 'lastMessage': lastMessage});
+
+    _inboxBloc.updateGroupOnMessage(groupid, lastUser, time, lastMessage);
   }
 
   @override

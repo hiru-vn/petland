@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class Formart {
   static toVNDCurency(double value, {hasUnit = true}) {
@@ -12,6 +13,23 @@ class Formart {
     final formatter = NumberFormat("#,##0.00", "en_US");
     String newValue = formatter.format(value);
     return newValue;
+  }
+
+  static String timeAgo(DateTime time) {
+    if (time == null) return null;
+    return timeago.format(time, locale: 'en_short');
+  }
+
+  static String timeByDay(DateTime time) {
+    if (time == null) return null;
+    DateTime now = DateTime.now();
+    if (time.day == now.day &&
+        time.month == now.month &&
+        time.year == now.year) {
+      DateFormat format = DateFormat("hh:mm a");
+      return format.format(time);
+    }
+    else return timeAgo(time);
   }
 
   static double toFixedDouble(double value, int digit) {
