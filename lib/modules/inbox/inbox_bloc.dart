@@ -60,6 +60,19 @@ class InboxBloc extends ChangeNotifier {
     });
   }
 
+  Future<Stream<QuerySnapshot>> getStreamIncomingMessages(
+      String groupId, String latestFetchedMessageId) async {
+    final latestFetchedMessageDoc = await getGroup(groupId)
+        .collection(messageCollection)
+        .doc(latestFetchedMessageId)
+        .get();
+    return getGroup(groupId)
+        .collection(messageCollection)
+        .orderBy('date', descending: false)
+        .startAfterDocument(latestFetchedMessageDoc)
+        .snapshots();
+  }
+
   Future<List<FbInboxMessageModel>> get20Messages(String groupId,
       {String lastMessageId}) async {
     List<FbInboxMessageModel> res;

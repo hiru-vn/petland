@@ -6,8 +6,7 @@ import 'package:petland/modules/inbox/inbox_bloc.dart';
 import 'package:petland/modules/inbox/inbox_model.dart';
 import 'package:petland/share/import.dart';
 import 'package:dash_chat/dash_chat.dart';
-
-import 'load_more.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class InboxChat extends StatefulWidget {
   final FbInboxGroupModel group;
@@ -33,6 +32,8 @@ class _InboxChatState extends State<InboxChat> {
   bool shouldShowLoadEarlier = true;
   bool reachEndList = false;
   bool onLoadMore = false;
+  Stream<QuerySnapshot> _incomingMessageStream;
+  StreamSubscription _incomingMessageListener;
 
   List<ChatMessage> messages = List<ChatMessage>();
 
@@ -57,6 +58,12 @@ class _InboxChatState extends State<InboxChat> {
     super.initState();
   }
 
+  @override
+  dispose() {
+    super.dispose();
+    _incomingMessageListener?.cancel();
+  }
+
   Future<void> loadUsers() async {
     final fbUsers = await _inboxBloc.getUsers(widget.group.users);
     for (final fbUser in fbUsers) {
@@ -70,6 +77,7 @@ class _InboxChatState extends State<InboxChat> {
   Future<void> loadFirst20Message() async {
     // get list first 20 message by group id
     final fbMessages = await _inboxBloc.get20Messages(widget.group.id);
+    if (fbMessages.isEmpty) return;
     messages.addAll(fbMessages.map((element) {
       return ChatMessage(
           user: users.firstWhere((user) => user.uid == element.uid),
@@ -79,6 +87,39 @@ class _InboxChatState extends State<InboxChat> {
     }).toList());
     setState(() {});
     Future.delayed(Duration(milliseconds: 50), () => jumpToEnd());
+
+    _incomingMessageStream = await _inboxBloc.getStreamIncomingMessages(
+        widget.group.id, fbMessages[fbMessages.length - 1].id);
+    _incomingMessageListener = _incomingMessageStream.listen(onIncomingMessage);
+  }
+
+  void onIncomingMessage(event) async {
+    print('new message!!!');
+    final newMessages = event as QuerySnapshot;
+    final fbMessages = newMessages.docs
+        .map((e) => FbInboxMessageModel.fromJson(e.data(), e.id))
+        .toList();
+    fbMessages.removeWhere((message) => message.uid == _authBloc.userModel.id);
+    if (fbMessages.isEmpty) return;
+    messages.addAll(fbMessages.map((element) {
+      return ChatMessage(
+          user: users.firstWhere((user) => user.uid == element.uid),
+          text: element.text,
+          id: element.id,
+          createdAt: DateTime.tryParse(element.date));
+    }).toList());
+
+    _incomingMessageStream = await _inboxBloc.getStreamIncomingMessages(
+        widget.group.id, fbMessages[fbMessages.length - 1].id);
+    _incomingMessageListener?.cancel();
+    _incomingMessageListener = _incomingMessageStream.listen(onIncomingMessage);
+
+    setState(() {});
+    Future.delayed(Duration(milliseconds: 100), () {
+      if (_chatViewKey.currentState.scrollController.position.pixels >
+          _chatViewKey.currentState.scrollController.position.maxScrollExtent -
+              200) scrollToEnd();
+    });
   }
 
   Future<void> loadNext20Message() async {
@@ -182,7 +223,6 @@ class _InboxChatState extends State<InboxChat> {
         inverted: false,
         onSend: onSend,
         sendOnEnter: true,
-
         textInputAction: TextInputAction.send,
         user: users.firstWhere((user) => user.uid == _authBloc.userModel.id),
         textCapitalization: TextCapitalization.sentences,
@@ -241,10 +281,6 @@ class _InboxChatState extends State<InboxChat> {
           //     );
           // });
         },
-        // onLoadEarlier: () {
-        //   print("loading...");
-        //   loadNext20Message();
-        // },
         shouldShowLoadEarlier: true,
         showTraillingBeforeSend: true,
         showLoadEarlierWidget: () {
