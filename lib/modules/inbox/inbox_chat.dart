@@ -4,6 +4,7 @@ import 'package:path/path.dart' as path;
 import 'package:petland/modules/authentication/auth_bloc.dart';
 import 'package:petland/modules/inbox/inbox_bloc.dart';
 import 'package:petland/modules/inbox/inbox_model.dart';
+import 'package:petland/modules/inbox/video_call_page.dart';
 import 'package:petland/share/import.dart';
 import 'package:dash_chat/dash_chat.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -25,6 +26,7 @@ class InboxChat extends StatefulWidget {
 class _InboxChatState extends State<InboxChat> {
   final GlobalKey<DashChatState> _chatViewKey = GlobalKey<DashChatState>();
   final List<ChatUser> users = [];
+  final List<FbInboxUserModel> _fbUsers = [];
 
   File _file;
   InboxBloc _inboxBloc;
@@ -47,7 +49,7 @@ class _InboxChatState extends State<InboxChat> {
     if (_inboxBloc == null || _authBloc == null) {
       _inboxBloc = Provider.of<InboxBloc>(context);
       _authBloc = Provider.of<AuthBloc>(context);
-      loadUsers();
+      loadUsers().then((value) => initMenu());
       loadFirst20Message();
     }
     super.didChangeDependencies();
@@ -69,6 +71,7 @@ class _InboxChatState extends State<InboxChat> {
 
   Future<void> loadUsers() async {
     final fbUsers = await _inboxBloc.getUsers(widget.group.users);
+    _fbUsers.addAll(fbUsers);
     for (final fbUser in fbUsers) {
       final user = users.firstWhere((user) => user.uid == fbUser.id);
       user.avatar = fbUser.image;
@@ -338,24 +341,33 @@ class _InboxChatState extends State<InboxChat> {
     );
   }
 
-  PopupMenu menu = PopupMenu(
-      items: [
-        MenuItem(
-            title: 'Voice call',
-            image: Icon(
-              Icons.phone,
-              color: Colors.white,
-            )),
-        MenuItem(
-            title: 'Video call',
-            image: Icon(
-              Icons.video_call,
-              color: Colors.white,
-            )),
-      ],
-      onClickMenu: (val) {},
-      stateChanged: (val) {},
-      onDismiss: () {});
+  initMenu() {
+    menu = PopupMenu(
+        items: [
+          MenuItem(
+              title: 'Voice call',
+              image: Icon(
+                Icons.phone,
+                color: Colors.white,
+              )),
+          MenuItem(
+              title: 'Video call',
+              image: Icon(
+                Icons.video_call,
+                color: Colors.white,
+              )),
+        ],
+        onClickMenu: (val) {
+          if (val.menuTitle == 'Voice call') {}
+          if (val.menuTitle == 'Video call') {
+            VideoCallPage.navigate(widget.group.id, _fbUsers);
+          }
+        },
+        stateChanged: (val) {},
+        onDismiss: () {});
+  }
+
+  PopupMenu menu;
 }
 
 class LoadEarlierWidget extends StatelessWidget {

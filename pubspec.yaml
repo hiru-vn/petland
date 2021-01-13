@@ -42,7 +42,6 @@ dev_dependencies:
   flutter_launcher_icons: ^0.8.1
   flutter_staggered_grid_view: ^0.3.2
   imgur: ^1.1.1
-  permission_handler: ^5.0.1+1
   image_picker: ^0.6.7+15
   photo_view: ^0.10.3
   dash_chat: ^1.1.15
@@ -64,6 +63,10 @@ dev_dependencies:
   google_sign_in: ^4.5.9
   cloud_firestore: ^0.14.4
   firebase_core: ^0.5.3
+
+  # call
+  agora_rtc_engine: ^3.2.1
+  permission_handler: ^5.0.1+1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
