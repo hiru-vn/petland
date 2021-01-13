@@ -72,18 +72,14 @@ class _InboxChatState extends State<InboxChat> {
           createdAt: DateTime.tryParse(element.date));
     }).toList());
     setState(() {});
+    Future.delayed(Duration(milliseconds: 50), () => jumpToEnd());
   }
 
   Future<void> onSend(ChatMessage message) async {
     setState(() {
       messages.add(message);
     });
-    _chatViewKey.currentState.scrollController
-      ..animateTo(
-        _chatViewKey.currentState.scrollController.position.maxScrollExtent,
-        curve: Curves.easeOut,
-        duration: const Duration(milliseconds: 300),
-      );
+    scrollToEnd();
 
     String text = message.text;
 
@@ -109,6 +105,22 @@ class _InboxChatState extends State<InboxChat> {
 
     _inboxBloc.updateGroupOnMessage(
         groupid, lastUser, time, lastMessage, image);
+  }
+
+  void scrollToEnd() {
+    _chatViewKey.currentState.scrollController
+      ..animateTo(
+        _chatViewKey.currentState.scrollController.position.maxScrollExtent,
+        curve: Curves.easeOut,
+        duration: const Duration(milliseconds: 300),
+      );
+  }
+
+  void jumpToEnd() {
+    _chatViewKey.currentState.scrollController
+      ..jumpTo(
+        _chatViewKey.currentState.scrollController.position.maxScrollExtent,
+      );
   }
 
   @override
