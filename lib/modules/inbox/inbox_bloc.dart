@@ -139,6 +139,7 @@ class InboxBloc extends ChangeNotifier {
           await firestore.collection(groupCollection).doc(idGroups[i]).get();
       list.add(FbInboxGroupModel.fromJson(item.data(), item.id));
     }
+    list.sort((a, b) => DateTime.tryParse(b.time).compareTo(DateTime.tryParse(a.time)));
     return list;
   }
 

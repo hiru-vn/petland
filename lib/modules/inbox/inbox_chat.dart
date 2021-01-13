@@ -7,6 +7,7 @@ import 'package:petland/modules/inbox/inbox_model.dart';
 import 'package:petland/share/import.dart';
 import 'package:dash_chat/dash_chat.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:popup_menu/popup_menu.dart';
 
 class InboxChat extends StatefulWidget {
   final FbInboxGroupModel group;
@@ -34,6 +35,8 @@ class _InboxChatState extends State<InboxChat> {
   bool onLoadMore = false;
   Stream<QuerySnapshot> _incomingMessageStream;
   StreamSubscription _incomingMessageListener;
+  GlobalKey<State<StatefulWidget>> moreBtnKey =
+      GlobalKey<State<StatefulWidget>>();
 
   List<ChatMessage> messages = List<ChatMessage>();
 
@@ -120,7 +123,7 @@ class _InboxChatState extends State<InboxChat> {
     _incomingMessageListener?.cancel();
     _incomingMessageListener = _incomingMessageStream.listen(onIncomingMessage);
 
-    setState(() {});
+    if (mounted) setState(() {});
     // new message! scroll to bottom to see them
     Future.delayed(Duration(milliseconds: 100), () {
       if (_chatViewKey.currentState.scrollController.position.pixels >
@@ -209,6 +212,7 @@ class _InboxChatState extends State<InboxChat> {
 
   @override
   Widget build(BuildContext context) {
+    PopupMenu.context = context;
     return Scaffold(
       appBar: MyAppBar(
         title: widget.title,
@@ -221,6 +225,15 @@ class _InboxChatState extends State<InboxChat> {
               height: 40,
             ),
           ),
+          IconButton(
+              key: moreBtnKey,
+              icon: Icon(
+                Icons.more_vert,
+                color: Colors.black.withOpacity(0.7),
+              ),
+              onPressed: () {
+                menu.show(widgetKey: moreBtnKey);
+              }),
         ],
       ),
       backgroundColor: Colors.grey[50],
@@ -270,24 +283,7 @@ class _InboxChatState extends State<InboxChat> {
           border: Border.all(width: 0.0),
           color: Colors.white,
         ),
-        onQuickReply: (Reply reply) {
-          // setState(() {
-          //   messages.add(ChatMessage(
-          //       text: reply.value, createdAt: DateTime.now(), user: user));
-
-          //   messages = [...messages];
-          // });
-
-          // Timer(Duration(milliseconds: 300), () {
-          //   _chatViewKey.currentState.scrollController
-          //     ..animateTo(
-          //       _chatViewKey
-          //           .currentState.scrollController.position.maxScrollExtent,
-          //       curve: Curves.easeOut,
-          //       duration: const Duration(milliseconds: 300),
-          //     );
-          // });
-        },
+        onQuickReply: (Reply reply) {},
         shouldShowLoadEarlier: true,
         showTraillingBeforeSend: true,
         showLoadEarlierWidget: () {
@@ -341,6 +337,25 @@ class _InboxChatState extends State<InboxChat> {
       ),
     );
   }
+
+  PopupMenu menu = PopupMenu(
+      items: [
+        MenuItem(
+            title: 'Voice call',
+            image: Icon(
+              Icons.phone,
+              color: Colors.white,
+            )),
+        MenuItem(
+            title: 'Video call',
+            image: Icon(
+              Icons.video_call,
+              color: Colors.white,
+            )),
+      ],
+      onClickMenu: (val) {},
+      stateChanged: (val) {},
+      onDismiss: () {});
 }
 
 class LoadEarlierWidget extends StatelessWidget {
@@ -367,12 +382,12 @@ class LoadEarlierWidget extends StatelessWidget {
             },
             child: Container(
               padding: EdgeInsets.symmetric(
-                horizontal: 12.0,
-                vertical: 5.0,
+                horizontal: 14,
+                vertical: 6,
               ),
               decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(20.0),
+                  borderRadius: BorderRadius.circular(12.0),
                   boxShadow: [
                     BoxShadow(
                       spreadRadius: 1.0,
@@ -382,10 +397,8 @@ class LoadEarlierWidget extends StatelessWidget {
                     )
                   ]),
               child: Text(
-                "Load More",
-                style: TextStyle(
-                  color: Theme.of(context).primaryColor,
-                ),
+                "Load more",
+                style: TextStyle(color: Theme.of(context).primaryColor),
               ),
             ),
           );
