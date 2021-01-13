@@ -42,10 +42,10 @@ class InboxBloc extends ChangeNotifier {
   }
 
   Future<List<FbInboxUserModel>> getUsers(List<String> users) async {
-    final List<DocumentSnapshot> snapShots = await Future.wait(users.map((e) => 
-      firestore.collection(userCollection).doc(e).get()
-    ));
-    final listUser = snapShots.map((e) => FbInboxUserModel.fromJson(e.data())).toList();
+    final List<DocumentSnapshot> snapShots = await Future.wait(
+        users.map((e) => firestore.collection(userCollection).doc(e).get()));
+    final listUser =
+        snapShots.map((e) => FbInboxUserModel.fromJson(e.data())).toList();
     return listUser;
   }
 
@@ -60,13 +60,33 @@ class InboxBloc extends ChangeNotifier {
     });
   }
 
-  Future<List<FbInboxMessageModel>> get20Messages(String groupId) async {
-    final query = getGroup(groupId)
-        .collection(messageCollection)
-        .orderBy('date', descending: false)
-        .limit(20);
-    final snapshot = await query.get();
-    final res = snapshot.docs.map((e) => FbInboxMessageModel.fromJson(e.data(), e.id)).toList();
+  Future<List<FbInboxMessageModel>> get20Messages(String groupId,
+      {String lastMessageId}) async {
+    List<FbInboxMessageModel> res;
+    if (lastMessageId == null) {
+      final query = getGroup(groupId)
+          .collection(messageCollection)
+          .orderBy('date', descending: false)
+          .limitToLast(20);
+      final snapshot = await query.get();
+      res = snapshot.docs
+          .map((e) => FbInboxMessageModel.fromJson(e.data(), e.id))
+          .toList();
+    } else {
+      final lastMessageDoc = await getGroup(groupId)
+          .collection(messageCollection)
+          .doc(lastMessageId)
+          .get();
+      final query = getGroup(groupId)
+          .collection(messageCollection)
+          .orderBy('date', descending: false)
+          .endBeforeDocument(lastMessageDoc)
+          .limitToLast(20);
+      final snapshot = await query.get();
+      res = snapshot.docs
+          .map((e) => FbInboxMessageModel.fromJson(e.data(), e.id))
+          .toList();
+    }
     return res;
   }
 
