@@ -88,8 +88,10 @@ class _InboxChatState extends State<InboxChat> {
     setState(() {});
     Future.delayed(Duration(milliseconds: 50), () => jumpToEnd());
 
+    // init stream with last messageId
     _incomingMessageStream = await _inboxBloc.getStreamIncomingMessages(
         widget.group.id, fbMessages[fbMessages.length - 1].id);
+    // add listener to cancel listener, or else will cause bug setState when dispose state
     _incomingMessageListener = _incomingMessageStream.listen(onIncomingMessage);
   }
 
@@ -99,8 +101,10 @@ class _InboxChatState extends State<InboxChat> {
     final fbMessages = newMessages.docs
         .map((e) => FbInboxMessageModel.fromJson(e.data(), e.id))
         .toList();
+    // do not add message come for this user
     fbMessages.removeWhere((message) => message.uid == _authBloc.userModel.id);
     if (fbMessages.isEmpty) return;
+    // add incoming message to first
     messages.addAll(fbMessages.map((element) {
       return ChatMessage(
           user: users.firstWhere((user) => user.uid == element.uid),
@@ -109,12 +113,15 @@ class _InboxChatState extends State<InboxChat> {
           createdAt: DateTime.tryParse(element.date));
     }).toList());
 
+    // now update stream with new last message id
     _incomingMessageStream = await _inboxBloc.getStreamIncomingMessages(
         widget.group.id, fbMessages[fbMessages.length - 1].id);
+    // refresh lisener to prevent bug
     _incomingMessageListener?.cancel();
     _incomingMessageListener = _incomingMessageStream.listen(onIncomingMessage);
 
     setState(() {});
+    // new message! scroll to bottom to see them
     Future.delayed(Duration(milliseconds: 100), () {
       if (_chatViewKey.currentState.scrollController.position.pixels >
           _chatViewKey.currentState.scrollController.position.maxScrollExtent -
