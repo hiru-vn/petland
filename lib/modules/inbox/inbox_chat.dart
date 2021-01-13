@@ -75,6 +75,16 @@ class _InboxChatState extends State<InboxChat> {
   }
 
   Future<void> onSend(ChatMessage message) async {
+    setState(() {
+      messages.add(message);
+    });
+    _chatViewKey.currentState.scrollController
+      ..animateTo(
+        _chatViewKey.currentState.scrollController.position.maxScrollExtent,
+        curve: Curves.easeOut,
+        duration: const Duration(milliseconds: 300),
+      );
+
     String text = message.text;
 
     _updateGroupPageText(widget.group.id, _authBloc.userModel.name, text,
@@ -89,18 +99,6 @@ class _InboxChatState extends State<InboxChat> {
           _authBloc.userModel.name,
           _authBloc.userModel.avatar);
     }
-
-    setState(() {
-      messages.add(message);
-    });
-    await Future.delayed(Duration(milliseconds: 100), () {
-      _chatViewKey.currentState.scrollController
-        ..animateTo(
-          _chatViewKey.currentState.scrollController.position.maxScrollExtent,
-          curve: Curves.easeOut,
-          duration: const Duration(milliseconds: 300),
-        );
-    });
   }
 
   _updateGroupPageText(String groupid, String lastUser, String lastMessage,
@@ -176,22 +174,22 @@ class _InboxChatState extends State<InboxChat> {
           color: Colors.white,
         ),
         onQuickReply: (Reply reply) {
-          setState(() {
-            // messages.add(ChatMessage(
-            //     text: reply.value, createdAt: DateTime.now(), user: user));
+          // setState(() {
+          //   messages.add(ChatMessage(
+          //       text: reply.value, createdAt: DateTime.now(), user: user));
 
-            // messages = [...messages];
-          });
+          //   messages = [...messages];
+          // });
 
-          Timer(Duration(milliseconds: 300), () {
-            _chatViewKey.currentState.scrollController
-              ..animateTo(
-                _chatViewKey
-                    .currentState.scrollController.position.maxScrollExtent,
-                curve: Curves.easeOut,
-                duration: const Duration(milliseconds: 300),
-              );
-          });
+          // Timer(Duration(milliseconds: 300), () {
+          //   _chatViewKey.currentState.scrollController
+          //     ..animateTo(
+          //       _chatViewKey
+          //           .currentState.scrollController.position.maxScrollExtent,
+          //       curve: Curves.easeOut,
+          //       duration: const Duration(milliseconds: 300),
+          //     );
+          // });
         },
         onLoadEarlier: () {
           print("laoding...");
