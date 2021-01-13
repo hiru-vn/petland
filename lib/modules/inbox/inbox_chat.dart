@@ -3,16 +3,17 @@ import 'dart:io';
 import 'package:path/path.dart' as path;
 import 'package:petland/modules/authentication/auth_bloc.dart';
 import 'package:petland/modules/inbox/inbox_bloc.dart';
+import 'package:petland/modules/inbox/inbox_model.dart';
 import 'package:petland/share/import.dart';
 import 'package:dash_chat/dash_chat.dart';
 
 class InboxChat extends StatefulWidget {
-  final String groupId;
+  final FbInboxGroupModel group;
   final String title;
-  InboxChat(this.groupId, this.title);
-  static Future navigate(String groupId, String title) {
-    return navigatorKey.currentState
-        .push(pageBuilder(InboxChat(groupId, title)));
+
+  InboxChat(this.group, this.title);
+  static Future navigate(FbInboxGroupModel group, String title) {
+    return navigatorKey.currentState.push(pageBuilder(InboxChat(group, title)));
   }
 
   @override
@@ -21,14 +22,8 @@ class InboxChat extends StatefulWidget {
 
 class _InboxChatState extends State<InboxChat> {
   final GlobalKey<DashChatState> _chatViewKey = GlobalKey<DashChatState>();
-  final ChatUser user = ChatUser(
-    name: 'Huy',
-    uid: 'Huy',
-  );
-  final ChatUser userOther = ChatUser(
-    name: 'Anh',
-    uid: 'Anh',
-  );
+  final List<ChatUser> users = [];
+
   File _file;
   InboxBloc _inboxBloc;
   AuthBloc _authBloc;
@@ -42,42 +37,55 @@ class _InboxChatState extends State<InboxChat> {
     if (_inboxBloc == null || _authBloc == null) {
       _inboxBloc = Provider.of<InboxBloc>(context);
       _authBloc = Provider.of<AuthBloc>(context);
-      loadFirst20();
+      loadUsers();
+      loadFirst20Message();
     }
     super.didChangeDependencies();
   }
 
   @override
   void initState() {
+    for (final id in widget.group.users) {
+      users.add(ChatUser(uid: id, name: ''));
+    }
     super.initState();
   }
 
-  Future<void> loadFirst20() async {
+  Future<void> loadUsers() async {
+    final fbUsers = await _inboxBloc.getUsers(widget.group.users);
+    for (final fbUser in fbUsers) {
+      final user = users.firstWhere((user) => user.uid == fbUser.id);
+      user.avatar = fbUser.image;
+      user.name = fbUser.name;
+    }
+    setState(() {});
+  }
+
+  Future<void> loadFirst20Message() async {
     // get list first 20 message by group id
-    final fbMessages = await _inboxBloc.get20Messages(widget.groupId);
-    messages.addAll(
-        fbMessages.map((element) {
-          return ChatMessage(
-              user: user,
-              text: element.text,
-              id: element.id,
-              createdAt: DateTime.tryParse(element.date));
-        }).toList());
+    final fbMessages = await _inboxBloc.get20Messages(widget.group.id);
+    messages.addAll(fbMessages.map((element) {
+      return ChatMessage(
+          user: users.firstWhere((user) => user.uid == element.uid),
+          text: element.text,
+          id: element.id,
+          createdAt: DateTime.tryParse(element.date));
+    }).toList());
     setState(() {});
   }
 
   Future<void> onSend(ChatMessage message) async {
     String text = message.text;
 
-    _updateGroupPageText(widget.groupId, _authBloc.userModel.name, text,
+    _updateGroupPageText(widget.group.id, _authBloc.userModel.name, text,
         message.createdAt, message.user.avatar);
     if (text.length > 0) {
       _file = null;
       await _inboxBloc.addMessage(
-          widget.groupId,
+          widget.group.id,
           text,
           message.createdAt,
-          _authBloc.userModel.uid,
+          _authBloc.userModel.id,
           _authBloc.userModel.name,
           _authBloc.userModel.avatar);
     }
@@ -128,7 +136,7 @@ class _InboxChatState extends State<InboxChat> {
         onSend: onSend,
         sendOnEnter: true,
         textInputAction: TextInputAction.send,
-        user: user,
+        user: users.firstWhere((user) => user.uid == _authBloc.userModel.id),
         textCapitalization: TextCapitalization.sentences,
         messageTextBuilder: (text, [messages]) {
           return Padding(
@@ -169,10 +177,10 @@ class _InboxChatState extends State<InboxChat> {
         ),
         onQuickReply: (Reply reply) {
           setState(() {
-            messages.add(ChatMessage(
-                text: reply.value, createdAt: DateTime.now(), user: user));
+            // messages.add(ChatMessage(
+            //     text: reply.value, createdAt: DateTime.now(), user: user));
 
-            messages = [...messages];
+            // messages = [...messages];
           });
 
           Timer(Duration(milliseconds: 300), () {

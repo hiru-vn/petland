@@ -71,7 +71,7 @@ class _InboxListState extends State<InboxList>
               itemCount: groups.length,
               itemBuilder: (context, index) => ListTile(
                 onTap: () {
-                  InboxChat.navigate(groups[index].id, groups[index].lastUser)
+                  InboxChat.navigate(groups[index], groups[index].lastUser)
                       .then((value) => reload());
                 },
                 tileColor: groups[index].reader.contains(_authBloc.userModel.id)

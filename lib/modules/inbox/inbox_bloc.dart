@@ -14,6 +14,7 @@ class InboxBloc extends ChangeNotifier {
 
   final userCollection = 'user';
   final groupCollection = 'group';
+  final messageCollection = 'messages';
 
   Future<void> createGroup(String lastUser, DateTime time, String lastMessage,
       String image, List<String> users) async {
@@ -40,9 +41,17 @@ class InboxBloc extends ChangeNotifier {
     }
   }
 
+  Future<List<FbInboxUserModel>> getUsers(List<String> users) async {
+    final List<DocumentSnapshot> snapShots = await Future.wait(users.map((e) => 
+      firestore.collection(userCollection).doc(e).get()
+    ));
+    final listUser = snapShots.map((e) => FbInboxUserModel.fromJson(e.data())).toList();
+    return listUser;
+  }
+
   Future<void> addMessage(String groupId, String text, DateTime time,
       String uid, String fullName, String avatar) {
-    return getGroup(groupId).collection("messages").add({
+    return getGroup(groupId).collection(messageCollection).add({
       'text': text,
       'date': time.toIso8601String(),
       'uid': uid,
@@ -53,7 +62,7 @@ class InboxBloc extends ChangeNotifier {
 
   Future<List<FbInboxMessageModel>> get20Messages(String groupId) async {
     final query = getGroup(groupId)
-        .collection("messages")
+        .collection(messageCollection)
         .orderBy('date', descending: false)
         .limit(20);
     final snapshot = await query.get();
@@ -69,7 +78,7 @@ class InboxBloc extends ChangeNotifier {
           .doc(id)
           .update({'name': name, 'id': id, 'image': image});
     } else {
-      await firestore.collection(userCollection).add({
+      await firestore.collection(userCollection).doc(id).set({
         'name': name,
         'id': id,
         'image': image,
