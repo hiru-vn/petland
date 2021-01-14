@@ -5,6 +5,8 @@ import 'package:petland/modules/authentication/auth_bloc.dart';
 import 'package:petland/share/import.dart';
 import 'package:dash_chat/dash_chat.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:petland/share/widgets/image_view.dart';
+import 'package:petland/utils/file_util.dart';
 import 'package:popup_menu/popup_menu.dart';
 
 import 'inbox_bloc.dart';
@@ -90,6 +92,12 @@ class _InboxChatState extends State<InboxChat> {
           user: _users.firstWhere((user) => user.uid == element.uid),
           text: element.text,
           id: element.id,
+          image: FileUtil.getFbUrlFileType(element.filePath) == FileType.image
+              ? element.filePath
+              : null,
+          video: FileUtil.getFbUrlFileType(element.filePath) == FileType.video
+              ? element.filePath
+              : null,
           createdAt: DateTime.tryParse(element.date));
     }).toList());
     setState(() {});
@@ -117,6 +125,12 @@ class _InboxChatState extends State<InboxChat> {
           user: _users.firstWhere((user) => user.uid == element.uid),
           text: element.text,
           id: element.id,
+          image: FileUtil.getFbUrlFileType(element.filePath) == FileType.image
+              ? element.filePath
+              : null,
+          video: FileUtil.getFbUrlFileType(element.filePath) == FileType.video
+              ? element.filePath
+              : null,
           createdAt: DateTime.tryParse(element.date));
     }).toList());
 
@@ -161,12 +175,21 @@ class _InboxChatState extends State<InboxChat> {
               user: _users.firstWhere((user) => user.uid == element.uid),
               text: element.text,
               id: element.id,
+              image:
+                  FileUtil.getFbUrlFileType(element.filePath) == FileType.image
+                      ? element.filePath
+                      : null,
+              video:
+                  FileUtil.getFbUrlFileType(element.filePath) == FileType.video
+                      ? element.filePath
+                      : null,
               createdAt: DateTime.tryParse(element.date));
         }).toList());
     setState(() {});
   }
 
-  Future<void> onSend(ChatMessage message) async {
+  void onSend(ChatMessage message) {
+    FileType fileType = FileUtil.getFileType(_file?.path);
     setState(() {
       messages.add(message);
     });
@@ -177,14 +200,32 @@ class _InboxChatState extends State<InboxChat> {
     _updateGroupPageText(widget.group.id, _authBloc.userModel.name, text,
         message.createdAt, message.user.avatar);
     if (text.length > 0) {
-      _file = null;
-      await _inboxBloc.addMessage(
-          widget.group.id,
-          text,
-          message.createdAt,
-          _authBloc.userModel.id,
-          _authBloc.userModel.name,
-          _authBloc.userModel.avatar);
+      FileUtil.uploadFireStorage(_file,
+              path:
+                  'chats/group_${widget.group.id}/user_${_authBloc.userModel.id}')
+          .then((fileUrl) {
+        if (fileType == FileType.video) {
+          setState(() {
+            messages.firstWhere((m) => m.id == message.id)?.video = fileUrl;
+          });
+        }
+        if (fileType == FileType.image) {
+          setState(() {
+            messages.firstWhere((m) => m.id == message.id)?.image = fileUrl;
+          });
+        }
+        _inboxBloc.addMessage(
+            widget.group.id,
+            text,
+            message.createdAt,
+            _authBloc.userModel.id,
+            _authBloc.userModel.name,
+            _authBloc.userModel.avatar,
+            filePath: fileUrl);
+      });
+      setState(() {
+        _file = null;
+      });
     }
   }
 
@@ -212,6 +253,16 @@ class _InboxChatState extends State<InboxChat> {
       ..jumpTo(
         _chatViewKey.currentState.scrollController.position.maxScrollExtent,
       );
+  }
+
+  void _onFilePick(String path) {
+    if (path != null) {
+      setState(() {
+        _file = File(path);
+      });
+    } else {
+      // User canceled the picker
+    }
   }
 
   @override
@@ -242,6 +293,9 @@ class _InboxChatState extends State<InboxChat> {
       ),
       backgroundColor: Colors.grey[50],
       body: DashChat(
+        messageImageBuilder: (url, [messages]) {
+          return ImageViewNetwork(url: url);
+        },
         scrollController: scrollController,
         key: _chatViewKey,
         inverted: false,
@@ -304,7 +358,7 @@ class _InboxChatState extends State<InboxChat> {
         },
         inputFooterBuilder: () => _file != null
             ? Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 3),
                 child: Row(
                   children: [
                     Container(
@@ -334,7 +388,7 @@ class _InboxChatState extends State<InboxChat> {
           IconButton(
             icon: Icon(Icons.file_present),
             onPressed: () async {
-              imagePicker(context, (str) {}, (str) {});
+              imagePicker(context, _onFilePick, _onFilePick, _onFilePick);
             },
           )
         ],

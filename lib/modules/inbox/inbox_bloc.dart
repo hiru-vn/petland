@@ -52,13 +52,16 @@ class InboxBloc extends ChangeNotifier {
   }
 
   Future<void> addMessage(String groupId, String text, DateTime time,
-      String uid, String fullName, String avatar) {
+      String uid, String fullName, String avatar,
+      {String filePath}) {
+    print('upload: ' + filePath);
     return getGroup(groupId).collection(messageCollection).add({
       'text': text,
       'date': time.toIso8601String(),
       'uid': uid,
       'fullName': fullName,
       'avatar': avatar,
+      'filePath': filePath
     });
   }
 
@@ -141,7 +144,8 @@ class InboxBloc extends ChangeNotifier {
           await firestore.collection(groupCollection).doc(idGroups[i]).get();
       list.add(FbInboxGroupModel.fromJson(item.data(), item.id));
     }
-    list.sort((a, b) => DateTime.tryParse(b.time).compareTo(DateTime.tryParse(a.time)));
+    list.sort((a, b) =>
+        DateTime.tryParse(b.time).compareTo(DateTime.tryParse(a.time)));
     return list;
   }
 

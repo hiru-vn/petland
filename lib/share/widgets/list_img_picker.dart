@@ -93,7 +93,7 @@ class _ImageRowPickerState extends State<ImageRowPicker>
           return Align(
             alignment: Alignment.bottomCenter,
             child: InkWell(
-              onTap: () => imagePicker(context, (str) {}, (str) {}),
+              onTap: () => imagePicker(context, (str) {}, (str) {}, (str) {}),
               child: Container(
                 height: 100,
                 width: 100,
