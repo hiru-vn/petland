@@ -7,7 +7,7 @@ import 'package:petland/modules/inbox/inbox_model.dart';
 import 'package:petland/share/import.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-const APP_ID = "ac814ee10683441b9fe892d3035d4e6a";
+const APP_ID = "96062bbe35dd4241a7d430b1294e8bed";
 
 /// MultiChannel Example
 class VideoCallPage extends StatefulWidget {
@@ -34,10 +34,10 @@ class _VideoCallPageState extends State<VideoCallPage> {
   @override
   void dispose() {
     // clear users
-    _users.clear();
+    _users?.clear();
     // destroy sdk
-    _engine.leaveChannel();
-    _engine.destroy();
+    _engine?.leaveChannel();
+    _engine?.destroy();
     super.dispose();
   }
 
@@ -57,6 +57,10 @@ class _VideoCallPageState extends State<VideoCallPage> {
       return;
     }
 
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      await [Permission.microphone, Permission.camera].request();
+    }
+
     await _initAgoraRtcEngine();
     _addAgoraEventHandlers();
     // set parameters for Agora Engine
@@ -64,6 +68,7 @@ class _VideoCallPageState extends State<VideoCallPage> {
         ':{\"width\":320,\"height\":180,\"frameRate\":15,\"bitRate\":140}}');
     // join channel corresponding to current group
     _engine.joinChannel(null, widget.groupId, null, 0);
+    print('test');
   }
 
   /// Create agora sdk instance and initialze
@@ -71,7 +76,7 @@ class _VideoCallPageState extends State<VideoCallPage> {
     _engine = await RtcEngine.create(APP_ID);
     await _engine.enableVideo();
     await _engine.startPreview();
-    await _engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
+    await _engine.setChannelProfile(ChannelProfile.Communication);
     await _engine.setClientRole(ClientRole.Broadcaster);
   }
 
@@ -108,8 +113,10 @@ class _VideoCallPageState extends State<VideoCallPage> {
 
   /// Helper function to get list of native views
   List<Widget> _getRenderViews() {
-    List<Widget> list = [LocalView.SurfaceView()];
-    _users.forEach((int uid) => {list.add(LocalView.SurfaceView())});
+    List<Widget> list = [LocalView.SurfaceView(channelId: widget.groupId)];
+    _users.forEach((int uid) => {
+          list.add(RemoteView.SurfaceView(uid: uid, channelId: widget.groupId))
+        });
     return list;
   }
 
@@ -179,24 +186,24 @@ class _VideoCallPageState extends State<VideoCallPage> {
               children: <Widget>[
                 RawMaterialButton(
                   onPressed: () => _onToggleMute(),
-                  child: new Icon(
+                  child:  Icon(
                     muted ? Icons.mic : Icons.mic_off,
                     color: muted ? Colors.white : Colors.blueAccent,
                     size: 20.0,
                   ),
-                  shape: new CircleBorder(),
+                  shape:  CircleBorder(),
                   elevation: 2.0,
                   fillColor: muted ? Colors.blueAccent : Colors.white,
                   padding: const EdgeInsets.all(12.0),
                 ),
                 RawMaterialButton(
                   onPressed: () => _onSwitchCamera(),
-                  child: new Icon(
+                  child:  Icon(
                     Icons.switch_camera,
                     color: Colors.blueAccent,
                     size: 20.0,
                   ),
-                  shape: new CircleBorder(),
+                  shape:  CircleBorder(),
                   elevation: 2.0,
                   fillColor: Colors.white,
                   padding: const EdgeInsets.all(12.0),

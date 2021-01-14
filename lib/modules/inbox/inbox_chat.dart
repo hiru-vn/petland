@@ -25,7 +25,7 @@ class InboxChat extends StatefulWidget {
 
 class _InboxChatState extends State<InboxChat> {
   final GlobalKey<DashChatState> _chatViewKey = GlobalKey<DashChatState>();
-  final List<ChatUser> users = [];
+  final List<ChatUser> _users = [];
   final List<FbInboxUserModel> _fbUsers = [];
 
   File _file;
@@ -58,7 +58,7 @@ class _InboxChatState extends State<InboxChat> {
   @override
   void initState() {
     for (final id in widget.group.users) {
-      users.add(ChatUser(uid: id, name: ''));
+      _users.add(ChatUser(uid: id, name: ''));
     }
     super.initState();
   }
@@ -73,7 +73,7 @@ class _InboxChatState extends State<InboxChat> {
     final fbUsers = await _inboxBloc.getUsers(widget.group.users);
     _fbUsers.addAll(fbUsers);
     for (final fbUser in fbUsers) {
-      final user = users.firstWhere((user) => user.uid == fbUser.id);
+      final user = _users.firstWhere((user) => user.uid == fbUser.id);
       user.avatar = fbUser.image;
       user.name = fbUser.name;
     }
@@ -86,7 +86,7 @@ class _InboxChatState extends State<InboxChat> {
     if (fbMessages.isEmpty) return;
     messages.addAll(fbMessages.map((element) {
       return ChatMessage(
-          user: users.firstWhere((user) => user.uid == element.uid),
+          user: _users.firstWhere((user) => user.uid == element.uid),
           text: element.text,
           id: element.id,
           createdAt: DateTime.tryParse(element.date));
@@ -113,7 +113,7 @@ class _InboxChatState extends State<InboxChat> {
     // add incoming message to first
     messages.addAll(fbMessages.map((element) {
       return ChatMessage(
-          user: users.firstWhere((user) => user.uid == element.uid),
+          user: _users.firstWhere((user) => user.uid == element.uid),
           text: element.text,
           id: element.id,
           createdAt: DateTime.tryParse(element.date));
@@ -157,7 +157,7 @@ class _InboxChatState extends State<InboxChat> {
         0,
         fbMessages.map((element) {
           return ChatMessage(
-              user: users.firstWhere((user) => user.uid == element.uid),
+              user: _users.firstWhere((user) => user.uid == element.uid),
               text: element.text,
               id: element.id,
               createdAt: DateTime.tryParse(element.date));
@@ -247,7 +247,7 @@ class _InboxChatState extends State<InboxChat> {
         onSend: onSend,
         sendOnEnter: true,
         textInputAction: TextInputAction.send,
-        user: users.firstWhere((user) => user.uid == _authBloc.userModel.id),
+        user: _users.firstWhere((user) => user.uid == _authBloc.userModel.id),
         textCapitalization: TextCapitalization.sentences,
         messageTextBuilder: (text, [messages]) {
           return Padding(
