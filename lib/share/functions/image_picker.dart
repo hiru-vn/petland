@@ -41,8 +41,7 @@ void imagePicker(BuildContext context, Function(String path) onCameraPick,
                         onGranted: () {
                           // close showModalBottomSheet
                           Navigator.of(context).pop();
-                          ImagePicker()
-                              .getImage(source: ImageSource.camera)
+                          ImagePicker.pickImage(source: ImageSource.camera)
                               .then((value) {
                             if (value == null) return;
                             onCameraPick(value.path);
@@ -79,8 +78,7 @@ void imagePicker(BuildContext context, Function(String path) onCameraPick,
                           // close showModalBottomSheet
                           Navigator.of(context).pop();
 
-                          ImagePicker()
-                              .getImage(source: ImageSource.gallery)
+                          ImagePicker.pickImage(source: ImageSource.gallery)
                               .then((value) {
                             if (value == null) return;
                             onImagePick(value.path);
@@ -117,8 +115,7 @@ void imagePicker(BuildContext context, Function(String path) onCameraPick,
                           // close showModalBottomSheet
                           Navigator.of(context).pop();
 
-                          ImagePicker()
-                              .getVideo(source: ImageSource.gallery)
+                          ImagePicker.pickVideo(source: ImageSource.gallery)
                               .then((value) {
                             if (value == null) return;
                             onVideoPick(value.path);

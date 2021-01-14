@@ -61,7 +61,7 @@ class InboxBloc extends ChangeNotifier {
       'uid': uid,
       'fullName': fullName,
       'avatar': avatar,
-      'filePath': filePath
+      'filePath': filePath.isNotEmpty ? filePath : null
     });
   }
 

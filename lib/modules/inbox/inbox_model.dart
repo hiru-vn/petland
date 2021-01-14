@@ -49,7 +49,13 @@ class FbInboxMessageModel {
       this.uid, this.filePath);
 
   factory FbInboxMessageModel.fromJson(Map<String, dynamic> map, String id) {
-    return FbInboxMessageModel(id, map['avatar'], map['date'], map["fullName"],
-        map['text'], map['uid'], map['filePath']);
+    return FbInboxMessageModel(
+        id,
+        map['avatar'],
+        map['date'],
+        map["fullName"],
+        map['text'],
+        map['uid'],
+        map['filePath'] == '' ? null : map['filePath']);
   }
 }

@@ -8,6 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:petland/share/widgets/image_view.dart';
 import 'package:petland/utils/file_util.dart';
 import 'package:popup_menu/popup_menu.dart';
+import 'package:video_player/video_player.dart';
 
 import 'inbox_bloc.dart';
 import 'inbox_model.dart';
@@ -92,14 +93,10 @@ class _InboxChatState extends State<InboxChat> {
           user: _users.firstWhere((user) => user.uid == element.uid),
           text: element.text,
           id: element.id,
-          image: FileUtil.getFbUrlFileType(element.filePath) == FileType.image
-              ? element.filePath
-              : null,
-          video: FileUtil.getFbUrlFileType(element.filePath) == FileType.video
-              ? element.filePath
-              : null,
+          image: element.filePath,
           createdAt: DateTime.tryParse(element.date));
     }).toList());
+    print(messages[1].video);
     setState(() {});
     Future.delayed(Duration(milliseconds: 50), () => jumpToEnd());
 
@@ -125,12 +122,7 @@ class _InboxChatState extends State<InboxChat> {
           user: _users.firstWhere((user) => user.uid == element.uid),
           text: element.text,
           id: element.id,
-          image: FileUtil.getFbUrlFileType(element.filePath) == FileType.image
-              ? element.filePath
-              : null,
-          video: FileUtil.getFbUrlFileType(element.filePath) == FileType.video
-              ? element.filePath
-              : null,
+          image: element.filePath,
           createdAt: DateTime.tryParse(element.date));
     }).toList());
 
@@ -175,21 +167,13 @@ class _InboxChatState extends State<InboxChat> {
               user: _users.firstWhere((user) => user.uid == element.uid),
               text: element.text,
               id: element.id,
-              image:
-                  FileUtil.getFbUrlFileType(element.filePath) == FileType.image
-                      ? element.filePath
-                      : null,
-              video:
-                  FileUtil.getFbUrlFileType(element.filePath) == FileType.video
-                      ? element.filePath
-                      : null,
+              image: element.filePath,
               createdAt: DateTime.tryParse(element.date));
         }).toList());
     setState(() {});
   }
 
   void onSend(ChatMessage message) {
-    FileType fileType = FileUtil.getFileType(_file?.path);
     setState(() {
       messages.add(message);
     });
@@ -200,32 +184,36 @@ class _InboxChatState extends State<InboxChat> {
     _updateGroupPageText(widget.group.id, _authBloc.userModel.name, text,
         message.createdAt, message.user.avatar);
     if (text.length > 0) {
-      FileUtil.uploadFireStorage(_file,
-              path:
-                  'chats/group_${widget.group.id}/user_${_authBloc.userModel.id}')
-          .then((fileUrl) {
-        if (fileType == FileType.video) {
-          setState(() {
-            messages.firstWhere((m) => m.id == message.id)?.video = fileUrl;
-          });
-        }
-        if (fileType == FileType.image) {
-          setState(() {
-            messages.firstWhere((m) => m.id == message.id)?.image = fileUrl;
-          });
-        }
+      if (_file == null) {
         _inboxBloc.addMessage(
             widget.group.id,
             text,
             message.createdAt,
             _authBloc.userModel.id,
             _authBloc.userModel.name,
-            _authBloc.userModel.avatar,
-            filePath: fileUrl);
-      });
-      setState(() {
-        _file = null;
-      });
+            _authBloc.userModel.avatar);
+      } else {
+        FileUtil.uploadFireStorage(_file,
+                path:
+                    'chats/group_${widget.group.id}/user_${_authBloc.userModel.id}')
+            .then((fileUrl) {
+          setState(() {
+            messages.firstWhere((m) => m.id == message.id)?.image = fileUrl;
+          });
+          _inboxBloc.addMessage(
+              widget.group.id,
+              text,
+              message.createdAt,
+              _authBloc.userModel.id,
+              _authBloc.userModel.name,
+              _authBloc.userModel.avatar,
+              filePath: fileUrl);
+        });
+
+        setState(() {
+          _file = null;
+        });
+      }
     }
   }
 
@@ -294,7 +282,17 @@ class _InboxChatState extends State<InboxChat> {
       backgroundColor: Colors.grey[50],
       body: DashChat(
         messageImageBuilder: (url, [messages]) {
-          return ImageViewNetwork(url: url);
+          if (FileUtil.getFbUrlFileType(url) == FileType.image)
+            return ImageViewNetwork(url: url);
+          if (FileUtil.getFbUrlFileType(url) == FileType.video) {
+            // final _videoC = VideoPlayerController.network(url)
+            //   ..initialize().then((value) => setState(() {
+            //     print('inited video');
+            //   }));
+            // return VideoPlayer(_videoC);
+            return SizedBox.shrink();
+          }
+          return SizedBox.shrink();
         },
         scrollController: scrollController,
         key: _chatViewKey,
