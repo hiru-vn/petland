@@ -1,8 +1,10 @@
 import 'package:petland/modules/authentication/auth_bloc.dart';
-import 'package:petland/modules/inbox/inbox_bloc.dart';
-import 'package:petland/modules/inbox/inbox_chat.dart';
-import 'package:petland/modules/inbox/inbox_model.dart';
+
 import 'package:petland/share/import.dart';
+
+import 'inbox_bloc.dart';
+import 'inbox_chat.dart';
+import 'inbox_model.dart';
 
 class InboxList extends StatefulWidget {
   static Future navigate() {

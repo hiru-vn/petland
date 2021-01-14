@@ -2,13 +2,14 @@ import 'dart:async';
 import 'dart:io';
 import 'package:path/path.dart' as path;
 import 'package:petland/modules/authentication/auth_bloc.dart';
-import 'package:petland/modules/inbox/inbox_bloc.dart';
-import 'package:petland/modules/inbox/inbox_model.dart';
-import 'package:petland/modules/inbox/video_call_page.dart';
 import 'package:petland/share/import.dart';
 import 'package:dash_chat/dash_chat.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:popup_menu/popup_menu.dart';
+
+import 'inbox_bloc.dart';
+import 'inbox_model.dart';
+import 'video_call_page.dart';
 
 class InboxChat extends StatefulWidget {
   final FbInboxGroupModel group;

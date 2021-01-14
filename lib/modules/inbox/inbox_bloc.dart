@@ -1,6 +1,8 @@
-import 'package:petland/modules/inbox/inbox_model.dart';
-import 'package:petland/share/import.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:petland/utils/spref.dart';
+
+import 'inbox_model.dart';
 
 class InboxBloc extends ChangeNotifier {
   InboxBloc._privateConstructor();
