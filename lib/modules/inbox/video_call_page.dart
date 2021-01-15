@@ -185,13 +185,13 @@ class _VideoCallPageState extends State<VideoCallPage> {
                 RawMaterialButton(
                   onPressed: () => _onToggleMute(),
                   child: Icon(
-                    muted ? Icons.mic : Icons.mic_off,
-                    color: muted ? Colors.white : Colors.blueAccent,
+                    muted ? Icons.mic_off : Icons.mic,
+                    color: muted ? Colors.blueAccent : Colors.white,
                     size: 20.0,
                   ),
                   shape: CircleBorder(),
                   elevation: 2.0,
-                  fillColor: muted ? Colors.blueAccent : Colors.white,
+                  fillColor: muted ? Colors.white : Colors.blueAccent,
                   padding: const EdgeInsets.all(12.0),
                 ),
                 SizedBox(

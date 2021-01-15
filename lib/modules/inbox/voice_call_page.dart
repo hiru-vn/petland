@@ -81,15 +81,28 @@ class _VoiceCallPageState extends State<VoiceCallPage> {
   _addListeners() {
     _engine?.setEventHandler(RtcEngineEventHandler(
       joinChannelSuccess: (channel, uid, elapsed) {
-        log('joinChannelSuccess $channel $uid $elapsed');
+        print('joinChannelSuccess $channel $uid $elapsed');
         setState(() {
           isJoined = true;
         });
       },
+      userJoined: (uid, elapsed) {
+        print('userJoined  $uid $elapsed');
+        setState(() {
+          _users.add(uid);
+        });
+      },
+      userOffline: (uid, reason) {
+        print('userOffline  $uid $reason');
+        setState(() {
+          _users.removeWhere((element) => element == uid);
+        });
+      },
       leaveChannel: (stats) {
-        log('leaveChannel ${stats.toJson()}');
+        print('leaveChannel ${stats.toJson()}');
         setState(() {
           isJoined = false;
+          _users.clear();
         });
       },
     ));
@@ -156,14 +169,14 @@ class _VoiceCallPageState extends State<VoiceCallPage> {
   List<Widget> _getRenderViews() {
     List<Widget> list = [
       Center(
-        child: SizedBox(
-            width: deviceWidth(context) / 6,
-            height: deviceWidth(context) / 6,
-            child: Image.asset(
-              'assets/image/avatar.png',
-              fit: BoxFit.cover,
-            )),
-      ),
+            child: SizedBox(
+                width: deviceWidth(context) / 6,
+                height: deviceWidth(context) / 6,
+                child: Image.asset(
+                  'assets/image/avatar.png',
+                  fit: BoxFit.cover,
+                )),
+          ),
     ];
     _users.forEach((int uid) => {
           list.add(Center(
@@ -246,13 +259,13 @@ class _VoiceCallPageState extends State<VoiceCallPage> {
                 RawMaterialButton(
                   onPressed: () => _onToggleMute(),
                   child: Icon(
-                    muted ? Icons.mic : Icons.mic_off,
-                    color: muted ? Colors.white : Colors.blueAccent,
+                    muted ?Icons.mic_off: Icons.mic,
+                    color: muted ? Colors.blueAccent: Colors.white,
                     size: 20.0,
                   ),
                   shape: CircleBorder(),
                   elevation: 2.0,
-                  fillColor: muted ? Colors.blueAccent : Colors.white,
+                  fillColor: muted ? Colors.white : Colors.blueAccent,
                   padding: const EdgeInsets.all(12.0),
                 ),
                 SizedBox(

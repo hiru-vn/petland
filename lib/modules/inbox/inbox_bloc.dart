@@ -54,7 +54,7 @@ class InboxBloc extends ChangeNotifier {
   Future<void> addMessage(String groupId, String text, DateTime time,
       String uid, String fullName, String avatar,
       {String filePath}) {
-    print('upload: ' + filePath);
+    print('upload: ' + filePath.toString());
     return getGroup(groupId).collection(messageCollection).add({
       'text': text,
       'date': time.toIso8601String(),
