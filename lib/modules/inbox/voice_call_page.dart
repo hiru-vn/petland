@@ -169,14 +169,14 @@ class _VoiceCallPageState extends State<VoiceCallPage> {
   List<Widget> _getRenderViews() {
     List<Widget> list = [
       Center(
-            child: SizedBox(
-                width: deviceWidth(context) / 6,
-                height: deviceWidth(context) / 6,
-                child: Image.asset(
-                  'assets/image/avatar.png',
-                  fit: BoxFit.cover,
-                )),
-          ),
+        child: SizedBox(
+            width: deviceWidth(context) / 6,
+            height: deviceWidth(context) / 6,
+            child: Image.asset(
+              'assets/image/avatar.png',
+              fit: BoxFit.cover,
+            )),
+      ),
     ];
     _users.forEach((int uid) => {
           list.add(Center(
@@ -259,8 +259,8 @@ class _VoiceCallPageState extends State<VoiceCallPage> {
                 RawMaterialButton(
                   onPressed: () => _onToggleMute(),
                   child: Icon(
-                    muted ?Icons.mic_off: Icons.mic,
-                    color: muted ? Colors.blueAccent: Colors.white,
+                    muted ? Icons.mic_off : Icons.mic,
+                    color: muted ? Colors.blueAccent : Colors.white,
                     size: 20.0,
                   ),
                   shape: CircleBorder(),

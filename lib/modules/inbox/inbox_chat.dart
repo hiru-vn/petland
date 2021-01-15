@@ -173,6 +173,10 @@ class _InboxChatState extends State<InboxChat> {
   }
 
   void onSend(ChatMessage message) {
+    if (_file !=null) {
+      // add a loading gif
+      message.image = 'assets/image/loading.gif';
+    }
     setState(() {
       messages.add(message);
     });
@@ -281,17 +285,24 @@ class _InboxChatState extends State<InboxChat> {
       backgroundColor: Colors.grey[50],
       body: DashChat(
         messageImageBuilder: (url, [messages]) {
-          if (FileUtil.getFbUrlFileType(url) == FileType.image)
+          if (FileUtil.getFbUrlFileType(url) == FileType.gif) {
             return Padding(
               padding: const EdgeInsets.all(8.0),
-              child: ImageViewNetwork(url: url),
+              child: Image.asset(url),
             );
+          }
           if (FileUtil.getFbUrlFileType(url) == FileType.video) {
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: VideoViewNetwork(url: url),
             );
           }
+          if (FileUtil.getFbUrlFileType(url) == FileType.image)
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ImageViewNetwork(url: url),
+            );
+          
           return SizedBox.shrink();
         },
         scrollController: scrollController,
@@ -314,7 +325,7 @@ class _InboxChatState extends State<InboxChat> {
         messageTimeBuilder: (text, [messages]) {
           return Text(
             text,
-            style: ptSmall(),
+            style: ptTiny(),
           );
         },
         inputToolbarPadding: EdgeInsets.all(4),

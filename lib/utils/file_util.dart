@@ -6,7 +6,7 @@ import 'package:path/path.dart' as Path;
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:mime/mime.dart';
 
-enum FileType { document, image, video }
+enum FileType { document, image, video, gif }
 
 class FileUtil {
   static FileType getFileType(String path) {
@@ -29,6 +29,7 @@ class FileUtil {
         path.contains('.webp')) return FileType.image;
     if (path.contains('.mp4') || path.contains('.wmv')) return FileType.video;
     if (path.contains('.doc')) return FileType.document;
+    if (path.contains('.gif')) return FileType.gif;
     return null;
   }
 
