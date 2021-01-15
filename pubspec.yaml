@@ -57,6 +57,7 @@ dev_dependencies:
   fluttertoast: ^7.1.5
   flutter_local_notifications: ^3.0.3
   timeago: ^2.0.29
+  geolocator: ^6.1.13
   popup_menu: ^1.0.5
   mime: ^0.9.7
   google_maps_flutter: ^1.1.1
