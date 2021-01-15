@@ -63,6 +63,8 @@
           <category android:name="android.intent.category.BROWSABLE" />
           <data android:scheme="@string/fb_login_protocol_scheme" />
         </intent-filter>
-</activity>
+      </activity>
+      <meta-data android:name="com.google.android.geo.API_KEY"
+        android:value="AIzaSyC5NAXbhupZOLL-HjcbTmildpYueffwCKE"/>
     </application>
 </manifest>

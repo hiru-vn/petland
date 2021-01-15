@@ -9,6 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:petland/utils/file_util.dart';
 import 'package:popup_menu/popup_menu.dart';
 
+import 'google_map_widget.dart';
 import 'inbox_bloc.dart';
 import 'inbox_model.dart';
 import 'video_call_page.dart';
@@ -173,7 +174,7 @@ class _InboxChatState extends State<InboxChat> {
   }
 
   void onSend(ChatMessage message) {
-    if (_file !=null) {
+    if (_file != null) {
       // add a loading gif
       message.image = 'assets/image/loading.gif';
     }
@@ -302,7 +303,7 @@ class _InboxChatState extends State<InboxChat> {
               padding: const EdgeInsets.all(8.0),
               child: ImageViewNetwork(url: url),
             );
-          
+
           return SizedBox.shrink();
         },
         scrollController: scrollController,
@@ -393,13 +394,70 @@ class _InboxChatState extends State<InboxChat> {
                 ),
               )
             : SizedBox.shrink(),
+        leading: [
+          GestureDetector(
+            onTap: () async {
+              showModalBottomSheet(
+                  useRootNavigator: true,
+                  isScrollControlled: true,
+                  context: context,
+                  builder: (context) {
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                              color: ptPrimaryColorLight(context)),
+                          width: deviceWidth(context) - 30,
+                          padding: EdgeInsets.symmetric(
+                              vertical: 20, horizontal: 10),
+                          child: Row(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  navigatorKey.currentState.maybePop();
+                                },
+                                child: ActionItem(
+                                  img: 'assets/image/location.png',
+                                  name: 'Location',
+                                  onTap: () {
+                                    showGoogleMap(context,
+                                        height: deviceHeight(context) -
+                                            kToolbarHeight - 500);
+                                  },
+                                ),
+                              ),
+                              SpacingBox(w: 6),
+                              GestureDetector(
+                                onTap: () {
+                                  navigatorKey.currentState.maybePop();
+                                },
+                                child: ActionItem(
+                                  img: 'assets/image/invite_chat.jpg',
+                                  name: 'Invite',
+                                  onTap: () {},
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    );
+                  });
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(8.0).copyWith(right: 5),
+              child: Icon(Icons.apps),
+            ),
+          ),
+        ],
         trailing: <Widget>[
           IconButton(
             icon: Icon(Icons.file_present),
             onPressed: () async {
               imagePicker(context, _onFilePick, _onFilePick, _onFilePick);
             },
-          )
+          ),
         ],
       ),
     );
@@ -480,5 +538,34 @@ class LoadEarlierWidget extends StatelessWidget {
               ),
             ),
           );
+  }
+}
+
+class ActionItem extends StatelessWidget {
+  final String img;
+  final String name;
+  final Function onTap;
+
+  const ActionItem({Key key, this.img, this.name, this.onTap})
+      : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        children: [
+          SizedBox(
+            height: 50,
+            width: 50,
+            child: Image.asset(img),
+          ),
+          SizedBox(height: 6),
+          Text(
+            name,
+            style: ptTiny().copyWith(fontWeight: FontWeight.w500),
+          ),
+        ],
+      ),
+    );
   }
 }

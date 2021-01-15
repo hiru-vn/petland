@@ -59,6 +59,7 @@ dev_dependencies:
   timeago: ^2.0.29
   popup_menu: ^1.0.5
   mime: ^0.9.7
+  google_maps_flutter: ^1.1.1
 
   # firebase
   firebase_auth: ^0.20.0+1
