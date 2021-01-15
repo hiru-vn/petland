@@ -1,41 +1,42 @@
 {
   "project_info": {
-    "project_number": "333766068870",
-    "project_id": "vn-petland",
-    "storage_bucket": "vn-petland.appspot.com"
+    "project_number": "940741219840",
+    "firebase_url": "https://petland-39227-default-rtdb.firebaseio.com",
+    "project_id": "petland-39227",
+    "storage_bucket": "petland-39227.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:333766068870:android:0a05fcf7c1a457ffdfdf07",
+        "mobilesdk_app_id": "1:940741219840:android:56282dccc125300e7ceae5",
         "android_client_info": {
-          "package_name": "app.petland.io"
+          "package_name": "app.petland.vn"
         }
       },
       "oauth_client": [
         {
-          "client_id": "333766068870-dgcgremf709mf4rec49bet9ocmo7fll5.apps.googleusercontent.com",
+          "client_id": "940741219840-lp6u1qo2clqsdnla07bp9og3dqtt6fm7.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "app.petland.io",
+            "package_name": "app.petland.vn",
             "certificate_hash": "4cd17c36f6303b4a935dfa725b609806ca7422ab"
           }
         },
         {
-          "client_id": "333766068870-f19evnnatpm7b32nevgaq0mjh8608148.apps.googleusercontent.com",
+          "client_id": "940741219840-cu2i24jhvlnh7phku91luo4vuetpe5dh.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB0NppqxKhhugpFqGKLPIwT4q6TdB9WSbA"
+          "current_key": "AIzaSyC5NAXbhupZOLL-HjcbTmildpYueffwCKE"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "333766068870-f19evnnatpm7b32nevgaq0mjh8608148.apps.googleusercontent.com",
+              "client_id": "940741219840-cu2i24jhvlnh7phku91luo4vuetpe5dh.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

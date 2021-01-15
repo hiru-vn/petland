@@ -22,10 +22,14 @@ class ImageViewNetwork extends StatelessWidget {
           );
         }));
       },
-      child: Image.network(
-        url,
-        fit: BoxFit.cover,
-        loadingBuilder: kLoadingBuilder,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(10),
+        child: Image.network(
+          url,
+          fit: BoxFit.cover,
+          errorBuilder: (_, __, ___) => SizedBox.shrink(),
+          loadingBuilder: kLoadingBuilder,
+        ),
       ),
     );
   }
@@ -48,6 +52,7 @@ class DetailImageScreen extends StatelessWidget {
               imageProvider: NetworkImage(
                 url,
               ),
+              errorBuilder: (_, __, ___) => SizedBox.shrink(),
               loadingBuilder: (context, event) => PhotoView(
                 backgroundDecoration: BoxDecoration(color: Colors.black87),
                 imageProvider: NetworkImage(

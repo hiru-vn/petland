@@ -9,9 +9,16 @@ class InputWithLeading extends StatelessWidget {
   final TextStyle textStyle;
   final Color iconColor;
   final Color iconBgColor;
+  final TextEditingController controller;
 
   const InputWithLeading(
-      {Key key, @required this.hint, @required this.icon, this.textStyle, this.iconBgColor, this.iconColor})
+      {Key key,
+      @required this.hint,
+      @required this.controller,
+      @required this.icon,
+      this.textStyle,
+      this.iconBgColor,
+      this.iconColor})
       : super(key: key);
 
   @override
@@ -22,12 +29,12 @@ class InputWithLeading extends StatelessWidget {
           width: 40,
           height: 48,
           decoration: BoxDecoration(
-              color: iconBgColor??HexColor('#625b39'),
+              color: iconBgColor ?? HexColor('#625b39'),
               borderRadius: BorderRadius.circular(10)),
           child: Center(
             child: Icon(
               icon,
-              color: iconColor?? HexColor('#ffc644'),
+              color: iconColor ?? HexColor('#ffc644'),
             ),
           ),
         ),
@@ -36,6 +43,7 @@ class InputWithLeading extends StatelessWidget {
           child: SizedBox(
             height: 40,
             child: TextFormField(
+              controller: controller,
               style: textStyle ?? ptBody(),
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.only(bottom: 10),

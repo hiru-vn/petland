@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:petland/modules/authentication/auth_bloc.dart';
 import 'package:petland/modules/authentication/splash.dart';
+import 'package:petland/modules/inbox/inbox_bloc.dart';
 import 'package:petland/navigator.dart';
 import 'package:petland/share/import.dart';
 import 'package:petland/themes/lightTheme.dart';
@@ -17,7 +19,7 @@ void main() async {
   await Firebase.initializeApp();
 
   runZonedGuarded(
-    () => runApp(PetLand()),
+    () => runApp(Petland()),
     (error, stackTrace) async {
       await _sentry.captureException(
         exception: error,
@@ -32,7 +34,7 @@ Image splash = Image.asset(
   fit: BoxFit.fill,
 );
 
-class PetLand extends StatelessWidget {
+class Petland extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     precacheImage(splash.image, context);
@@ -48,21 +50,31 @@ class PetLand extends StatelessWidget {
           child: ThemeProvider(
             initTheme: lightTheme,
             child: Builder(builder: (context) {
-              return MaterialApp(
-                debugShowCheckedModeBanner: false,
-                localizationsDelegates: [
-                  const AppInternalizationlegate(),
-                  GlobalMaterialLocalizations.delegate,
-                  GlobalWidgetsLocalizations.delegate,
-                  GlobalCupertinoLocalizations.delegate,
+              return MultiProvider(
+                providers: [
+                  ChangeNotifierProvider(
+                    create: (context) => AuthBloc.instance,
+                  ),
+                  ChangeNotifierProvider(
+                    create: (context) => InboxBloc.instance,
+                  ),
                 ],
-                supportedLocales: [
-                  Locale('en', 'US'),
-                  Locale('vi', 'VN'),
-                ],
-                theme: ThemeProvider.of(context),
-                navigatorKey: navigatorKey,
-                home: SplashPage(),
+                child: MaterialApp(
+                  debugShowCheckedModeBanner: false,
+                  localizationsDelegates: [
+                    const AppInternalizationlegate(),
+                    GlobalMaterialLocalizations.delegate,
+                    GlobalWidgetsLocalizations.delegate,
+                    GlobalCupertinoLocalizations.delegate,
+                  ],
+                  supportedLocales: [
+                    Locale('en', 'US'),
+                    Locale('vi', 'VN'),
+                  ],
+                  theme: ThemeProvider.of(context),
+                  navigatorKey: navigatorKey,
+                  home: SplashPage(),
+                ),
               );
             }),
           ),

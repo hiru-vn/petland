@@ -1,16 +1,40 @@
-# petland
+# Petland - Flutter
 
-A new Flutter project.
+---
 
-## Getting Started
+# Installation
 
-This project is a starting point for a Flutter application.
+- Download [release apk](https://drive.google.com/drive/u/0/folders/1NTpdjdrbaAerhSdNzggW_sLLZ0GkhyCT)
 
-A few resources to get you started if this is your first Flutter project:
+or manually download the project:
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+- Download [Flutter](https://flutter.dev/)
+- Install this repository
+- Checkout branch ui-only-branch
+- The project should run on flutter version 1.22.5, channel stable
+```
+git clone https://github.com/huynguyen1999kh/petland.git
+git checkout ui-only-branch
+flutter packages get
+flutter run # make sure your mobile device is connected
+```
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+# Showcase
+
+||||
+|:---:|:---:|:---:|
+|![1]|![2]|![3]|
+|![4]|![5]|![6]|
+|![7]|![8]|![9]|
+
+[1]: ./image_app/1.png
+[2]: ./image_app/2.png
+[3]: ./image_app/3.png
+[4]: ./image_app/4.png
+[5]: ./image_app/5.png
+[6]: ./image_app/6.png
+[7]: ./image_app/7.png
+[8]: ./image_app/8.png
+[9]: ./image_app/9.png
+[10]: ./image_app/10.png

@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class Formart {
   static toVNDCurency(double value, {hasUnit = true}) {
@@ -14,8 +15,30 @@ class Formart {
     return newValue;
   }
 
+  static String timeAgo(DateTime time) {
+    if (time == null) return null;
+    return timeago.format(time, locale: 'en_short');
+  }
+
+  static String timeByDay(DateTime time) {
+    if (time == null) return null;
+    DateTime now = DateTime.now();
+    if (time.day == now.day &&
+        time.month == now.month &&
+        time.year == now.year) {
+      DateFormat format = DateFormat("hh:mm a");
+      return format.format(time);
+    }
+    else return timeAgo(time);
+  }
+
   static double toFixedDouble(double value, int digit) {
     return num.parse(value.toStringAsFixed(digit));
+  }
+
+  static String formatToDateTime(DateTime date) {
+    if (date == null) return null;
+    return '${formatToDate(date)} ${formatToTime(date)}';
   }
 
   static String formatToDate(DateTime date) {
@@ -23,10 +46,9 @@ class Formart {
     return '${date.day}/${date.month}/${date.year}';
   }
 
-  static String formatToTime(String time) {
+  static String formatToTime(DateTime time) {
     if (time == null) return null;
-    var result = DateTime.parse(time);
-    return '${result.hour}:${result.minute < 10 ? '0' : ''}${result.minute}';
+    return '${time.hour}:${time.minute < 10 ? '0' : ''}${time.minute}';
   }
 
   static String formatNumber(double number) {

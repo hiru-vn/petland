@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:petland/modules/authentication/auth_bloc.dart';
+import 'package:petland/modules/authentication/welcome.dart';
 import 'package:petland/modules/inbox/inbox_list.dart';
 import 'package:petland/modules/my_pet/pick_my_pet_list.dart';
 import 'package:petland/modules/my_pet/pick_pet.dart';
@@ -10,7 +12,20 @@ import 'package:petland/modules/profile/theme_page.dart';
 import 'package:petland/share/import.dart';
 import 'package:open_appstore/open_appstore.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  AuthBloc _authBloc;
+
+  @override
+  void didChangeDependencies() {
+    _authBloc = Provider.of<AuthBloc>(context);
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     final list = [
@@ -124,7 +139,7 @@ class ProfilePage extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          'Pet Choy',
+                          _authBloc.userModel.name,
                           style:
                               ptTitle().copyWith(fontWeight: FontWeight.w900),
                         ),
@@ -188,7 +203,7 @@ class ProfilePage extends StatelessWidget {
                                 padding:
                                     const EdgeInsets.all(10).copyWith(top: 0),
                                 child: Text(
-                                  'Add your cute friend profile to PetLand',
+                                  'Add your cute friend profile to Petland',
                                   maxLines: null,
                                   style: ptTiny().copyWith(
                                     color: Colors.white,
@@ -258,7 +273,9 @@ class ProfilePage extends StatelessWidget {
                 padding: const EdgeInsets.all(10),
                 child: ExpandBtn(
                   text: 'Logout',
-                  onPress: () {},
+                  onPress: () {
+                    WelcomePage.navigate();
+                  },
                   color: ptGreyColor(context).withOpacity(0.6),
                   height: 45,
                   textColor: Colors.black,

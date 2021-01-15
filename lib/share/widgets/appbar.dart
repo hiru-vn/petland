@@ -9,12 +9,14 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget leading;
   final String title;
   final bool automaticallyImplyLeading;
+  final bool centerTitle;
 
   MyAppBar(
       {this.actions,
       this.bgColor,
       this.leading,
       this.title,
+      this.centerTitle = false,
       this.automaticallyImplyLeading = false});
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,9 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       automaticallyImplyLeading: automaticallyImplyLeading,
       leading: leading,
+      centerTitle: centerTitle,
       title: Row(
+        mainAxisSize: centerTitle ? MainAxisSize.min : MainAxisSize.max,
         children: [
           if (!automaticallyImplyLeading) ...[
             Image.asset(
@@ -36,9 +40,9 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ],
           Text(
-            title ?? 'PetLand',
+            title ?? 'Petland',
             style: ptBigTitle().copyWith(
-                color: bgColor != null ? Colors.white : Colors.black87),
+                color: (bgColor != null && bgColor != Colors.white) ? Colors.white : Colors.black87),
           ),
         ],
       ),
@@ -48,10 +52,12 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
 }
 
 innerAppBar(BuildContext context, String title,
-        {List<Widget> actions, Function(String) onSearch, final Color bgColor}) =>
+        {List<Widget> actions,
+        Function(String) onSearch,
+        final Color bgColor}) =>
     AppBar(
       elevation: 0,
-      backgroundColor: bgColor??ptPrimaryColor(context),
+      backgroundColor: bgColor ?? ptPrimaryColor(context),
       title: Text(
         title,
         style: GoogleFonts.nunito(

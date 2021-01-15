@@ -3,7 +3,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 Center kLoadingSpinner = Center(
   child: SpinKitCircle(
-    color: Colors.amber,
+    color: Colors.greenAccent,
     size: 50.0,
   ),
 );

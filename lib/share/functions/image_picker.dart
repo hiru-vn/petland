@@ -5,7 +5,7 @@ import 'package:image_picker/image_picker.dart';
 // variable to hold image to be displayed
 
 void imagePicker(BuildContext context, Function(String path) onCameraPick,
-    Function(String path) onGalleryPick,
+    Function(String path) onImagePick, Function(String path) onVideoPick,
     {String title}) {
   showModalBottomSheet(
       backgroundColor: Colors.transparent,
@@ -17,12 +17,12 @@ void imagePicker(BuildContext context, Function(String path) onCameraPick,
           child: Container(
             margin: EdgeInsets.symmetric(horizontal: 4),
             width: double.infinity,
-            height: 150,
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  title ?? 'Chọn ảnh từ điện thoại',
+                  title ?? 'Chọn ảnh và video từ điện thoại',
                   style: TextStyle(
                       fontWeight: FontWeight.bold, color: Color(0xff696969)),
                 ),
@@ -41,10 +41,10 @@ void imagePicker(BuildContext context, Function(String path) onCameraPick,
                         onGranted: () {
                           // close showModalBottomSheet
                           Navigator.of(context).pop();
-                          ImagePicker()
-                              .getImage(source: ImageSource.camera)
+                          ImagePicker.pickImage(source: ImageSource.camera)
                               .then((value) {
-                            onGalleryPick(value.path);
+                            if (value == null) return;
+                            onCameraPick(value.path);
                           });
                         });
                   },
@@ -78,10 +78,10 @@ void imagePicker(BuildContext context, Function(String path) onCameraPick,
                           // close showModalBottomSheet
                           Navigator.of(context).pop();
 
-                          ImagePicker()
-                              .getImage(source: ImageSource.gallery)
+                          ImagePicker.pickImage(source: ImageSource.gallery)
                               .then((value) {
-                            onCameraPick(value.path);
+                            if (value == null) return;
+                            onImagePick(value.path);
                           });
                         });
                   },
@@ -89,14 +89,51 @@ void imagePicker(BuildContext context, Function(String path) onCameraPick,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Icon(
-                        Icons.apps,
+                        Icons.image,
                         color: Color(0xff696969),
                       ),
                       SizedBox(
                         width: 13,
                       ),
                       Text(
-                        'Thư viện',
+                        'Images',
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold),
+                      )
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 16,
+                ),
+                GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onTap: () {
+                    onCustomPersionRequest(
+                        permission: Permission.photos,
+                        onGranted: () {
+                          // close showModalBottomSheet
+                          Navigator.of(context).pop();
+
+                          ImagePicker.pickVideo(source: ImageSource.gallery)
+                              .then((value) {
+                            if (value == null) return;
+                            onVideoPick(value.path);
+                          });
+                        });
+                  },
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Icon(
+                        Icons.video_collection,
+                        color: Color(0xff696969),
+                      ),
+                      SizedBox(
+                        width: 13,
+                      ),
+                      Text(
+                        'Videos',
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold),
                       )
