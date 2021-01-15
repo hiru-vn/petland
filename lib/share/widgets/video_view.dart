@@ -47,14 +47,33 @@ class DetailVideoScreen extends StatefulWidget {
 
 class _DetailVideoScreenState extends State<DetailVideoScreen> {
   VideoPlayerController _controller;
+  bool videoEnded = false;
 
   @override
   void initState() {
     super.initState();
     _controller = VideoPlayerController.network(widget.url)
-      ..initialize().then((_) {
-        if (mounted) setState(() {});
-      });
+      ..initialize().then(
+        (_) {
+          if (mounted)
+            setState(() {
+              _controller.play();
+            });
+        },
+      );
+    _controller.addListener(() {
+      if (_controller.value.position == _controller.value.duration) {
+        setState(() {
+          videoEnded = true;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -89,14 +108,25 @@ class _DetailVideoScreenState extends State<DetailVideoScreen> {
                     borderRadius: BorderRadius.circular(20)),
                 width: 40,
                 height: 40,
-                child: Icon(Icons.close, color: Colors.white,),
+                child: Icon(
+                  Icons.close,
+                  color: Colors.white,
+                ),
               ),
             ),
           ),
         ]),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
+        onPressed: () async {
+          if (videoEnded) {
+            await _controller.seekTo(Duration.zero);
+            _controller.play();
+            setState(() {
+              videoEnded = false;
+            });
+            return;
+          }
           setState(() {
             _controller.value.isPlaying
                 ? _controller.pause()
@@ -104,7 +134,9 @@ class _DetailVideoScreenState extends State<DetailVideoScreen> {
           });
         },
         child: Icon(
-          _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+          videoEnded
+              ? Icons.replay
+              : (_controller.value.isPlaying ? Icons.pause : Icons.play_arrow),
         ),
       ),
     );
