@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:path/path.dart' as path;
 import 'package:petland/modules/authentication/auth_bloc.dart';
+import 'package:petland/modules/inbox/voice_call_page.dart';
 import 'package:petland/share/import.dart';
 import 'package:dash_chat/dash_chat.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -410,7 +411,9 @@ class _InboxChatState extends State<InboxChat> {
               )),
         ],
         onClickMenu: (val) {
-          if (val.menuTitle == 'Voice call') {}
+          if (val.menuTitle == 'Voice call') {
+            VoiceCallPage.navigate(widget.group.id, _fbUsers);
+          }
           if (val.menuTitle == 'Video call') {
             VideoCallPage.navigate(widget.group.id, _fbUsers);
           }

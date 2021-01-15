@@ -67,7 +67,6 @@ class _VideoCallPageState extends State<VideoCallPage> {
         ':{\"width\":320,\"height\":180,\"frameRate\":15,\"bitRate\":140}}');
     // join channel corresponding to current group
     _engine.joinChannel(null, widget.groupId, null, 0);
-    print('test');
   }
 
   /// Create agora sdk instance and initialze
@@ -185,26 +184,44 @@ class _VideoCallPageState extends State<VideoCallPage> {
               children: <Widget>[
                 RawMaterialButton(
                   onPressed: () => _onToggleMute(),
-                  child:  Icon(
+                  child: Icon(
                     muted ? Icons.mic : Icons.mic_off,
                     color: muted ? Colors.white : Colors.blueAccent,
                     size: 20.0,
                   ),
-                  shape:  CircleBorder(),
+                  shape: CircleBorder(),
                   elevation: 2.0,
                   fillColor: muted ? Colors.blueAccent : Colors.white,
                   padding: const EdgeInsets.all(12.0),
                 ),
+                SizedBox(
+                  height: 10,
+                ),
                 RawMaterialButton(
                   onPressed: () => _onSwitchCamera(),
-                  child:  Icon(
+                  child: Icon(
                     Icons.switch_camera,
                     color: Colors.blueAccent,
                     size: 20.0,
                   ),
-                  shape:  CircleBorder(),
+                  shape: CircleBorder(),
                   elevation: 2.0,
                   fillColor: Colors.white,
+                  padding: const EdgeInsets.all(12.0),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                RawMaterialButton(
+                  onPressed: () => navigatorKey.currentState.maybePop(),
+                  child: Icon(
+                    Icons.phone,
+                    color: Colors.white,
+                    size: 20.0,
+                  ),
+                  shape: CircleBorder(),
+                  elevation: 2.0,
+                  fillColor: Colors.red,
                   padding: const EdgeInsets.all(12.0),
                 ),
               ],
