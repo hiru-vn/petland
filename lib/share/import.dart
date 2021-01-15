@@ -36,3 +36,5 @@ export 'package:petland/services/base_graphql.dart';
 export 'package:petland/share/widgets/spin_loader.dart';
 export 'package:petland/model/user.dart';
 export 'package:petland/share/widgets/load_more_scroll_view.dart';
+export 'package:petland/share/widgets/image_view.dart';
+export 'package:petland/share/widgets/video_view.dart';

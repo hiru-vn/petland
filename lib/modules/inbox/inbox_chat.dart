@@ -5,10 +5,8 @@ import 'package:petland/modules/authentication/auth_bloc.dart';
 import 'package:petland/share/import.dart';
 import 'package:dash_chat/dash_chat.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:petland/share/widgets/image_view.dart';
 import 'package:petland/utils/file_util.dart';
 import 'package:popup_menu/popup_menu.dart';
-import 'package:video_player/video_player.dart';
 
 import 'inbox_bloc.dart';
 import 'inbox_model.dart';
@@ -283,14 +281,15 @@ class _InboxChatState extends State<InboxChat> {
       body: DashChat(
         messageImageBuilder: (url, [messages]) {
           if (FileUtil.getFbUrlFileType(url) == FileType.image)
-            return ImageViewNetwork(url: url);
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ImageViewNetwork(url: url),
+            );
           if (FileUtil.getFbUrlFileType(url) == FileType.video) {
-            // final _videoC = VideoPlayerController.network(url)
-            //   ..initialize().then((value) => setState(() {
-            //     print('inited video');
-            //   }));
-            // return VideoPlayer(_videoC);
-            return SizedBox.shrink();
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: VideoViewNetwork(url: url),
+            );
           }
           return SizedBox.shrink();
         },
