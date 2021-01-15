@@ -413,30 +413,24 @@ class _InboxChatState extends State<InboxChat> {
                               vertical: 20, horizontal: 10),
                           child: Row(
                             children: [
-                              GestureDetector(
-                                onTap: () {
-                                  navigatorKey.currentState.maybePop();
+                              ActionItem(
+                                img: 'assets/image/location.png',
+                                name: 'Location',
+                                onTap: () async {
+                                  await navigatorKey.currentState.maybePop();
+                                  showGoogleMap(context,
+                                      height: deviceHeight(context) -
+                                          kToolbarHeight -
+                                          500);
                                 },
-                                child: ActionItem(
-                                  img: 'assets/image/location.png',
-                                  name: 'Location',
-                                  onTap: () {
-                                    showGoogleMap(context,
-                                        height: deviceHeight(context) -
-                                            kToolbarHeight - 500);
-                                  },
-                                ),
                               ),
                               SpacingBox(w: 6),
-                              GestureDetector(
-                                onTap: () {
-                                  navigatorKey.currentState.maybePop();
+                              ActionItem(
+                                img: 'assets/image/invite_chat.jpg',
+                                name: 'Invite',
+                                onTap: () async {
+                                  await navigatorKey.currentState.maybePop();
                                 },
-                                child: ActionItem(
-                                  img: 'assets/image/invite_chat.jpg',
-                                  name: 'Invite',
-                                  onTap: () {},
-                                ),
                               ),
                             ],
                           ),

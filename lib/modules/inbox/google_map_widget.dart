@@ -56,11 +56,14 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
               onTap: () => Navigator.of(context).maybePop(),
               child: Container(
                 decoration: BoxDecoration(
-                    color: Colors.white24,
+                    color: Colors.black38,
                     borderRadius: BorderRadius.circular(20)),
                 width: 40,
                 height: 40,
-                child: Icon(Icons.close),
+                child: Icon(
+                  Icons.close,
+                  color: Colors.white,
+                ),
               ),
             ),
           ),
