@@ -1,0 +1,23 @@
+import 'base_graphql.dart';
+
+class PetSrv extends BaseService {
+  PetSrv() : super(module: 'Pet', fragment: '''
+id: String
+name: String
+raceId: ID
+birthday: DateTime
+gender: String
+character: [String]
+userId: ID
+avatar: String
+coverImage: String
+race {
+  id
+  image
+  name
+  type
+}
+createdAt: DateTime
+updatedAt: DateTime
+''');
+}

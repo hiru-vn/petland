@@ -45,10 +45,10 @@ class BaseService {
       int offset,
       String fragment}) async {
     fragment = fragment ?? _fragmentDefault;
-    if (filter == null) filter = "";
+    if (filter == null) filter = "{}";
     if (search == null) search = "";
     final String listNode =
-        'query GetAll$_name{getAll$_name(q:{limit: $limit, page: ${page ?? 1}, offset: $offset, filter: {$filter}, search: "$search" , order: $order }){data{$fragment} pagination{limit offset page total} }}';
+        'query GetAll$_name{getAll$_name(q:{limit: $limit, page: ${page ?? 1}, offset: $offset, filter: $filter, search: "$search" , order: $order }){data{$fragment} pagination{limit offset page total} }}';
     print("Query: " + listNode);
 
     final QueryOptions options = QueryOptions(

@@ -1,8 +1,31 @@
+import 'package:petland/bloc/pet_bloc.dart';
+import 'package:petland/model/pet.dart';
 import 'package:petland/modules/my_pet/pet_profile.dart';
 import 'package:petland/modules/my_pet/pick_pet.dart';
 import 'package:petland/share/import.dart';
 
-class MyPetWidget extends StatelessWidget {
+class MyPetWidget extends StatefulWidget {
+  @override
+  _MyPetWidgetState createState() => _MyPetWidgetState();
+}
+
+class _MyPetWidgetState extends State<MyPetWidget> {
+  PetBloc _petBloc;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_petBloc == null) {
+      _petBloc = Provider.of<PetBloc>(context);
+      _petBloc.getAllPet();
+    }
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -16,15 +39,16 @@ class MyPetWidget extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Petcard(
-              image: 'assets/image/cat1.png',
-              name: 'Mick',
-            ),
-            SizedBox(width: 6),
-            Petcard(
-              image: 'assets/image/cat2.png',
-              name: 'Tô',
-            ),
+            ..._petBloc.pets
+                .map(
+                  (e) => Padding(
+                    padding: const EdgeInsets.only(right: 5),
+                    child: Petcard(
+                      pet: e
+                    ),
+                  ),
+                )
+                .toList(),
             Spacer(),
             InkWell(
               borderRadius: BorderRadius.circular(15),
@@ -53,23 +77,21 @@ class MyPetWidget extends StatelessWidget {
 }
 
 class Petcard extends StatelessWidget {
-  final String image;
-  final String name;
+  final PetModel pet;
 
-  const Petcard({Key key, this.image, this.name}) : super(key: key);
+  const Petcard({Key key, this.pet}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         PetProfilePage.navigate(
-            race: 'Bristish short-hair',
-            birthdate: DateTime.now(),
-            gender: 'male',
-            characters: ['cute', 'overweight', 'fat'],
-            bgUrl: 'https://www.coversden.com/images/covers/1/690.jpg',
-            imgUrl: 'https://ca-times.brightspotcdn.com/dims4/default/33c083b/2147483647/strip/true/crop/1611x906+0+0/resize/840x472!/quality/90/?url=https%3A%2F%2Fcalifornia-times-brightspot.s3.amazonaws.com%2Ffd%2Fef%2F05c1aab3e76c3d902aa0548c0046%2Fla-la-hm-pet-issue-18-jpg-20150615',
-            petName: 'Mick'
-            );
+            race: pet.race.name,
+            birthdate: DateTime.tryParse(pet.birthday),
+            gender: pet.gender.toLowerCase(),
+            characters: pet.character,
+            bgUrl: pet.coverImage,
+            imgUrl: pet.avatar,
+            petName: pet.name);
       },
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10),
@@ -79,8 +101,8 @@ class Petcard extends StatelessWidget {
           child: Stack(
             fit: StackFit.expand,
             children: [
-              Image.asset(
-                image,
+              Image.network(
+                pet.avatar,
                 fit: BoxFit.cover,
               ),
               Positioned(
@@ -92,7 +114,7 @@ class Petcard extends StatelessWidget {
                   color: ptPrimaryColor(context).withOpacity(0.5),
                   child: Center(
                     child: Text(
-                      name,
+                      pet.name,
                       style: ptTitle().copyWith(color: Colors.white),
                     ),
                   ),

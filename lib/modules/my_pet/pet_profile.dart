@@ -83,14 +83,13 @@ class _PetProfilePageState extends State<PetProfilePage>
         IconButton(
             onPressed: () {
               PetDataUpdatePage.navigate(
-                  race: 'Bristish short-hair',
-                  birthdate: DateTime.now(),
-                  gender: 'male',
-                  characters: ['cute', 'overweight', 'fat'],
-                  bgUrl: 'https://www.coversden.com/images/covers/1/690.jpg',
-                  imgUrl:
-                      'https://ca-times.brightspotcdn.com/dims4/default/33c083b/2147483647/strip/true/crop/1611x906+0+0/resize/840x472!/quality/90/?url=https%3A%2F%2Fcalifornia-times-brightspot.s3.amazonaws.com%2Ffd%2Fef%2F05c1aab3e76c3d902aa0548c0046%2Fla-la-hm-pet-issue-18-jpg-20150615',
-                  petName: 'Mick');
+                  race: widget.race,
+                  birthdate: widget.birthdate,
+                  gender: widget.gender,
+                  characters: widget.characters,
+                  bgUrl: widget.bgUrl,
+                  imgUrl: widget.imgUrl,
+                  petName: widget.petName);
             },
             icon: Icon(
               Icons.settings,

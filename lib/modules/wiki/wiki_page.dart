@@ -1,4 +1,3 @@
-import 'package:petland/modules/wiki/post_detail_page.dart';
 import 'package:petland/modules/wiki/post_list_page.dart';
 import 'package:petland/share/import.dart';
 
