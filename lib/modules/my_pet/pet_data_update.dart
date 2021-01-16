@@ -1,42 +1,21 @@
+import 'package:petland/bloc/pet_bloc.dart';
+import 'package:petland/model/pet.dart';
 import 'package:petland/modules/my_pet/pet_race.dart';
 import 'package:petland/share/import.dart';
 
 class PetDataUpdatePage extends StatefulWidget {
-  final String race;
-  final DateTime birthdate;
-  final String gender;
-  final List<String> characters;
-  final String imgUrl;
-  final String bgUrl;
-  final String petName;
+  final String petId;
 
-  const PetDataUpdatePage(
-      {Key key,
-      this.race,
-      this.birthdate,
-      this.gender,
-      this.characters,
-      this.bgUrl,
-      this.imgUrl,
-      this.petName})
-      : super(key: key);
+  const PetDataUpdatePage({
+    Key key,
+    this.petId,
+  }) : super(key: key);
 
-  static navigate(
-      {String race,
-      DateTime birthdate,
-      String gender,
-      List<String> characters,
-      String imgUrl,
-      String bgUrl,
-      String petName}) {
+  static navigate({
+    String petId,
+  }) {
     navigatorKey.currentState.push(pageBuilder(PetDataUpdatePage(
-      race: race,
-      birthdate: birthdate,
-      gender: gender,
-      characters: characters,
-      imgUrl: imgUrl,
-      bgUrl: bgUrl,
-      petName: petName,
+      petId: petId,
     )));
   }
 
@@ -45,26 +24,28 @@ class PetDataUpdatePage extends StatefulWidget {
 }
 
 class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
-  String _race;
-  DateTime _birthdate;
-  String _gender;
-  List<String> _characters;
-  String _imgUrl;
-  String _bgUrl;
-  String _petName;
   bool _isUpdate = false;
+  PetBloc _petBloc;
+  PetModel _pet;
 
   @override
   void initState() {
-    _race = widget.race;
-    _birthdate = widget.birthdate;
-    _gender = widget.gender;
-    _characters = widget.characters ?? <String>[];
-    _imgUrl = widget.imgUrl;
-    _bgUrl = widget.bgUrl;
-    _petName = widget.petName;
-    if (_petName != null) _isUpdate = true;
+    if (widget.petId != null) _isUpdate = true;
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_petBloc == null) {
+      _petBloc = Provider.of<PetBloc>(context);
+      _pet = _petBloc.pets.firstWhere((element) => element.id == widget.petId);
+    }
+    super.didChangeDependencies();
+  }
+
+  Future _save() {
+    if (_isUpdate) {}
+    navigatorKey.currentState.maybePop();
   }
 
   @override
@@ -81,18 +62,19 @@ class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
       ]),
       body: SingleChildScrollView(
         child: Column(children: [
-          _buildHead(imgUrl: _imgUrl, imageCover: _bgUrl, petName: _petName),
+          _buildHead(
+              imgUrl: _pet.avatar,
+              imageCover: _pet.coverImage,
+              petName: _pet.name),
           SpacingBox(h: 3),
           _buildForm(),
           SpacingBox(h: 3),
           Padding(
-            padding: const EdgeInsets.all(15),
-            child: ExpandBtn(
+              padding: const EdgeInsets.all(15),
+              child: ExpandBtn(
                 text: 'Save',
-                onPress: () {
-                  navigatorKey.currentState.maybePop();
-                }),
-          )
+                onPress: _save,
+              ))
         ]),
       ),
     );
@@ -195,9 +177,9 @@ class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                if (_race != null) ...[
+                if (_pet.race != null) ...[
                   Text(
-                    _race,
+                    _pet.race.name ?? '',
                   ),
                   SizedBox(width: 10),
                 ],
@@ -232,8 +214,8 @@ class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                if (_birthdate != null) ...[
-                  Text(Formart.formatToDate(_birthdate)),
+                if (_pet.birthday != null) ...[
+                  Text(Formart.formatToDate(DateTime.tryParse(_pet.birthday))),
                   SizedBox(width: 10),
                 ],
                 Icon(
@@ -292,17 +274,17 @@ class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                if (_gender == 'female' || _gender == null)
+                if (_pet.gender == 'female' || _pet.gender == null)
                   Icon(
                     MdiIcons.genderFemale,
                     size: 20,
                     color: Colors.pink,
                   ),
-                if (_gender != 'female')
+                if (_pet.gender != 'female')
                   SizedBox(
                     width: 10,
                   ),
-                if (_gender == 'male' || _gender == null)
+                if (_pet.gender == 'male' || _pet.gender == null)
                   Icon(
                     MdiIcons.genderMale,
                     size: 20,
@@ -320,7 +302,7 @@ class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
           child: TextFieldTags(
             onTag: (val) {},
             onDelete: (val) {},
-            initialTags: _characters,
+            initialTags: _pet.character,
             textFieldStyler: TextFieldStyler(
               hintText: 'CHARACTER',
               textStyle: ptTitle(),

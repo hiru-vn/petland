@@ -1,48 +1,26 @@
+import 'package:petland/bloc/pet_bloc.dart';
+import 'package:petland/model/pet.dart';
 import 'package:petland/modules/my_pet/pet_data_update.dart';
-import 'package:petland/modules/my_pet/pet_race.dart';
 import 'package:petland/modules/my_pet/records/birthday_page.dart';
 import 'package:petland/modules/my_pet/records/vaccine_page.dart';
 import 'package:petland/share/import.dart';
 import 'package:petland/share/widgets/image_view.dart';
 
 class PetProfilePage extends StatefulWidget {
-  final String race;
-  final DateTime birthdate;
-  final String gender;
-  final List<String> characters;
-  final String imgUrl;
-  final String bgUrl;
-  final String petName;
+  final String petId;
 
-  const PetProfilePage(
-      {Key key,
-      this.race,
-      this.birthdate,
-      this.gender,
-      this.characters,
-      this.bgUrl,
-      this.imgUrl,
-      this.petName})
-      : super(key: key);
+  const PetProfilePage({
+    Key key,
+    this.petId,
+  }) : super(key: key);
 
-  static navigate(
-      {String race,
-      DateTime birthdate,
-      String gender,
-      List<String> characters,
-      String imgUrl,
-      String bgUrl,
-      String petName}) {
+  static navigate({
+    String petId,
+  }) {
     navigatorKey.currentState.push(
       pageBuilder(
         PetProfilePage(
-          race: race,
-          birthdate: birthdate,
-          gender: gender,
-          characters: characters,
-          imgUrl: imgUrl,
-          bgUrl: bgUrl,
-          petName: petName,
+          petId: petId,
         ),
       ),
     );
@@ -54,26 +32,23 @@ class PetProfilePage extends StatefulWidget {
 
 class _PetProfilePageState extends State<PetProfilePage>
     with SingleTickerProviderStateMixin {
-  String _race;
-  DateTime _birthdate;
-  String _gender;
-  List<String> _characters;
-  String _imgUrl;
-  String _bgUrl;
-  String _petName;
   TabController _tabController;
+  PetBloc _petBloc;
+  PetModel _pet;
 
   @override
   void initState() {
-    _race = widget.race;
-    _birthdate = widget.birthdate;
-    _gender = widget.gender;
-    _characters = widget.characters ?? <String>[];
-    _imgUrl = widget.imgUrl;
-    _bgUrl = widget.bgUrl;
-    _petName = widget.petName;
     _tabController = TabController(length: 4, vsync: this);
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_petBloc == null) {
+      _petBloc = Provider.of<PetBloc>(context);
+      _pet = _petBloc.pets.firstWhere((element) => element.id == widget.petId);
+    }
+    super.didChangeDependencies();
   }
 
   @override
@@ -82,14 +57,7 @@ class _PetProfilePageState extends State<PetProfilePage>
       appBar: innerAppBar(context, 'Pet\'s profile', actions: [
         IconButton(
             onPressed: () {
-              PetDataUpdatePage.navigate(
-                  race: widget.race,
-                  birthdate: widget.birthdate,
-                  gender: widget.gender,
-                  characters: widget.characters,
-                  bgUrl: widget.bgUrl,
-                  imgUrl: widget.imgUrl,
-                  petName: widget.petName);
+              PetDataUpdatePage.navigate(petId: _pet.id);
             },
             icon: Icon(
               Icons.settings,
@@ -98,10 +66,10 @@ class _PetProfilePageState extends State<PetProfilePage>
       ]),
       body: Column(children: [
         PetProfileHeader(
-            imgUrl: _imgUrl,
-            imageCover: _bgUrl,
-            petName: _petName,
-            petRace: _race),
+            imgUrl: _pet.avatar,
+            imageCover: _pet.coverImage,
+            petName: _pet.name,
+            petRace: _pet.race.name),
         SpacingBox(h: 3),
         Align(
           alignment: Alignment.center,
@@ -133,10 +101,10 @@ class _PetProfilePageState extends State<PetProfilePage>
               controller: _tabController,
               children: [
                 PetDataWidget(
-                  gender: _gender,
-                  race: _race,
-                  birthdate: _birthdate,
-                  characters: _characters,
+                  gender: _pet.gender.toLowerCase(),
+                  race: _pet.race.name,
+                  birthdate: DateTime.tryParse(_pet.birthday),
+                  characters: _pet.character,
                 ),
                 PetPictureWidget(),
                 PetVideoWidget(),
@@ -262,20 +230,13 @@ class PetDataWidget extends StatelessWidget {
           Divider(
             height: 3,
           ),
-          InkWell(
-            highlightColor: ptAccentColor(context),
-            splashColor: ptPrimaryColor(context),
-            onTap: () {
-              PetRacePage.navigate();
-            },
-            child: ListTile(
-              title: Text(
-                'RACE',
-                style: ptTitle(),
-              ),
-              trailing: Text(
-                race ?? '',
-              ),
+          ListTile(
+            title: Text(
+              'RACE',
+              style: ptTitle(),
+            ),
+            trailing: Text(
+              race ?? '',
             ),
           ),
           Divider(

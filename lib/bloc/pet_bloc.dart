@@ -23,4 +23,16 @@ class PetBloc extends ChangeNotifier {
       notifyListeners();
     }
   }
+  
+  Future<BaseResponse> updatePet(PetModel pet) async {
+    try {
+      final res = await PetRepo().update(pet: pet);
+      pets[pets.indexWhere((element) => element.id == pet.id)] = pet;
+      return BaseResponse.success(res);
+    } catch (e) {
+      return BaseResponse.fail(e.message?.toString());
+    } finally {
+      notifyListeners();
+    }
+  }
 }

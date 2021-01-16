@@ -13,7 +13,6 @@ class _MyPetWidgetState extends State<MyPetWidget> {
   PetBloc _petBloc;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
@@ -43,9 +42,7 @@ class _MyPetWidgetState extends State<MyPetWidget> {
                 .map(
                   (e) => Padding(
                     padding: const EdgeInsets.only(right: 5),
-                    child: Petcard(
-                      pet: e
-                    ),
+                    child: Petcard(pet: e),
                   ),
                 )
                 .toList(),
@@ -85,13 +82,8 @@ class Petcard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         PetProfilePage.navigate(
-            race: pet.race.name,
-            birthdate: DateTime.tryParse(pet.birthday),
-            gender: pet.gender.toLowerCase(),
-            characters: pet.character,
-            bgUrl: pet.coverImage,
-            imgUrl: pet.avatar,
-            petName: pet.name);
+          petId: pet.id,
+        );
       },
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10),
