@@ -5,7 +5,7 @@ class PetRacePage extends StatefulWidget {
   final String type;
 
   const PetRacePage({Key key, this.type}) : super(key: key);
-  static navigate(String type) {
+  static Future navigate(String type) {
     return navigatorKey.currentState.push(pageBuilder(PetRacePage(type: type)));
   }
 

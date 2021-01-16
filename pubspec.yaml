@@ -61,6 +61,7 @@ dev_dependencies:
   popup_menu: ^1.0.5
   mime: ^0.9.7
   google_maps_flutter: ^1.1.1
+  giffy_dialog: ^1.8.0
 
   # firebase
   firebase_auth: ^0.20.0+1

@@ -27,6 +27,7 @@ class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
   bool _isUpdate = false;
   PetBloc _petBloc;
   PetModel _pet;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -44,7 +45,9 @@ class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
   }
 
   Future _save() async {
-    // _pet = PetModel.;
+    setState(() {
+      isLoading = true;
+    });
     if (_isUpdate) {
       final res = await _petBloc.updatePet(_pet);
       if (!res.isSuccess) {
@@ -58,38 +61,68 @@ class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
             'Có lỗi xảy ra khi cập nhật thông tin, vui lòng thử lại', context);
       }
     }
+    setState(() {
+      isLoading = false;
+    });
     navigatorKey.currentState.maybePop();
+  }
+
+  Future _delete() async {
+    setState(() {
+      isLoading = true;
+    });
+    final confirm = await showConfirmImageDialog(
+        context,
+        'Bạn muốn xoá profile của ${_pet.name} ?',
+        'assets/image/pet_delete_dialog.jpg');
+    if (confirm) {
+      final res = await _petBloc.updatePet(_pet);
+      if (!res.isSuccess) {
+        showToast(
+            'Có lỗi xảy ra khi cập nhật thông tin, vui lòng thử lại', context);
+      }
+    }
+    setState(() {
+      isLoading = false;
+    });
+    await navigatorKey.currentState.maybePop();
+    await navigatorKey.currentState.maybePop();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: innerAppBar(context, 'Update Pet\'s data', actions: [
-        if (_isUpdate)
-          IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.delete_forever,
-                color: Colors.white,
-              ))
-      ]),
-      body: SingleChildScrollView(
-        child: Column(children: [
-          _buildHead(
-              imgUrl: _pet.avatar,
-              imageCover: _pet.coverImage,
-              petName: _pet.name),
-          SpacingBox(h: 3),
-          _buildForm(),
-          SpacingBox(h: 3),
-          Padding(
-              padding: const EdgeInsets.all(15),
-              child: ExpandBtn(
-                text: 'Save',
-                onPress: _save,
-              ))
-        ]),
-      ),
+    return Stack(
+      children: [
+        Scaffold(
+          appBar: innerAppBar(context, 'Update Pet\'s data', actions: [
+            if (_isUpdate)
+              IconButton(
+                  onPressed: _delete,
+                  icon: Icon(
+                    Icons.delete_forever,
+                    color: Colors.white,
+                  ))
+          ]),
+          body: SingleChildScrollView(
+            child: Column(children: [
+              _buildHead(
+                  imgUrl: _pet.avatar,
+                  imageCover: _pet.coverImage,
+                  petName: _pet.name),
+              SpacingBox(h: 3),
+              _buildForm(),
+              SpacingBox(h: 3),
+              Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: ExpandBtn(
+                    text: 'Save',
+                    onPress: _save,
+                  ))
+            ]),
+          ),
+        ),
+        if (isLoading) kLoadingSpinner,
+      ],
     );
   }
 
@@ -186,7 +219,9 @@ class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
           highlightColor: ptAccentColor(context),
           splashColor: ptPrimaryColor(context),
           onTap: () {
-            PetRacePage.navigate(_pet.race.type);
+            PetRacePage.navigate(_pet.race.type).then((value) {
+              if (value != null) _pet.race = value;
+            });
           },
           child: ListTile(
             title: Text(
@@ -221,9 +256,19 @@ class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
             showDatePicker(
               context: context,
               initialDate: DateTime.now(),
-              firstDate: DateTime.now(),
+              firstDate: DateTime.now().subtract(Duration(days: 20 * 365)),
               lastDate: DateTime.now(),
-            );
+              builder: (BuildContext context, Widget child) {
+                return Theme(
+                  data: ThemeData.light().copyWith(
+                    primaryColor: Theme.of(context).primaryColor,
+                  ),
+                  child: child,
+                );
+              },
+            ).then((value) => setState(() {
+                  _pet.birthday = value.toIso8601String();
+                }));
           },
           child: ListTile(
             title: Text(
@@ -265,7 +310,7 @@ class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
                         color: ptPrimaryColor(context),
                       ),
                       'Male',
-                      'male',
+                      'MALE',
                     ),
                     PickerPageModel(
                       Icon(
@@ -273,7 +318,7 @@ class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
                         color: Colors.pink,
                       ),
                       'Female',
-                      'female',
+                      'FEMALE',
                     ),
                   ],
                   title: 'Pet gender',
@@ -282,7 +327,9 @@ class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
               ),
             )
                 .then((value) {
-              setState(() {});
+              setState(() {
+                _pet.gender = value;
+              });
             });
           },
           child: ListTile(
@@ -293,17 +340,17 @@ class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                if (_pet.gender == 'female' || _pet.gender == null)
+                if (_pet.gender == 'FEMALE' || _pet.gender == null)
                   Icon(
                     MdiIcons.genderFemale,
                     size: 20,
                     color: Colors.pink,
                   ),
-                if (_pet.gender != 'female')
+                if (_pet.gender != 'FEMALE')
                   SizedBox(
                     width: 10,
                   ),
-                if (_pet.gender == 'male' || _pet.gender == null)
+                if (_pet.gender == 'MALE' || _pet.gender == null)
                   Icon(
                     MdiIcons.genderMale,
                     size: 20,

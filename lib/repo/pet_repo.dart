@@ -20,6 +20,11 @@ class PetRepo {
     ''');
     return res;
   }
+
+  Future delete({String petId}) async {
+    final res = await PetSrv().delete(petId);
+    return res;
+  }
 }
 
 class RaceRepo {

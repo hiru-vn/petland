@@ -38,6 +38,17 @@ class PetBloc extends ChangeNotifier {
     }
   }
 
+  Future<BaseResponse> deletePet(String petId) async {
+    try {
+      final res = await PetRepo().delete(petId:  petId);
+      return BaseResponse.success(res);
+    } catch (e) {
+      return BaseResponse.fail(e.message?.toString());
+    } finally {
+      notifyListeners();
+    }
+  }
+
   Future<BaseResponse> getAllPetRace(String type) async {
     try {
       final res = await RaceRepo().getAll(type: type);
