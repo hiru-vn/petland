@@ -1,25 +1,32 @@
+import 'package:petland/bloc/pet_bloc.dart';
 import 'package:petland/share/import.dart';
 
-class PetRacePage extends StatelessWidget {
-  static navigate() {
-    return navigatorKey.currentState.push(pageBuilder(PetRacePage()));
+class PetRacePage extends StatefulWidget {
+  final String type;
+
+  const PetRacePage({Key key, this.type}) : super(key: key);
+  static navigate(String type) {
+    return navigatorKey.currentState.push(pageBuilder(PetRacePage(type: type)));
+  }
+
+  @override
+  _PetRacePageState createState() => _PetRacePageState();
+}
+
+class _PetRacePageState extends State<PetRacePage> {
+  PetBloc _petBloc;
+
+  @override
+  void didChangeDependencies() {
+    if (_petBloc == null) {
+      _petBloc = Provider.of<PetBloc>(context);
+      _petBloc.getAllPetRace(widget.type);
+    }
+    super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    final list = [
-      {"name": "Brishtish short-hair", "img": "assets/image/cat_race_1.jpg"},
-      {
-        "name": "Brishtish short-hair golden",
-        "img": "assets/image/cat_race_2.jpg"
-      },
-      {"name": "Brishtish long-hair", "img": "assets/image/cat_race_3.jpg"},
-      {"name": "Beganli", "img": "assets/image/cat_race_4.jpg"},
-      {"name": "Burmilla", "img": "assets/image/cat_race_5.jpeg"},
-      {"name": "Exotic short hair", "img": "assets/image/cat_race_6.jpg"},
-      {"name": "Yellow cat", "img": "assets/image/cat_race_7.png"},
-      {"name": "Muchin", "img": "assets/image/cat_race_8.png"}
-    ];
     return Scaffold(
       appBar: innerAppBar(context, 'Pet race'),
       body: SingleChildScrollView(
@@ -29,12 +36,14 @@ class PetRacePage extends StatelessWidget {
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
             crossAxisCount: 2,
-            staggeredTiles: list.map((_) => StaggeredTile.fit(1)).toList(),
-            children: List.generate(list.length, (index) {
+            staggeredTiles:
+                _petBloc.races.map((_) => StaggeredTile.fit(1)).toList(),
+            children: List.generate(_petBloc.races.length, (index) {
               return PetRaceCard(
-                title: list[index]['name'],
-                image: list[index]['img'],
-                onTap: () => navigatorKey.currentState.maybePop(),
+                title: _petBloc.races[index].name,
+                image: _petBloc.races[index].image,
+                onTap: () =>
+                    navigatorKey.currentState.maybePop(_petBloc.races[index]),
               );
             }),
           ),
@@ -73,10 +82,15 @@ class PetRaceCard extends StatelessWidget {
                 ),
                 child: SizedBox(
                   width: deviceWidth(context) / 2,
-                  child: Image.asset(
-                    image,
-                    fit: BoxFit.fitWidth,
-                  ),
+                  child: image.contains('assets/image')
+                      ? Image.asset(
+                          image,
+                          fit: BoxFit.fitWidth,
+                        )
+                      : Image.network(
+                          image,
+                          fit: BoxFit.fitWidth,
+                        ),
                 ),
               ),
               Padding(

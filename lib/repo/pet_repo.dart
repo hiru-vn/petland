@@ -21,3 +21,10 @@ class PetRepo {
     return res;
   }
 }
+
+class RaceRepo {
+  Future getAll({String type}) async {
+    final res = await RaceSrv().getList(filter: '{type: "$type"}');
+    return res;
+  }
+}

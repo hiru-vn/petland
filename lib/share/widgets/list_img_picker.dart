@@ -93,7 +93,8 @@ class _ImageRowPickerState extends State<ImageRowPicker>
           return Align(
             alignment: Alignment.bottomCenter,
             child: InkWell(
-              onTap: () => imagePicker(context, (str) {}, (str) {}, (str) {}),
+              onTap: () => imagePicker(context,
+                  onCameraPick: (str) {}, onImagePick: (str) {}),
               child: Container(
                 height: 100,
                 width: 100,
@@ -101,11 +102,7 @@ class _ImageRowPickerState extends State<ImageRowPicker>
                   color: Colors.grey[300],
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Icon(
-                  MdiIcons.plusCircle,
-                  size: 75,
-                  color: Colors.white
-                ),
+                child: Icon(MdiIcons.plusCircle, size: 75, color: Colors.white),
               ),
             ),
           );

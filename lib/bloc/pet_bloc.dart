@@ -1,4 +1,5 @@
 import 'package:petland/model/pet.dart';
+import 'package:petland/model/race.dart';
 import 'package:petland/repo/pet_repo.dart';
 import 'package:petland/services/base_response.dart';
 import 'package:petland/share/import.dart';
@@ -8,6 +9,7 @@ class PetBloc extends ChangeNotifier {
   static final PetBloc instance = PetBloc._privateConstructor();
 
   List<PetModel> pets = [];
+  List<RaceModel> races = [];
 
   Future<BaseResponse> getAllPet() async {
     try {
@@ -23,12 +25,26 @@ class PetBloc extends ChangeNotifier {
       notifyListeners();
     }
   }
-  
+
   Future<BaseResponse> updatePet(PetModel pet) async {
     try {
       final res = await PetRepo().update(pet: pet);
       pets[pets.indexWhere((element) => element.id == pet.id)] = pet;
       return BaseResponse.success(res);
+    } catch (e) {
+      return BaseResponse.fail(e.message?.toString());
+    } finally {
+      notifyListeners();
+    }
+  }
+
+  Future<BaseResponse> getAllPetRace(String type) async {
+    try {
+      final res = await RaceRepo().getAll(type: type);
+      final List listRaw = res['data'];
+      final list = listRaw.map((e) => RaceModel.fromJson(e)).toList();
+      races = list;
+      return BaseResponse.success(list);
     } catch (e) {
       return BaseResponse.fail(e.message?.toString());
     } finally {

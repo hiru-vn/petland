@@ -43,8 +43,21 @@ class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
     super.didChangeDependencies();
   }
 
-  Future _save() {
-    if (_isUpdate) {}
+  Future _save() async {
+    // _pet = PetModel.;
+    if (_isUpdate) {
+      final res = await _petBloc.updatePet(_pet);
+      if (!res.isSuccess) {
+        showToast(
+            'Có lỗi xảy ra khi cập nhật thông tin, vui lòng thử lại', context);
+      }
+    } else {
+      final res = await _petBloc.updatePet(_pet);
+      if (!res.isSuccess) {
+        showToast(
+            'Có lỗi xảy ra khi cập nhật thông tin, vui lòng thử lại', context);
+      }
+    }
     navigatorKey.currentState.maybePop();
   }
 
@@ -106,9 +119,15 @@ class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
                   ),
                 ),
                 if (imageCover != null)
-                  SizedBox(
-                      width: deviceWidth(context),
-                      child: Image.network(imageCover, fit: BoxFit.cover)),
+                  GestureDetector(
+                    onTap: () {
+                      imagePicker(context,
+                          onCameraPick: (url) {}, onImagePick: (url) {});
+                    },
+                    child: SizedBox(
+                        width: deviceWidth(context),
+                        child: Image.network(imageCover, fit: BoxFit.cover)),
+                  ),
               ],
             ),
           ),
@@ -167,7 +186,7 @@ class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
           highlightColor: ptAccentColor(context),
           splashColor: ptPrimaryColor(context),
           onTap: () {
-            PetRacePage.navigate();
+            PetRacePage.navigate(_pet.race.type);
           },
           child: ListTile(
             title: Text(

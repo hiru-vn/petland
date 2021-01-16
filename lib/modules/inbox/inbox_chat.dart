@@ -449,7 +449,10 @@ class _InboxChatState extends State<InboxChat> {
           IconButton(
             icon: Icon(Icons.file_present),
             onPressed: () async {
-              imagePicker(context, _onFilePick, _onFilePick, _onFilePick);
+              imagePicker(context,
+                  onCameraPick: _onFilePick,
+                  onImagePick: _onFilePick,
+                  onVideoPick: _onFilePick);
             },
           ),
         ],

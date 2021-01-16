@@ -21,3 +21,14 @@ createdAt: DateTime
 updatedAt: DateTime
 ''');
 }
+
+class RaceSrv extends BaseService {
+  RaceSrv() : super(module: 'Race', fragment: '''
+id: String
+name: String
+image: String
+type: String
+createdAt: DateTime
+updatedAt: DateTime
+''');
+}
