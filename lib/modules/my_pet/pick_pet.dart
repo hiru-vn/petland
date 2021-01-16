@@ -49,7 +49,7 @@ class PetCard extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 12),
       child: GestureDetector(
         onTap: () {
-          PetDataUpdatePage.navigate();
+          PetDataUpdatePage.navigate(type: title);
         },
         child: Card(
           elevation: 6,

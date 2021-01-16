@@ -38,9 +38,24 @@ class PetBloc extends ChangeNotifier {
     }
   }
 
+  Future<BaseResponse> createPet(PetModel pet) async {
+    try {
+      final String id = await SPref.instance.get('id');
+      pet.userId = id;
+      final res = await PetRepo().create(pet: pet);
+      pets.add(PetModel.fromJson(res));
+      return BaseResponse.success(res);
+    } catch (e) {
+      return BaseResponse.fail(e.message?.toString());
+    } finally {
+      notifyListeners();
+    }
+  }
+
   Future<BaseResponse> deletePet(String petId) async {
     try {
-      final res = await PetRepo().delete(petId:  petId);
+      final res = await PetRepo().delete(petId: petId);
+      pets.removeWhere((element) => element.id == petId);
       return BaseResponse.success(res);
     } catch (e) {
       return BaseResponse.fail(e.message?.toString());

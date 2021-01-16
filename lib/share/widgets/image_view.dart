@@ -27,7 +27,7 @@ class ImageViewNetwork extends StatelessWidget {
         child: Image.network(
           url,
           fit: BoxFit.cover,
-          errorBuilder: (_, __, ___) => SizedBox.shrink(),
+          errorBuilder: imageNetworkErrorBuilder,
           loadingBuilder: kLoadingBuilder,
         ),
       ),

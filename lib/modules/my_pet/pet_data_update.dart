@@ -5,17 +5,21 @@ import 'package:petland/share/import.dart';
 
 class PetDataUpdatePage extends StatefulWidget {
   final String petId;
+  final String type;
 
   const PetDataUpdatePage({
     Key key,
     this.petId,
+    this.type,
   }) : super(key: key);
 
   static navigate({
     String petId,
+    String type,
   }) {
     navigatorKey.currentState.push(pageBuilder(PetDataUpdatePage(
       petId: petId,
+      type: type,
     )));
   }
 
@@ -28,6 +32,7 @@ class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
   PetBloc _petBloc;
   PetModel _pet;
   bool isLoading = false;
+  TextEditingController petNameC = TextEditingController();
 
   @override
   void initState() {
@@ -39,12 +44,17 @@ class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
   void didChangeDependencies() {
     if (_petBloc == null) {
       _petBloc = Provider.of<PetBloc>(context);
-      _pet = _petBloc.pets.firstWhere((element) => element.id == widget.petId);
+      if (_isUpdate)
+        _pet =
+            _petBloc.pets.firstWhere((element) => element.id == widget.petId);
+      else
+        _pet = PetModel();
     }
     super.didChangeDependencies();
   }
 
   Future _save() async {
+    _pet.name = petNameC.text;
     setState(() {
       isLoading = true;
     });
@@ -55,10 +65,9 @@ class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
             'Có lỗi xảy ra khi cập nhật thông tin, vui lòng thử lại', context);
       }
     } else {
-      final res = await _petBloc.updatePet(_pet);
+      final res = await _petBloc.createPet(_pet);
       if (!res.isSuccess) {
-        showToast(
-            'Có lỗi xảy ra khi cập nhật thông tin, vui lòng thử lại', context);
+        showToast('Có lỗi xảy ra khi gửi yêu cầu, vui lòng thử lại', context);
       }
     }
     setState(() {
@@ -73,20 +82,21 @@ class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
     });
     final confirm = await showConfirmImageDialog(
         context,
-        'Bạn muốn xoá profile của ${_pet.name} ?',
+        'Bạn chắc chứ?',
+        'Dữ liệu của ${_pet.name} sẽ không thể khôi phục lại.',
         'assets/image/pet_delete_dialog.jpg');
     if (confirm) {
-      final res = await _petBloc.updatePet(_pet);
+      final res = await _petBloc.deletePet(_pet.id);
       if (!res.isSuccess) {
         showToast(
-            'Có lỗi xảy ra khi cập nhật thông tin, vui lòng thử lại', context);
+            'Có lỗi xảy ra, vui lòng thử lại', context);
       }
+      await navigatorKey.currentState.maybePop();
+      await navigatorKey.currentState.maybePop();
     }
     setState(() {
       isLoading = false;
     });
-    await navigatorKey.currentState.maybePop();
-    await navigatorKey.currentState.maybePop();
   }
 
   @override
@@ -106,9 +116,9 @@ class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
           body: SingleChildScrollView(
             child: Column(children: [
               _buildHead(
-                  imgUrl: _pet.avatar,
-                  imageCover: _pet.coverImage,
-                  petName: _pet.name),
+                  imgUrl: _pet?.avatar,
+                  imageCover: _pet?.coverImage,
+                  petName: _pet?.name),
               SpacingBox(h: 3),
               _buildForm(),
               SpacingBox(h: 3),
@@ -191,6 +201,7 @@ class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
             left: deviceWidth(context) / 10 + 125,
             bottom: 10,
             child: TextFormField(
+              controller: petName == null ? petNameC : null,
               initialValue: petName,
               style: ptBigTitle().copyWith(fontSize: 19.5),
               decoration: InputDecoration(
@@ -219,8 +230,9 @@ class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
           highlightColor: ptAccentColor(context),
           splashColor: ptPrimaryColor(context),
           onTap: () {
-            PetRacePage.navigate(_pet.race.type).then((value) {
-              if (value != null) _pet.race = value;
+            PetRacePage.navigate(_isUpdate ? _pet?.race?.type : widget.type)
+                .then((value) {
+              if (value != null) _pet?.race = value;
             });
           },
           child: ListTile(
@@ -231,9 +243,9 @@ class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                if (_pet.race != null) ...[
+                if (_pet?.race != null) ...[
                   Text(
-                    _pet.race.name ?? '',
+                    _pet?.race?.name ?? '',
                   ),
                   SizedBox(width: 10),
                 ],
@@ -267,7 +279,7 @@ class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
                 );
               },
             ).then((value) => setState(() {
-                  _pet.birthday = value.toIso8601String();
+                  _pet?.birthday = value.toIso8601String();
                 }));
           },
           child: ListTile(
@@ -278,8 +290,8 @@ class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                if (_pet.birthday != null) ...[
-                  Text(Formart.formatToDate(DateTime.tryParse(_pet.birthday))),
+                if (_pet?.birthday != null) ...[
+                  Text(Formart.formatToDate(DateTime.tryParse(_pet?.birthday))),
                   SizedBox(width: 10),
                 ],
                 Icon(
@@ -328,7 +340,7 @@ class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
             )
                 .then((value) {
               setState(() {
-                _pet.gender = value;
+                _pet?.gender = value;
               });
             });
           },
@@ -340,17 +352,17 @@ class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                if (_pet.gender == 'FEMALE' || _pet.gender == null)
+                if (_pet?.gender == 'FEMALE' || _pet?.gender == null)
                   Icon(
                     MdiIcons.genderFemale,
                     size: 20,
                     color: Colors.pink,
                   ),
-                if (_pet.gender != 'FEMALE')
+                if (_pet?.gender != 'FEMALE')
                   SizedBox(
                     width: 10,
                   ),
-                if (_pet.gender == 'MALE' || _pet.gender == null)
+                if (_pet?.gender == 'MALE' || _pet?.gender == null)
                   Icon(
                     MdiIcons.genderMale,
                     size: 20,
@@ -368,7 +380,7 @@ class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
           child: TextFieldTags(
             onTag: (val) {},
             onDelete: (val) {},
-            initialTags: _pet.character,
+            initialTags: _pet?.character,
             textFieldStyler: TextFieldStyler(
               hintText: 'CHARACTER',
               textStyle: ptTitle(),

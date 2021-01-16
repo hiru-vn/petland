@@ -157,7 +157,11 @@ class PetProfileHeader extends StatelessWidget {
                 if (imageCover != null)
                   SizedBox(
                       width: deviceWidth(context),
-                      child: Image.network(imageCover, fit: BoxFit.cover)),
+                      child: Image.network(
+                        imageCover,
+                        fit: BoxFit.cover,
+                        errorBuilder: imageNetworkErrorBuilder,
+                      )),
               ],
             ),
           ),

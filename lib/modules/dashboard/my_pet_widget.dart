@@ -35,38 +35,45 @@ class _MyPetWidgetState extends State<MyPetWidget> {
           style: ptBigTitle(),
         ),
         SpacingBox(h: 2),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ..._petBloc.pets
-                .map(
-                  (e) => Padding(
-                    padding: const EdgeInsets.only(right: 5),
-                    child: Petcard(pet: e),
-                  ),
-                )
-                .toList(),
-            Spacer(),
-            InkWell(
-              borderRadius: BorderRadius.circular(15),
-              onTap: () {
-                PickPet.navigate();
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.orange),
-                  borderRadius: BorderRadius.circular(15),
-                  color: Colors.orange.withOpacity(0.1),
-                ),
-                width: 44,
-                height: 35,
-                child: Icon(
-                  Icons.add,
-                  color: Colors.orange,
+        Container(
+          height: 100,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: _petBloc.pets
+                      .map(
+                        (e) => Padding(
+                          padding: const EdgeInsets.only(right: 5),
+                          child: Petcard(pet: e),
+                        ),
+                      )
+                      .toList(),
                 ),
               ),
-            )
-          ],
+              InkWell(
+                borderRadius: BorderRadius.circular(15),
+                onTap: () {
+                  PickPet.navigate();
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.orange),
+                    borderRadius: BorderRadius.circular(15),
+                    color: Colors.orange.withOpacity(0.1),
+                  ),
+                  width: 44,
+                  height: 35,
+                  child: Icon(
+                    Icons.add,
+                    color: Colors.orange,
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ],
     );
@@ -96,6 +103,7 @@ class Petcard extends StatelessWidget {
               Image.network(
                 pet.avatar,
                 fit: BoxFit.cover,
+                errorBuilder: imageNetworkErrorBuilder,
               ),
               Positioned(
                 bottom: 0,
