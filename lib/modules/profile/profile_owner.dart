@@ -1,55 +1,21 @@
+import 'package:petland/bloc/pet_bloc.dart';
+import 'package:petland/model/pet.dart';
+import 'package:petland/modules/authentication/auth_bloc.dart';
+import 'package:petland/modules/my_pet/pet_data_update.dart';
 import 'package:petland/modules/my_pet/records/birthday_page.dart';
 import 'package:petland/modules/my_pet/records/vaccine_page.dart';
 import 'package:petland/share/import.dart';
 import 'package:petland/share/widgets/image_view.dart';
 
 class OwnerProfilePage extends StatefulWidget {
-  final DateTime birthdate;
-  final String gender;
-  final String imgUrl;
-  final String bgUrl;
-  final String name;
-  final String nickName;
-  final String country;
-  final String description;
-  final String email;
+  const OwnerProfilePage({
+    Key key,
+  }) : super(key: key);
 
-  const OwnerProfilePage(
-      {Key key,
-      this.birthdate,
-      this.gender,
-      this.bgUrl,
-      this.imgUrl,
-      this.name,
-      this.nickName,
-      this.description,
-      this.country,
-      this.email})
-      : super(key: key);
-
-  static navigate(
-      {DateTime birthdate,
-      String gender,
-      String imgUrl,
-      String bgUrl,
-      String name,
-      String nickName,
-      String country,
-      String description,
-      String email}) {
+  static navigate() {
     navigatorKey.currentState.push(
       pageBuilder(
-        OwnerProfilePage(
-          birthdate: birthdate,
-          gender: gender,
-          imgUrl: imgUrl,
-          bgUrl: bgUrl,
-          name: name,
-          nickName: nickName,
-          description: description,
-          country: country,
-          email: email,
-        ),
+        OwnerProfilePage(),
       ),
     );
   }
@@ -60,30 +26,24 @@ class OwnerProfilePage extends StatefulWidget {
 
 class _OwnerProfilePageState extends State<OwnerProfilePage>
     with SingleTickerProviderStateMixin {
-  DateTime _birthdate;
-  String _gender;
-  String _imgUrl;
-  String _bgUrl;
-  String _name;
-  String _description;
-  String _nickName;
-  String _country;
-  String _email;
+  UserModel _user;
   TabController _tabController;
+  AuthBloc _authBloc;
+  PetBloc _petBloc;
 
   @override
   void initState() {
-    _birthdate = widget.birthdate;
-    _gender = widget.gender;
-    _imgUrl = widget.imgUrl;
-    _bgUrl = widget.bgUrl;
-    _name = widget.name;
-    _description = widget.description;
-    _nickName = widget.nickName;
-    _country = widget.country;
     _tabController = TabController(length: 3, vsync: this);
-    _email = widget.email;
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_authBloc == null) {
+      _authBloc = Provider.of<AuthBloc>(context);
+      _petBloc = Provider.of<PetBloc>(context);
+    }
+    super.didChangeDependencies();
   }
 
   @override
@@ -109,10 +69,10 @@ class _OwnerProfilePageState extends State<OwnerProfilePage>
       ]),
       body: Column(children: [
         OwnerProfileHeader(
-            imgUrl: _imgUrl,
-            imageCover: _bgUrl,
-            name: _name,
-            description: _description),
+            imgUrl: _authBloc.userModel?.avatar,
+            imageCover: _authBloc.userModel?.backgroundimage,
+            name: _authBloc.userModel?.name,
+            description: _authBloc.userModel?.description),
         SpacingBox(h: 3),
         Align(
           alignment: Alignment.center,
@@ -149,13 +109,17 @@ class _OwnerProfilePageState extends State<OwnerProfilePage>
               controller: _tabController,
               children: [
                 OwnerDataWidget(
-                  nickName: _nickName,
-                  birthdate: _birthdate,
-                  gender: _gender,
-                  country: _country,
-                  email: _email,
+                  nickName: _authBloc.userModel?.nickName,
+                  gender: 'MALE',
+                  country: 'Viet nam',
+                  email: _authBloc.userModel?.email,
                 ),
-                Container(),
+                Container(
+                    width: deviceWidth(context),
+                    height: 500,
+                    child: OwnerPetListWidget(
+                      petBloc: _petBloc,
+                    )),
                 Container()
               ],
             ),
@@ -239,11 +203,11 @@ class OwnerProfileHeader extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  name,
+                  name ?? '',
                   style: ptBigTitle().copyWith(fontSize: 19.5),
                 ),
                 Text(
-                  description,
+                  description ?? "",
                 ),
               ],
             ),
@@ -256,18 +220,12 @@ class OwnerProfileHeader extends StatelessWidget {
 
 class OwnerDataWidget extends StatelessWidget {
   final String nickName;
-  final DateTime birthdate;
   final String gender;
   final String country;
   final String email;
 
   const OwnerDataWidget(
-      {Key key,
-      this.nickName,
-      this.birthdate,
-      this.gender,
-      this.country,
-      this.email})
+      {Key key, this.nickName, this.gender, this.country, this.email})
       : super(key: key);
 
   @override
@@ -289,16 +247,6 @@ class OwnerDataWidget extends StatelessWidget {
                 nickName ?? '',
               ),
             ),
-          ),
-          Divider(
-            height: 3,
-          ),
-          ListTile(
-            title: Text(
-              'BIRTHDAY',
-              style: ptTitle(),
-            ),
-            trailing: Text(Formart.formatToDate(birthdate) ?? ''),
           ),
           Divider(
             height: 3,
@@ -373,34 +321,25 @@ class OwnerDataWidget extends StatelessWidget {
   }
 }
 
-class OwnerPictureWidget extends StatelessWidget {
+class OwnerPetListWidget extends StatelessWidget {
+  final PetBloc petBloc;
+
+  const OwnerPetListWidget({Key key, this.petBloc}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final list = [
-      'https://static.toiimg.com/photo/msid-67586673/67586673.jpg?3918697',
-      'https://c.files.bbci.co.uk/106B9/production/_114675276_catindex.jpg',
-      'https://img.webmd.com/dtmcms/live/webmd/consumer_assets/site_images/article_thumbnails/other/cat_relaxing_on_patio_other/1800x1200_cat_relaxing_on_patio_other.jpg',
-      'https://ebahana.com/wp-content/uploads/2019/02/maxresdefault-1-1.jpg',
-      'https://i.pinimg.com/564x/0d/0a/65/0d0a65ab7a9935b9635684fb80836e4e.jpg',
-      'https://i.pinimg.com/564x/0d/0a/65/0d0a65ab7a9935b9635684fb80836e4e.jpg',
-      'https://www.iflr.com/Media/images/iflr/1-abstract/AdobeStock_324008934.jpeg',
-      'https://ichef.bbci.co.uk/news/1024/cpsprodpb/151AB/production/_111434468_gettyimages-1143489763.jpg',
-      'https://static01.nyt.com/images/2020/04/22/science/22VIRUS-PETCATS1/22VIRUS-PETCATS1-mediumSquareAt3X.jpg',
-      'https://www.humanesociety.org/sites/default/files/styles/1240x698/public/2020-07/cat-410261.jpg?h=191a1c11&itok=c4ksCwxz',
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLkK5QsywkQyr89y6adF2dgs96uAbsWHD_fg&usqp=CAU'
-    ];
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: StaggeredGridView.count(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
-          crossAxisCount: 3,
-          staggeredTiles: list.map((_) => StaggeredTile.fit(1)).toList(),
-          children: List.generate(list.length, (index) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
-              child: ImageViewNetwork(url: list[index]),
+          crossAxisCount: 2,
+          staggeredTiles:
+              petBloc.pets.map((_) => StaggeredTile.fit(1)).toList(),
+          children: List.generate(petBloc.pets.length, (index) {
+            return PetCard(
+              pet: petBloc.pets[index],
+              onTap: () => navigatorKey.currentState.maybePop(),
             );
           }),
         ),
@@ -409,99 +348,82 @@ class OwnerPictureWidget extends StatelessWidget {
   }
 }
 
-class OwnerVideoWidget extends StatelessWidget {
+class PetCard extends StatelessWidget {
+  final PetModel pet;
+  final Function onTap;
+
+  const PetCard({Key key, this.pet, this.onTap}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    final list = [];
-    return list.length != 0
-        ? SingleChildScrollView(
-            child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: StaggeredGridView.count(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  crossAxisCount: 3,
-                  staggeredTiles:
-                      list.map((_) => StaggeredTile.fit(1)).toList(),
-                  children: List.generate(list.length, (index) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 2, vertical: 4),
-                      child: ImageViewNetwork(url: list[index]),
-                    );
-                  }),
-                )),
-          )
-        : Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+    return Padding(
+      padding: const EdgeInsets.all(6),
+      child: GestureDetector(
+        onTap: onTap,
+        child: Card(
+          elevation: 6,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(6),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                  width: deviceWidth(context) / 4,
-                  child: Image.asset('assets/image/logo.png')),
-              SpacingBox(h: 2),
-              SizedBox(
-                width: deviceWidth(context) / 1.4,
-                child: Text(
-                  'Mick does not have any videos yet',
-                  style: ptBigBody(),
-                  textAlign: TextAlign.center,
+              ClipRRect(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10),
+                  topRight: Radius.circular(10),
+                ),
+                child: SizedBox(
+                  width: deviceWidth(context) / 2,
+                  height: deviceWidth(context) / 2 - 20,
+                  child: Image.network(
+                    pet.avatar,
+                    fit: BoxFit.fitWidth,
+                  ),
                 ),
               ),
-              SpacingBox(h: 5),
+              Padding(
+                padding: const EdgeInsets.all(10).copyWith(bottom: 5),
+                child: Row(
+                  children: [
+                    Text(
+                      pet.name,
+                      maxLines: null,
+                      style: ptTitle().copyWith(
+                        color: ptPrimaryColor(context),
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                    SizedBox(width: 6),
+                    Text('1 tuổi'),
+                    Spacer(),
+                    if (pet.gender == 'female'.toUpperCase() ||
+                        pet.gender == null)
+                      Icon(
+                        MdiIcons.genderMale,
+                        size: 14,
+                        color: ptPrimaryColor(context),
+                      ),
+                    if (pet.gender == 'male'.toUpperCase() ||
+                        pet.gender == null)
+                      Icon(
+                        MdiIcons.genderMale,
+                        size: 14,
+                        color: ptPrimaryColor(context),
+                      ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10).copyWith(top: 0),
+                child: Text(
+                  pet.race.name,
+                  maxLines: null,
+                  style: ptSmall(),
+                ),
+              )
             ],
-          );
-  }
-}
-
-class OwnerRecordWidget extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Divider(
-            height: 3,
           ),
-          _buildRecordTile(context, 'VACCINES', () {
-            VaccinePage.navigate();
-          }),
-          Divider(
-            height: 3,
-          ),
-          _buildRecordTile(context, 'BIRTHDAYS', () {
-            BirthdayPage.navigate();
-          }),
-          Divider(
-            height: 3,
-          ),
-          _buildRecordTile(context, 'WEIGHTS', () {}),
-          Divider(
-            height: 3,
-          ),
-          _buildRecordTile(context, 'BATHS', () {}),
-          Divider(
-            height: 3,
-          ),
-        ],
-      ),
-    );
-  }
-
-  _buildRecordTile(BuildContext context, String title, Function onTap) {
-    return InkWell(
-      highlightColor: ptAccentColor(context),
-      splashColor: ptPrimaryColor(context),
-      onTap: onTap,
-      child: ListTile(
-        title: Text(
-          title,
-          style: ptTitle().copyWith(
-              fontWeight: FontWeight.w900, color: Colors.black54, fontSize: 14),
-        ),
-        trailing: Icon(
-          MdiIcons.arrowRightCircle,
-          size: 20,
-          color: ptPrimaryColor(context),
         ),
       ),
     );

@@ -8,6 +8,11 @@ uid: String
 name: String
 email: String
 phone: String
+avatar: String
+description: String
+nickName: String
+backgroundimage: String
+follows: [String]
 createdAt: DateTime
 updatedAt: DateTime
   ''');

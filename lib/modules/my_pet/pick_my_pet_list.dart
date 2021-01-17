@@ -22,7 +22,7 @@ class PickMyPetListpage extends StatelessWidget {
             crossAxisCount: 2,
             staggeredTiles: list.map((_) => StaggeredTile.fit(1)).toList(),
             children: List.generate(list.length, (index) {
-              return PetRaceCard(
+              return PetCard(
                 title: list[index]['name'],
                 image: list[index]['img'],
                 onTap: () => navigatorKey.currentState.maybePop(),
@@ -35,12 +35,12 @@ class PickMyPetListpage extends StatelessWidget {
   }
 }
 
-class PetRaceCard extends StatelessWidget {
+class PetCard extends StatelessWidget {
   final String image;
   final String title;
   final Function onTap;
 
-  const PetRaceCard({Key key, this.image, this.title, this.onTap})
+  const PetCard({Key key, this.image, this.title, this.onTap})
       : super(key: key);
 
   @override

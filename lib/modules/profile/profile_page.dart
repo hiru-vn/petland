@@ -148,18 +148,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         SizedBox(height: 3),
                         GestureDetector(
                           onTap: () {
-                            OwnerProfilePage.navigate(
-                                birthdate: DateTime.now(),
-                                gender: 'male',
-                                bgUrl:
-                                    'https://www.coversden.com/images/covers/1/690.jpg',
-                                imgUrl:
-                                    'https://ca-times.brightspotcdn.com/dims4/default/33c083b/2147483647/strip/true/crop/1611x906+0+0/resize/840x472!/quality/90/?url=https%3A%2F%2Fcalifornia-times-brightspot.s3.amazonaws.com%2Ffd%2Fef%2F05c1aab3e76c3d902aa0548c0046%2Fla-la-hm-pet-issue-18-jpg-20150615',
-                                name: 'John Carlar',
-                                nickName: 'Brocat',
-                                country: 'Viet Nam',
-                                description: 'I love cats a lot',
-                                email: 'carla123love@gmail.com');
+                            OwnerProfilePage.navigate();
                           },
                           child: Text(
                             'Change profile infomation',
