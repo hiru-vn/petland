@@ -1,18 +1,28 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:path/path.dart' as path;
 import 'package:petland/modules/authentication/auth_bloc.dart';
-import 'package:petland/modules/inbox/voice_call_page.dart';
-import 'package:petland/share/import.dart';
 import 'package:dash_chat/dash_chat.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:petland/navigator.dart';
+import 'package:petland/share/widgets/page_builder.dart';
+import 'package:petland/themes/font.dart';
 import 'package:petland/utils/file_util.dart';
 import 'package:popup_menu/popup_menu.dart';
+import 'package:provider/provider.dart';
 
 import 'google_map_widget.dart';
+import 'import/animated_search_bar.dart';
+import 'import/app_bar.dart';
+import 'import/color.dart';
+import 'import/image_picker.dart';
+import 'import/image_view.dart';
+import 'import/video_view.dart';
 import 'inbox_bloc.dart';
 import 'inbox_model.dart';
 import 'video_call_page.dart';
+import 'voice_call_page.dart';
 
 class InboxChat extends StatefulWidget {
   final FbInboxGroupModel group;
@@ -20,6 +30,7 @@ class InboxChat extends StatefulWidget {
 
   InboxChat(this.group, this.title);
   static Future navigate(FbInboxGroupModel group, String title) {
+    // navigatorKey in MaterialApp
     return navigatorKey.currentState.push(pageBuilder(InboxChat(group, title)));
   }
 
@@ -52,7 +63,8 @@ class _InboxChatState extends State<InboxChat> {
   void didChangeDependencies() {
     if (_inboxBloc == null || _authBloc == null) {
       _inboxBloc = Provider.of<InboxBloc>(context);
-      _authBloc = Provider.of<AuthBloc>(context);
+      _authBloc = Provider.of<AuthBloc>(
+          context); // this just to get userId, avatar, name. you can replace this with your params
       loadUsers().then((value) => initMenu());
       loadFirst20Message();
     }
@@ -268,7 +280,7 @@ class _InboxChatState extends State<InboxChat> {
         actions: [
           Center(
             child: AnimatedSearchBar(
-              width: deviceWidth(context) / 2,
+              width: MediaQuery.of(context).size.width / 2,
               height: 40,
             ),
           ),
@@ -408,7 +420,7 @@ class _InboxChatState extends State<InboxChat> {
                         Container(
                           decoration: BoxDecoration(
                               color: ptPrimaryColorLight(context)),
-                          width: deviceWidth(context) - 30,
+                          width: MediaQuery.of(context).size.width - 30,
                           padding: EdgeInsets.symmetric(
                               vertical: 20, horizontal: 10),
                           child: Row(
@@ -419,12 +431,16 @@ class _InboxChatState extends State<InboxChat> {
                                 onTap: () async {
                                   await navigatorKey.currentState.maybePop();
                                   showGoogleMap(context,
-                                      height: deviceHeight(context) -
-                                          kToolbarHeight -
-                                          500);
+                                      height:
+                                          MediaQuery.of(context).size.height -
+                                              kToolbarHeight -
+                                              500);
                                 },
                               ),
-                              SpacingBox(w: 6),
+                              SizedBox(
+                                width:
+                                    MediaQuery.of(context).size.width * 6 / 100,
+                              ),
                               ActionItem(
                                 img: 'assets/image/invite_chat.jpg',
                                 name: 'Invite',

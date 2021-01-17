@@ -1,7 +1,15 @@
+import 'package:flutter/material.dart';
 import 'package:petland/modules/authentication/auth_bloc.dart';
+import 'package:petland/navigator.dart';
+import 'package:provider/provider.dart';
 
-import 'package:petland/share/import.dart';
-
+import 'import/animated_search_bar.dart';
+import 'import/app_bar.dart';
+import 'import/color.dart';
+import 'import/font.dart';
+import 'import/formart.dart';
+import 'import/page_builder.dart';
+import 'import/spin_loader.dart';
 import 'inbox_bloc.dart';
 import 'inbox_chat.dart';
 import 'inbox_model.dart';
@@ -61,7 +69,7 @@ class _InboxListState extends State<InboxList>
         actions: [
           Center(
             child: AnimatedSearchBar(
-              width: deviceWidth(context) / 2,
+              width: MediaQuery.of(context).size.width / 2,
               height: 40,
             ),
           ),

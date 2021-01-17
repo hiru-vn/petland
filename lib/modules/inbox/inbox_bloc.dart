@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:petland/utils/spref.dart';
 
 import 'inbox_model.dart';
 
@@ -61,7 +60,7 @@ class InboxBloc extends ChangeNotifier {
       'uid': uid,
       'fullName': fullName,
       'avatar': avatar,
-      'filePath': filePath.isNotEmpty ? filePath : null
+      'filePath': filePath==null ? null: (filePath.isNotEmpty ? filePath : null)
     });
   }
 
@@ -163,14 +162,5 @@ class InboxBloc extends ChangeNotifier {
   Future<String> getName({id}) async {
     final snapShot = await firestore.collection(userCollection).doc(id).get();
     return snapShot.data()['name'];
-  }
-
-  Future<void> getDetails({id}) async {
-    var doc = firestore.collection(userCollection).doc();
-    var checkData = await doc.get();
-    if (checkData == null) return;
-    await SPref.instance.set('id', checkData.data()['id']);
-    await SPref.instance.set('name', checkData.data()['name']);
-    await SPref.instance.set('image', checkData.data()['image']);
   }
 }

@@ -5,8 +5,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:petland/share/import.dart';
+import 'package:petland/navigator.dart';
 
+import 'import/page_builder.dart';
 import 'inbox_model.dart';
 import 'video_call_page.dart';
 
@@ -170,8 +171,8 @@ class _VoiceCallPageState extends State<VoiceCallPage> {
     List<Widget> list = [
       Center(
         child: SizedBox(
-            width: deviceWidth(context) / 6,
-            height: deviceWidth(context) / 6,
+            width: MediaQuery.of(context).size.width / 6,
+            height:MediaQuery.of(context).size.width / 6,
             child: Image.asset(
               'assets/image/avatar.png',
               fit: BoxFit.cover,
@@ -181,8 +182,8 @@ class _VoiceCallPageState extends State<VoiceCallPage> {
     _users.forEach((int uid) => {
           list.add(Center(
             child: SizedBox(
-                width: deviceWidth(context) / 6,
-                height: deviceWidth(context) / 6,
+                width: MediaQuery.of(context).size.width / 6,
+                height: MediaQuery.of(context).size.width / 6,
                 child: Image.asset(
                   'assets/image/avatar.png',
                   fit: BoxFit.cover,
@@ -275,8 +276,8 @@ class _VoiceCallPageState extends State<VoiceCallPage> {
                   onPressed: () => _switchSpeakerphone(),
                   child: Icon(
                     enableSpeakerphone
-                        ? MdiIcons.volumeHigh
-                        : MdiIcons.volumeLow,
+                        ? Icons.volume_up
+                        : Icons.volume_down,
                     color:
                         enableSpeakerphone ? Colors.white : Colors.blueAccent,
                     size: 20.0,

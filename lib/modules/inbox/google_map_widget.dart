@@ -3,16 +3,14 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:async';
 import 'package:geolocator/geolocator.dart';
 
-import 'package:petland/utils/constants.dart';
-
 showGoogleMap(BuildContext context, {double height}) {
-  if (height == null) height = deviceHeight(context) - kToolbarHeight;
+  if (height == null) height = MediaQuery.of(context).size.height - kToolbarHeight;
   showDialog(
       context: context,
       useRootNavigator: true,
       builder: (context) {
         return SizedBox(
-            width: deviceWidth(context),
+            width: MediaQuery.of(context).size.width,
             height: height,
             child: GoogleMapWidget());
       });
