@@ -7,9 +7,9 @@ import 'package:petland/modules/inbox/inbox_model.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:petland/navigator.dart';
 
+import 'app_id.dart';
 import 'import/page_builder.dart';
 
-const APP_ID = "96062bbe35dd4241a7d430b1294e8bed";
 
 /// MultiChannel Example
 class VideoCallPage extends StatefulWidget {
