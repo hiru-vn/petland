@@ -2,6 +2,7 @@ import 'package:petland/model/post.dart';
 import 'package:petland/modules/story/comment_page.dart';
 import 'package:petland/share/functions/share_to.dart';
 import 'package:petland/share/import.dart';
+import 'package:popup_menu/popup_menu.dart';
 
 class StoryWidget extends StatefulWidget {
   final Post post;
@@ -14,9 +15,18 @@ class StoryWidget extends StatefulWidget {
 
 class _StoryWidgetState extends State<StoryWidget> {
   bool _isLike = false;
+  GlobalKey<State<StatefulWidget>> moreBtnKey =
+      GlobalKey<State<StatefulWidget>>();
+
+  @override
+  void initState() {
+    initMenu();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    PopupMenu.context = context;
     return Stack(
       children: [
         Container(
@@ -58,11 +68,14 @@ class _StoryWidgetState extends State<StoryWidget> {
                         ]),
                     Spacer(),
                     IconButton(
+                        key: moreBtnKey,
                         icon: Icon(
                           Icons.more_horiz,
                           color: Colors.white,
                         ),
-                        onPressed: () {}),
+                        onPressed: () {
+                          menu.show(widgetKey: moreBtnKey);
+                        }),
                   ],
                 ),
               ),
@@ -171,4 +184,30 @@ class _StoryWidgetState extends State<StoryWidget> {
       ],
     );
   }
+
+  initMenu() {
+    menu = PopupMenu(
+        items: [
+          MenuItem(
+              title: 'Save post',
+              image: Icon(
+                Icons.post_add,
+                color: Colors.white,
+              )),
+          MenuItem(
+              title: 'Report',
+              image: Icon(
+                Icons.report,
+                color: Colors.white,
+              )),
+        ],
+        onClickMenu: (val) {
+          if (val.menuTitle == 'Voice call') {}
+          if (val.menuTitle == 'Video call') {}
+        },
+        stateChanged: (val) {},
+        onDismiss: () {});
+  }
+
+  PopupMenu menu;
 }

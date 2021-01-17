@@ -24,7 +24,8 @@ void imagePicker(BuildContext context,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  title ?? 'Chọn ảnh và video từ điện thoại',
+                  title ??
+                      'Chọn ảnh ${onVideoPick != null ? 'và video ' : ''}từ điện thoại',
                   style: TextStyle(
                       fontWeight: FontWeight.bold, color: Color(0xff696969)),
                 ),

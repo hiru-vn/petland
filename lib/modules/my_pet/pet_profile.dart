@@ -157,11 +157,7 @@ class PetProfileHeader extends StatelessWidget {
                 if (imageCover != null)
                   SizedBox(
                       width: deviceWidth(context),
-                      child: Image.network(
-                        imageCover,
-                        fit: BoxFit.cover,
-                        errorBuilder: imageNetworkErrorBuilder,
-                      )),
+                      child: ImageViewNetwork(url: imageCover)),
               ],
             ),
           ),
@@ -179,7 +175,7 @@ class PetProfileHeader extends StatelessWidget {
               child: imgUrl != null
                   ? ClipRRect(
                       borderRadius: BorderRadius.circular(55),
-                      child: Image.network(imgUrl, fit: BoxFit.cover))
+                      child: ImageViewNetwork(url: imgUrl))
                   : Icon(
                       MdiIcons.camera,
                       size: 70,

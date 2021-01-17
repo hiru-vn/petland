@@ -313,7 +313,7 @@ class _InboxChatState extends State<InboxChat> {
           if (FileUtil.getFbUrlFileType(url) == FileType.image)
             return Padding(
               padding: const EdgeInsets.all(8.0),
-              child: ImageViewNetwork(url: url),
+              child: ImageViewNetwork(url: url, borderRadius: 10,),
             );
 
           return SizedBox.shrink();

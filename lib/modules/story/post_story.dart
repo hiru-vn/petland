@@ -17,7 +17,14 @@ class _PostStoryState extends State<PostStory> {
   FocusNode _activityNode = FocusNode();
 
   @override
+  void initState() {
+    
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    
     return Container(
       width: deviceWidth(context),
       height: deviceHeight(context),
@@ -226,4 +233,6 @@ class _PostStoryState extends State<PostStory> {
       ],
     );
   }
+
+  
 }

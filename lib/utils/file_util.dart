@@ -48,12 +48,12 @@ class FileUtil {
     }
   }
 
-  static Future<String> uploadFireStorage(File file, {String path}) async {
+  static Future<String> uploadFireStorage(File file, { String path}) async {
     if (file == null) return '';
     try {
       Reference storageReference = FirebaseStorage.instance
           .ref()
-          .child('${path ?? 'chats'}/${Path.basename(file.path)}');
+          .child('${path ?? 'root'}/${Path.basename(file.path)}');
       UploadTask uploadTask = storageReference.putFile(file);
       await uploadTask.whenComplete(() {});
       print('File Uploaded');
