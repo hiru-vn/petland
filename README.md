@@ -2,6 +2,10 @@
 
 ---
 
+This project contains a chat module that work independently with the backend side and rest of the app, it use agora, firebase only and can be reuseable
+- Come here for chat module only?, i have a readme to intergrate it [here](https://github.com/huynguyen1999kh/petland/blob/master/lib/modules/inbox/readme.md)
+It is not fully optimize and missing some features like google map, update comming everyday
+
 # Installation
 
 - Download [release apk](https://drive.google.com/drive/u/0/folders/1NTpdjdrbaAerhSdNzggW_sLLZ0GkhyCT)
