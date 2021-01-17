@@ -14,21 +14,10 @@ import 'inbox_bloc.dart';
 import 'inbox_chat.dart';
 import 'inbox_model.dart';
 
-class InboxBlocProvider extends StatelessWidget {
-  static Future navigate() {
-    return navigatorKey.currentState.push(pageBuilder(InboxBlocProvider()));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => InboxBloc.instance,
-      child: InboxList(),
-    );
-  }
-}
-
 class InboxList extends StatefulWidget {
+  static Future navigate() {
+    return navigatorKey.currentState.push(pageBuilder(InboxList()));
+  }
 
   @override
   _InboxListState createState() => _InboxListState();

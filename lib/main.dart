@@ -58,6 +58,9 @@ class Petland extends StatelessWidget {
                     create: (context) => AuthBloc.instance,
                   ),
                   ChangeNotifierProvider(
+                    create: (context) => InboxBloc.instance,
+                  ),
+                  ChangeNotifierProvider(
                     create: (context) => PetBloc.instance,
                   ),
                   ChangeNotifierProvider(
