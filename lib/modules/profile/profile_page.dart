@@ -119,17 +119,19 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: Row(
                   children: [
                     Container(
-                      width: 57,
-                      height: 57,
+                      width: 54,
+                      height: 54,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border:
-                            Border.all(width: 1.5, color: ptDarkColor(context)),
+                            Border.all(width: 1.3, color: ptDarkColor(context)),
                       ),
                       child: Center(
                         child: CircleAvatar(
-                          radius: 26,
-                          backgroundImage: AssetImage('assets/image/cat1.png'),
+                          radius: 25,
+                          backgroundImage: _authBloc.userModel.avatar != null
+                              ? NetworkImage(_authBloc.userModel.avatar)
+                              : AssetImage('assets/image/avatar.png'),
                         ),
                       ),
                     ),
