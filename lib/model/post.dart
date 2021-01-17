@@ -44,10 +44,12 @@ var postData = [
 class PostModel {
   String id;
   String content;
-  List<String> image;
-  List<String> video;
+  List<String> images;
+  List<String> videos;
   List<String> commentIds;
   int like;
+  List<String> tags;
+  List<String> petTags;
   int share;
   User user;
   String userId;
@@ -57,10 +59,12 @@ class PostModel {
   PostModel(
       {this.id,
       this.content,
-      this.image,
-      this.video,
+      this.images,
+      this.videos,
       this.commentIds,
       this.like,
+      this.tags,
+      this.petTags,
       this.share,
       this.user,
       this.userId,
@@ -70,10 +74,12 @@ class PostModel {
   PostModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     content = json['content'];
-    image = json['image'].cast<String>();
-    video = json['video'].cast<String>();
+    images = json['images'].cast<String>();
+    videos = json['videos'].cast<String>();
     commentIds = json['commentIds'].cast<String>();
     like = json['like'];
+    tags = json['tags'].cast<String>();
+    petTags = json['petTags'].cast<String>();
     share = json['share'];
     user = json['user'] != null ? new User.fromJson(json['user']) : null;
     userId = json['userId'];
@@ -85,10 +91,12 @@ class PostModel {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['content'] = this.content;
-    data['image'] = this.image;
-    data['video'] = this.video;
+    data['images'] = this.images;
+    data['videos'] = this.videos;
     data['commentIds'] = this.commentIds;
     data['like'] = this.like;
+    data['tags'] = this.tags;
+    data['petTags'] = this.petTags;
     data['share'] = this.share;
     if (this.user != null) {
       data['user'] = this.user.toJson();

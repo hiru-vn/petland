@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:petland/bloc/pet_bloc.dart';
+import 'package:petland/bloc/post_bloc.dart';
 import 'package:petland/modules/authentication/auth_bloc.dart';
 import 'package:petland/modules/authentication/splash.dart';
 import 'package:petland/modules/inbox/inbox_bloc.dart';
@@ -57,10 +58,10 @@ class Petland extends StatelessWidget {
                     create: (context) => AuthBloc.instance,
                   ),
                   ChangeNotifierProvider(
-                    create: (context) => InboxBloc.instance,
+                    create: (context) => PetBloc.instance,
                   ),
                   ChangeNotifierProvider(
-                    create: (context) => PetBloc.instance,
+                    create: (context) => PostBloc.instance,
                   ),
                 ],
                 child: MaterialApp(

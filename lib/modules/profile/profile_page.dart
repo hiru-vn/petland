@@ -105,7 +105,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 size: 21,
               ),
               onPressed: () {
-                InboxList.navigate();
+                InboxBlocProvider.navigate();
               }),
         ],
       ),

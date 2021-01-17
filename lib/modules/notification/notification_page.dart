@@ -29,7 +29,7 @@ class _NotificationPageState extends State<NotificationPage>
                 size: 21,
               ),
               onPressed: () {
-                InboxList.navigate();
+                InboxBlocProvider.navigate();
               }),
         ],
       ),
