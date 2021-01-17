@@ -1,6 +1,7 @@
 Step to intergrate inbox module:
 
 - copy lib/modules/inbox folder to your project
+- import your navigatorKey from your MaterialApp to it
 - create your firebase project
 - enable firestorage and firestore in your firebase project
 - get an account at agora.io
