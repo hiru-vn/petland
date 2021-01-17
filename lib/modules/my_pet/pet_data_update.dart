@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:petland/bloc/pet_bloc.dart';
 import 'package:petland/model/pet.dart';
 import 'package:petland/modules/my_pet/pet_race.dart';
 import 'package:petland/share/import.dart';
+import 'package:petland/utils/file_util.dart';
 
 class PetDataUpdatePage extends StatefulWidget {
   final String petId;
@@ -88,14 +91,33 @@ class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
     if (confirm) {
       final res = await _petBloc.deletePet(_pet.id);
       if (!res.isSuccess) {
-        showToast(
-            'Có lỗi xảy ra, vui lòng thử lại', context);
+        showToast('Có lỗi xảy ra, vui lòng thử lại', context);
       }
       await navigatorKey.currentState.maybePop();
       await navigatorKey.currentState.maybePop();
     }
     setState(() {
       isLoading = false;
+    });
+  }
+
+  _updateAvatar(String filePath) async {
+    setState(() {
+      _pet.avatar = loadingGif;
+    });
+    final url = await FileUtil.uploadFireStorage(File(filePath));
+    setState(() {
+      _pet.avatar = url;
+    });
+  }
+
+  _updateCoverImage(String filePath) async {
+    setState(() {
+      _pet.coverImage = loadingGif;
+    });
+    final url = await FileUtil.uploadFireStorage(File(filePath));
+    setState(() {
+      _pet.coverImage = url;
     });
   }
 
@@ -163,13 +185,14 @@ class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
                 ),
                 if (imageCover != null)
                   GestureDetector(
-                    onTap: () {
+                    onLongPress: () {
                       imagePicker(context,
-                          onCameraPick: (url) {}, onImagePick: (url) {});
+                          onCameraPick: _updateCoverImage,
+                          onImagePick: _updateCoverImage);
                     },
                     child: SizedBox(
                         width: deviceWidth(context),
-                        child: Image.network(imageCover, fit: BoxFit.cover)),
+                        child: ImageViewNetwork(url: imageCover)),
                   ),
               ],
             ),
@@ -186,13 +209,27 @@ class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
                 border: Border.all(width: 2.5, color: Colors.white),
               ),
               child: imgUrl != null
-                  ? ClipRRect(
-                      borderRadius: BorderRadius.circular(55),
-                      child: Image.network(imgUrl, fit: BoxFit.cover))
-                  : Icon(
-                      MdiIcons.camera,
-                      size: 70,
-                      color: Colors.white30,
+                  ? GestureDetector(
+                      onLongPress: () {
+                        imagePicker(context,
+                            onCameraPick: _updateAvatar,
+                            onImagePick: _updateAvatar);
+                      },
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.circular(55),
+                          child: ImageViewNetwork(url: imgUrl)),
+                    )
+                  : GestureDetector(
+                      onTap: () {
+                        imagePicker(context,
+                            onCameraPick: _updateAvatar,
+                            onImagePick: _updateAvatar);
+                      },
+                      child: Icon(
+                        MdiIcons.camera,
+                        size: 70,
+                        color: Colors.white30,
+                      ),
                     ),
             ),
           ),

@@ -7,7 +7,8 @@ class ImageViewNetwork extends StatelessWidget {
   final String url;
   final String tag;
   final int w, h;
-  ImageViewNetwork({@required this.url, this.tag, this.w, this.h});
+  final double borderRadius;
+  ImageViewNetwork({@required this.url, this.tag, this.w, this.h, this.borderRadius = 0});
   @override
   Widget build(BuildContext context) {
     String genTag = tag ?? url + Random().nextInt(10000000).toString();
@@ -23,7 +24,7 @@ class ImageViewNetwork extends StatelessWidget {
         }));
       },
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(borderRadius),
         child: Image.network(
           url,
           fit: BoxFit.cover,
