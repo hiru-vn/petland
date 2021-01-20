@@ -14,19 +14,20 @@ class PetModel {
   String createdAt;
   String updatedAt;
 
-  PetModel(
-      {this.id,
-      this.name,
-      this.raceId,
-      this.birthday,
-      this.gender,
-      this.character,
-      this.userId,
-      this.avatar,
-      this.coverImage,
-      this.race,
-      this.createdAt,
-      this.updatedAt});
+  PetModel({
+    this.id,
+    this.name,
+    this.raceId,
+    this.birthday,
+    this.gender,
+    this.character,
+    this.userId,
+    this.avatar,
+    this.coverImage,
+    this.race,
+    this.createdAt,
+    this.updatedAt,
+  });
 
   PetModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -59,7 +60,7 @@ class PetModel {
     }
     data['createdAt'] = this.createdAt;
     data['updatedAt'] = this.updatedAt;
+    
     return data;
   }
 }
-

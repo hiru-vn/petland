@@ -1,16 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:petland/model/post.dart';
+import 'package:petland/bloc/post_bloc.dart';
 import 'package:petland/modules/story/story_appbar.dart';
 import 'package:petland/modules/story/story_widget.dart';
 import 'package:petland/share/import.dart';
 
-class StoryPage extends StatelessWidget {
+class StoryPage extends StatefulWidget {
+  @override
+  _StoryPageState createState() => _StoryPageState();
+}
+
+class _StoryPageState extends State<StoryPage> {
+  PostBloc _postBloc;
+
+  @override
+  void didChangeDependencies() {
+    if (_postBloc == null) {
+      _postBloc = Provider.of<PostBloc>(context);
+      _postBloc.getListPost();
+    }
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: StoryAppbar(
-       
-      ),
+      appBar: StoryAppbar(),
       body: SafeArea(
         child: Stack(
           children: [
@@ -21,7 +35,7 @@ class StoryPage extends StatelessWidget {
                 bottom: 0,
                 child: PageView(
                   scrollDirection: Axis.vertical,
-                  children: postData.map((e) => StoryWidget(post: e)).toList(),
+                  children: _postBloc.posts.map((e) => StoryWidget(post: e)).toList(),
                 )),
           ],
         ),

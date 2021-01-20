@@ -1,45 +1,4 @@
-class Post {
-  String ownerName;
-  String petName;
-  DateTime time;
-  String content;
-  List<String> images;
-
-  Post({this.content, this.images, this.ownerName, this.time, this.petName});
-}
-
-var postData = [
-  Post(
-      content:
-          'Me getting off the bed on Monday morning, realize im just a cat and aint do nothing',
-      images: [
-        'assets/image/cat1.png',
-        'assets/image/cat2.png',
-        'assets/image/cat3.png'
-      ],
-      petName: 'Fat man',
-      ownerName: 'PetChoy'),
-  Post(
-      content:
-          'Me getting off the bed on Monday morning, realize im just a cat and aint do nothing',
-      images: [
-        'assets/image/cat1.png',
-        'assets/image/cat2.png',
-        'assets/image/cat3.png'
-      ],
-      petName: 'Fat man',
-      ownerName: 'PetChoy'),
-  Post(
-      content:
-          'Me getting off the bed on Monday morning, realize im just a cat and aint do nothing',
-      images: [
-        'assets/image/cat1.png',
-        'assets/image/cat2.png',
-        'assets/image/cat3.png'
-      ],
-      petName: 'Fat man',
-      ownerName: 'PetChoy'),
-];
+import 'user.dart';
 
 class PostModel {
   String id;
@@ -51,10 +10,11 @@ class PostModel {
   List<String> tags;
   List<String> petTags;
   int share;
-  User user;
+  UserModel user;
   String userId;
   String createdAt;
   String updatedAt;
+  bool makePublic;
 
   PostModel(
       {this.id,
@@ -69,7 +29,8 @@ class PostModel {
       this.user,
       this.userId,
       this.createdAt,
-      this.updatedAt});
+      this.updatedAt,
+      this.makePublic});
 
   PostModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -81,10 +42,11 @@ class PostModel {
     tags = json['tags'].cast<String>();
     petTags = json['petTags'].cast<String>();
     share = json['share'];
-    user = json['user'] != null ? new User.fromJson(json['user']) : null;
+    user = json['user'] != null ? UserModel.fromJson(json['user']) : null;
     userId = json['userId'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
+    makePublic = json['makePublic'] ?? true;
   }
 
   Map<String, dynamic> toJson() {
@@ -104,59 +66,7 @@ class PostModel {
     data['userId'] = this.userId;
     data['createdAt'] = this.createdAt;
     data['updatedAt'] = this.updatedAt;
-    return data;
-  }
-}
-
-class User {
-  String id;
-  String uid;
-  String name;
-  String email;
-  String phone;
-  String avatar;
-  String description;
-  String nickName;
-  String backgroundimage;
-  List<String> follows;
-
-  User(
-      {this.id,
-      this.uid,
-      this.name,
-      this.email,
-      this.phone,
-      this.avatar,
-      this.description,
-      this.nickName,
-      this.backgroundimage,
-      this.follows});
-
-  User.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    uid = json['uid'];
-    name = json['name'];
-    email = json['email'];
-    phone = json['phone'];
-    avatar = json['avatar'];
-    description = json['description'];
-    nickName = json['nickName'];
-    backgroundimage = json['backgroundimage'];
-    follows = json['follows'].cast<String>();
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['uid'] = this.uid;
-    data['name'] = this.name;
-    data['email'] = this.email;
-    data['phone'] = this.phone;
-    data['avatar'] = this.avatar;
-    data['description'] = this.description;
-    data['nickName'] = this.nickName;
-    data['backgroundimage'] = this.backgroundimage;
-    data['follows'] = this.follows;
+    data['makePublic'] = this.makePublic;
     return data;
   }
 }

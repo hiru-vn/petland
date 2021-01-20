@@ -1,3 +1,4 @@
+import 'package:petland/bloc/post_bloc.dart';
 import 'package:petland/model/post.dart';
 import 'package:petland/modules/story/comment_page.dart';
 import 'package:petland/share/functions/share_to.dart';
@@ -5,7 +6,7 @@ import 'package:petland/share/import.dart';
 import 'package:popup_menu/popup_menu.dart';
 
 class StoryWidget extends StatefulWidget {
-  final Post post;
+  final PostModel post;
 
   const StoryWidget({Key key, this.post}) : super(key: key);
 
@@ -14,14 +15,25 @@ class StoryWidget extends StatefulWidget {
 }
 
 class _StoryWidgetState extends State<StoryWidget> {
+  PostModel _post;
+  PostBloc _postBloc;
   bool _isLike = false;
   GlobalKey<State<StatefulWidget>> moreBtnKey =
       GlobalKey<State<StatefulWidget>>();
 
   @override
   void initState() {
+    _post = widget.post;
     initMenu();
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_postBloc == null) {
+      _postBloc = Provider.of<PostBloc>(context);
+    }
+    super.didChangeDependencies();
   }
 
   @override
@@ -48,17 +60,20 @@ class _StoryWidgetState extends State<StoryWidget> {
                           RichText(
                             text: TextSpan(children: [
                               TextSpan(
-                                text: widget.post.ownerName,
+                                text: _post.user?.name.toString(),
                                 style: ptTitle().copyWith(color: Colors.white),
                               ),
-                              TextSpan(
-                                text: ' with ',
-                                style: ptBody().copyWith(color: Colors.white),
-                              ),
-                              TextSpan(
-                                text: widget.post.petName,
-                                style: ptTitle().copyWith(color: Colors.white),
-                              ),
+                              if (_post.petTags.length > 0) ...[
+                                TextSpan(
+                                  text: ' with ',
+                                  style: ptBody().copyWith(color: Colors.white),
+                                ),
+                                TextSpan(
+                                  text: _post.petTags[0]?.toString(),
+                                  style:
+                                      ptTitle().copyWith(color: Colors.white),
+                                ),
+                              ],
                             ]),
                           ),
                           Text(
@@ -79,11 +94,14 @@ class _StoryWidgetState extends State<StoryWidget> {
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Text(
-                  widget.post.content,
-                  style: TextStyle(color: Colors.white),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: Text(
+                    widget.post.content,
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               ),
               SpacingBox(h: 1),
@@ -91,14 +109,14 @@ class _StoryWidgetState extends State<StoryWidget> {
                 padding: const EdgeInsets.all(8.0),
                 child: Image.asset(widget.post.images[0]),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0).copyWith(top: 0),
-                child: Row(children: [
-                  Image.asset(widget.post.images[1]),
-                  SizedBox(width: 8),
-                  Image.asset(widget.post.images[2]),
-                ]),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.all(8.0).copyWith(top: 0),
+              //   child: Row(children: [
+              //     Image.asset(widget.post.images[1]),
+              //     SizedBox(width: 8),
+              //     Image.asset(widget.post.images[2]),
+              //   ]),
+              // ),
             ],
           ),
         ),
@@ -115,6 +133,11 @@ class _StoryWidgetState extends State<StoryWidget> {
                 onTap: () {
                   setState(() {
                     _isLike = !_isLike;
+                    if (_isLike) {
+                      _postBloc.likePost(_post.id);
+                    } else {
+                      _postBloc.unlikePost(_post.id);
+                    }
                   });
                 },
                 child: Icon(

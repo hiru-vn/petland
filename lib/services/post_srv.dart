@@ -1,14 +1,16 @@
-
 import 'base_graphql.dart';
 
 class PostSrv extends BaseService {
-  PostSrv()  : super(module: 'Post', fragment: ''' 
+  PostSrv() : super(module: 'Post', fragment: ''' 
 id
 content
-image
-video
+images
+videos
 commentIds
 like
+makePublic
+tags
+petTags
 share
 user {
 id

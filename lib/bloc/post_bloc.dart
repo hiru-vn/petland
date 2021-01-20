@@ -11,8 +11,7 @@ class PostBloc extends ChangeNotifier {
 
   Future<BaseResponse> getListPost() async {
     try {
-      final String id = await SPref.instance.get('id');
-      final res = await PostRepo().getList(userId: id);
+      final res = await PostRepo().getList();
       final List listRaw = res['data'];
       final list = listRaw.map((e) => PostModel.fromJson(e)).toList();
       posts = list;
@@ -54,6 +53,28 @@ class PostBloc extends ChangeNotifier {
     try {
       final res = await PostRepo().delete(postId: postId);
       posts.removeWhere((element) => element.id == postId);
+      return BaseResponse.success(res);
+    } catch (e) {
+      return BaseResponse.fail(e.message?.toString());
+    } finally {
+      notifyListeners();
+    }
+  }
+
+  Future<BaseResponse> likePost(String postId) async {
+    try {
+      final res = await PostRepo().increaseLikePost(postId: postId);
+      return BaseResponse.success(res);
+    } catch (e) {
+      return BaseResponse.fail(e.message?.toString());
+    } finally {
+      notifyListeners();
+    }
+  }
+
+  Future<BaseResponse> unlikePost(String postId) async {
+    try {
+      final res = await PostRepo().decreaseLikePost(postId: postId);
       return BaseResponse.success(res);
     } catch (e) {
       return BaseResponse.fail(e.message?.toString());
