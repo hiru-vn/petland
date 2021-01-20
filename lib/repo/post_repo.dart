@@ -1,4 +1,5 @@
 import 'package:petland/model/post.dart';
+import 'package:petland/services/comment_srv.dart';
 import 'package:petland/services/post_srv.dart';
 
 class PostRepo {
@@ -31,6 +32,11 @@ class PostRepo {
       'postId: "$postId"',
       fragment: 'id'
     );
+    return res;
+  }
+
+  Future getAllComment({String postId}) async {
+    final res = await CommentSrv().getList(limit: 20);
     return res;
   }
 }
