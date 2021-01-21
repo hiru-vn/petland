@@ -1,7 +1,15 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:petland/bloc/pet_bloc.dart';
+import 'package:petland/bloc/post_bloc.dart';
+import 'package:petland/model/pet.dart';
+import 'package:petland/model/post.dart';
+import 'package:petland/modules/authentication/auth_bloc.dart';
 import 'package:petland/modules/my_pet/pick_my_pet_list.dart';
 import 'package:petland/share/import.dart';
 import 'package:petland/share/widgets/textfield_tag/lib/src/main.dart';
+import 'package:petland/utils/file_util.dart';
 
 class PostStory extends StatefulWidget {
   static navigate() {
@@ -15,16 +23,62 @@ class PostStory extends StatefulWidget {
 class _PostStoryState extends State<PostStory> {
   bool _makePublic = true;
   FocusNode _activityNode = FocusNode();
+  PostBloc _postBloc;
+  List<String> images = [];
+  List<String> videos = [];
+  List<String> tags = [];
+  PetModel pet;
+  TextEditingController _statusC = TextEditingController();
 
   @override
   void initState() {
-    
     super.initState();
   }
 
   @override
+  void didChangeDependencies() {
+    if (_postBloc == null) {
+      _postBloc = Provider.of<PostBloc>(context);
+    }
+
+    super.didChangeDependencies();
+  }
+
+  Future _submit() async {
+    final res = await _postBloc.createPost(PostModel(
+        content: _statusC.text,
+        images: images,
+        videos: videos,
+        petTags: [pet.id],
+        tags: tags,
+        makePublic: _makePublic));
+    if (!res.isSuccess) {
+      showToast(res.errMessage, context);
+    } else {
+      showToast('Đăng thành công', context, isSuccess: true);
+      _postBloc.getListPost();
+      navigatorKey.currentState.maybePop();
+    }
+  }
+
+  Future _upload(String img) async {
+    images.add(loadingGif);
+    setState(() {});
+    final res = await FileUtil.uploadFireStorage(File(img),
+        path: 'pets/user_${AuthBloc.instance.userModel.id}');
+    if (FileUtil.getFbUrlFileType(res) == FileType.image ||
+        FileUtil.getFbUrlFileType(res) == FileType.gif) {
+      images.add(res);
+    }
+    if (FileUtil.getFbUrlFileType(res) == FileType.video) {
+      videos.add(res);
+    }
+    images.remove(loadingGif);
+    setState(() {});
+  }
+
+  @override
   Widget build(BuildContext context) {
-    
     return Container(
       width: deviceWidth(context),
       height: deviceHeight(context),
@@ -68,10 +122,11 @@ class _PostStoryState extends State<PostStory> {
                       child: SizedBox(
                         height: 110,
                         child: ImageRowPicker(
-                          [
-                            'https://media2.giphy.com/media/H4DjXQXamtTiIuCcRU/giphy.gif'
-                          ],
-                          onUpdateListImg: (listImg) {},
+                          images,
+                          onUpdateListImg: (listImg) {
+                            print('as');
+                          },
+                          onAddImg: _upload,
                         ),
                       ),
                     ),
@@ -81,6 +136,7 @@ class _PostStoryState extends State<PostStory> {
                         child: TextField(
                           maxLength: 200,
                           maxLines: null,
+                          controller: _statusC,
                           style: ptBigBody().copyWith(color: Colors.black54),
                           decoration: InputDecoration(
                             border: InputBorder.none,
@@ -107,9 +163,7 @@ class _PostStoryState extends State<PostStory> {
                     ),
                     ExpandRectangleButton(
                       text: 'Post',
-                      onTap: () {
-                        navigatorKey.currentState.maybePop();
-                      },
+                      onTap: _submit,
                     ),
                     SizedBox(
                       height: _activityNode.hasFocus
@@ -137,16 +191,31 @@ class _PostStoryState extends State<PostStory> {
           highlightColor: ptAccentColor(context),
           splashColor: ptPrimaryColor(context),
           onTap: () {
-            PickMyPetListpage.navigate();
+            PickMyPetListpage.navigate().then((value) {
+              if (value != null) {
+                setState(() {
+                  pet = value;
+                });
+              }
+            });
           },
           child: CustomListTile(
             leading: Icon(
               Icons.pets,
               color: Colors.pinkAccent,
             ),
-            title: Text(
-              'Select pet',
-              style: ptTitle(),
+            title: Row(
+              children: [
+                Text(
+                  'Select pet',
+                  style: ptTitle(),
+                ),
+                Spacer(),
+                Text(
+                  pet?.name ?? '',
+                  style: ptBody(),
+                )
+              ],
             ),
             trailing: Icon(
               MdiIcons.arrowRightCircle,
@@ -171,6 +240,7 @@ class _PostStoryState extends State<PostStory> {
               ),
               Expanded(
                 child: TextFieldTags(
+                  initialTags: tags,
                   onTag: (val) {},
                   focusNode: _activityNode,
                   onDelete: (val) {},
@@ -233,6 +303,4 @@ class _PostStoryState extends State<PostStory> {
       ],
     );
   }
-
-  
 }

@@ -1,3 +1,4 @@
+import 'package:petland/bloc/pet_bloc.dart';
 import 'package:petland/bloc/post_bloc.dart';
 import 'package:petland/model/post.dart';
 import 'package:petland/modules/story/comment_page.dart';
@@ -51,7 +52,9 @@ class _StoryWidgetState extends State<StoryWidget> {
                 child: Row(
                   children: [
                     CircleAvatar(
-                      backgroundImage: AssetImage('assets/image/cat1.png'),
+                      backgroundImage: _post.user.avatar != null
+                          ? NetworkImage(_post.user.avatar)
+                          : AssetImage('assets/image/avatar.png'),
                     ),
                     SizedBox(width: 10),
                     Column(
@@ -69,7 +72,13 @@ class _StoryWidgetState extends State<StoryWidget> {
                                   style: ptBody().copyWith(color: Colors.white),
                                 ),
                                 TextSpan(
-                                  text: _post.petTags[0]?.toString(),
+                                  text: (PetBloc.instance.pets.length > 0)
+                                      ? PetBloc.instance.pets
+                                          .firstWhere((element) =>
+                                              element.id ==
+                                              _post.petTags[0]?.toString())
+                                          .name
+                                      : '',
                                   style:
                                       ptTitle().copyWith(color: Colors.white),
                                 ),
@@ -107,7 +116,9 @@ class _StoryWidgetState extends State<StoryWidget> {
               SpacingBox(h: 1),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Image.asset(widget.post.images[0]),
+                child: widget.post.images.length > 0
+                    ? Image.asset(widget.post.images[0])
+                    : Container(),
               ),
               // Padding(
               //   padding: const EdgeInsets.all(8.0).copyWith(top: 0),

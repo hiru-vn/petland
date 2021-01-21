@@ -14,8 +14,14 @@ class ImageRowPicker extends StatefulWidget {
   final bool canRemove;
   final Function(List<String>) onUpdateListImg;
   final Function reloadParent;
+  final Function(String) onAddImg;
+  final Function(String) onRemoveImg;
   ImageRowPicker(this.listImg,
-      {this.onUpdateListImg, this.canRemove = true, this.reloadParent});
+      {this.onUpdateListImg,
+      this.canRemove = true,
+      this.reloadParent,
+      this.onAddImg,
+      this.onRemoveImg});
   @override
   _ImageRowPickerState createState() => _ImageRowPickerState();
 }
@@ -65,6 +71,8 @@ class _ImageRowPickerState extends State<ImageRowPicker>
                         widget.listImg.removeAt(index);
                         setState(() {});
                         //await navigatorKey.currentState.maybePop();
+                        if (widget.onRemoveImg != null)
+                          widget.onRemoveImg(widget.listImg[index]);
                         if (widget.onUpdateListImg != null)
                           widget.onUpdateListImg(widget.listImg);
                         if (widget.reloadParent != null) widget.reloadParent();
@@ -93,8 +101,13 @@ class _ImageRowPickerState extends State<ImageRowPicker>
           return Align(
             alignment: Alignment.bottomCenter,
             child: InkWell(
-              onTap: () => imagePicker(context,
-                  onCameraPick: (str) {}, onImagePick: (str) {}),
+              onTap: () => imagePicker(context, onCameraPick: (str) {
+                if (widget.onAddImg != null) widget.onAddImg(str);
+              }, onImagePick: (str) {
+                if (widget.onAddImg != null) widget.onAddImg(str);
+              }, onVideoPick: (str) {
+                if (widget.onAddImg != null) widget.onAddImg(str);
+              }),
               child: Container(
                 height: 100,
                 width: 100,

@@ -37,8 +37,6 @@ class PostBloc extends ChangeNotifier {
 
   Future<BaseResponse> createPost(PostModel post) async {
     try {
-      final String id = await SPref.instance.get('id');
-      post.userId = id;
       final res = await PostRepo().create(post: post);
       posts.add(PostModel.fromJson(res));
       return BaseResponse.success(res);

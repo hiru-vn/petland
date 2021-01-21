@@ -1,16 +1,29 @@
+import 'package:petland/bloc/pet_bloc.dart';
 import 'package:petland/share/import.dart';
 
-class PickMyPetListpage extends StatelessWidget {
-  static navigate() {
+class PickMyPetListpage extends StatefulWidget {
+  static Future navigate() {
     return navigatorKey.currentState.push(pageBuilder(PickMyPetListpage()));
   }
 
   @override
+  _PickMyPetListpageState createState() => _PickMyPetListpageState();
+}
+
+class _PickMyPetListpageState extends State<PickMyPetListpage> {
+  PetBloc _petBloc;
+
+  @override
+  void didChangeDependencies() {
+    if (_petBloc == null) {
+      _petBloc = Provider.of<PetBloc>(context);
+    }
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final list = [
-      {"name": "Mick", "img": "assets/image/cat1.png"},
-      {"name": "Tô", "img": "assets/image/cat_race_2.jpg"},
-    ];
+    
     return Scaffold(
       appBar: innerAppBar(context, 'My pets'),
       body: SingleChildScrollView(
@@ -20,12 +33,12 @@ class PickMyPetListpage extends StatelessWidget {
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
             crossAxisCount: 2,
-            staggeredTiles: list.map((_) => StaggeredTile.fit(1)).toList(),
-            children: List.generate(list.length, (index) {
+            staggeredTiles: _petBloc.pets.map((_) => StaggeredTile.fit(1)).toList(),
+            children: List.generate(_petBloc.pets.length, (index) {
               return PetCard(
-                title: list[index]['name'],
-                image: list[index]['img'],
-                onTap: () => navigatorKey.currentState.maybePop(),
+                title: _petBloc.pets[index].name,
+                image: _petBloc.pets[index].avatar,
+                onTap: () => navigatorKey.currentState.maybePop(_petBloc.pets[index]),
               );
             }),
           ),
@@ -65,7 +78,7 @@ class PetCard extends StatelessWidget {
                 child: SizedBox(
                   width: deviceWidth(context) / 2,
                   height: deviceWidth(context) / 2 - 20,
-                  child: Image.asset(
+                  child: Image.network(
                     image,
                     fit: BoxFit.fitWidth,
                   ),
