@@ -1,21 +1,22 @@
 import 'package:petland/bloc/pet_bloc.dart';
 import 'package:petland/bloc/post_bloc.dart';
 import 'package:petland/model/post.dart';
+import 'package:petland/modules/authentication/auth_bloc.dart';
 import 'package:petland/modules/story/comment_page.dart';
 import 'package:petland/share/functions/share_to.dart';
 import 'package:petland/share/import.dart';
 import 'package:popup_menu/popup_menu.dart';
 
-class StoryWidget extends StatefulWidget {
+class StoryImageWidget extends StatefulWidget {
   final PostModel post;
 
-  const StoryWidget({Key key, this.post}) : super(key: key);
+  const StoryImageWidget({Key key, this.post}) : super(key: key);
 
   @override
-  _StoryWidgetState createState() => _StoryWidgetState();
+  _StoryImageWidgetState createState() => _StoryImageWidgetState();
 }
 
-class _StoryWidgetState extends State<StoryWidget> {
+class _StoryImageWidgetState extends State<StoryImageWidget> {
   PostModel _post;
   PostBloc _postBloc;
   bool _isLike = false;
@@ -117,15 +118,15 @@ class _StoryWidgetState extends State<StoryWidget> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: widget.post.images.length > 0
-                    ? Image.asset(widget.post.images[0])
+                    ? Image.network(widget.post.images[0])
                     : Container(),
               ),
               // Padding(
               //   padding: const EdgeInsets.all(8.0).copyWith(top: 0),
               //   child: Row(children: [
-              //     Image.asset(widget.post.images[1]),
+              //     Image.network(widget.post.images[1]),
               //     SizedBox(width: 8),
-              //     Image.asset(widget.post.images[2]),
+              //     Image.network(widget.post.images[2]),
               //   ]),
               // ),
             ],
@@ -222,12 +223,20 @@ class _StoryWidgetState extends State<StoryWidget> {
   initMenu() {
     menu = PopupMenu(
         items: [
-          MenuItem(
-              title: 'Save post',
-              image: Icon(
-                Icons.post_add,
-                color: Colors.white,
-              )),
+          if (_post.userId != AuthBloc.instance.userModel.id)
+            MenuItem(
+                title: 'Save post',
+                image: Icon(
+                  Icons.post_add,
+                  color: Colors.white,
+                )),
+          if (_post.userId == AuthBloc.instance.userModel.id)
+            MenuItem(
+                title: 'Delete post',
+                image: Icon(
+                  Icons.delete,
+                  color: Colors.white,
+                )),
           MenuItem(
               title: 'Report',
               image: Icon(

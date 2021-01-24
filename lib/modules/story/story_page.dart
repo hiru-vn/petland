@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:petland/bloc/post_bloc.dart';
 import 'package:petland/modules/story/story_appbar.dart';
-import 'package:petland/modules/story/story_widget.dart';
+import 'package:petland/modules/story/story_image_widget.dart';
 import 'package:petland/share/import.dart';
 
 class StoryPage extends StatefulWidget {
@@ -35,7 +35,9 @@ class _StoryPageState extends State<StoryPage> {
                 bottom: 0,
                 child: PageView(
                   scrollDirection: Axis.vertical,
-                  children: _postBloc.posts.map((e) => StoryWidget(post: e)).toList(),
+                  children: _postBloc.posts
+                      .map((e) => StoryImageWidget(post: e))
+                      .toList(),
                 )),
           ],
         ),
