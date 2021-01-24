@@ -16,7 +16,8 @@ class StoryImageWidget extends StatefulWidget {
   _StoryImageWidgetState createState() => _StoryImageWidgetState();
 }
 
-class _StoryImageWidgetState extends State<StoryImageWidget> {
+class _StoryImageWidgetState extends State<StoryImageWidget>
+    with AutomaticKeepAliveClientMixin {
   PostModel _post;
   PostBloc _postBloc;
   bool _isLike = false;
@@ -24,9 +25,11 @@ class _StoryImageWidgetState extends State<StoryImageWidget> {
       GlobalKey<State<StatefulWidget>>();
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   void initState() {
     _post = widget.post;
-    initMenu();
     super.initState();
   }
 
@@ -39,8 +42,16 @@ class _StoryImageWidgetState extends State<StoryImageWidget> {
   }
 
   @override
+  void dispose() {
+    menu.dismiss();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     PopupMenu.context = context;
+    initMenu();
     return Stack(
       children: [
         Container(
