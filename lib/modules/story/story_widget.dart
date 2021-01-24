@@ -7,16 +7,16 @@ import 'package:petland/share/functions/share_to.dart';
 import 'package:petland/share/import.dart';
 import 'package:popup_menu/popup_menu.dart';
 
-class StoryImageWidget extends StatefulWidget {
+class StoryWidget extends StatefulWidget {
   final PostModel post;
 
-  const StoryImageWidget({Key key, this.post}) : super(key: key);
+  const StoryWidget({Key key, this.post}) : super(key: key);
 
   @override
-  _StoryImageWidgetState createState() => _StoryImageWidgetState();
+  _StoryWidgetState createState() => _StoryWidgetState();
 }
 
-class _StoryImageWidgetState extends State<StoryImageWidget>
+class _StoryWidgetState extends State<StoryWidget>
     with AutomaticKeepAliveClientMixin {
   PostModel _post;
   PostBloc _postBloc;
