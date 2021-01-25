@@ -36,7 +36,7 @@ class UserModel {
     description = json['description'];
     nickName = json['nickName'];
     backgroundimage = json['backgroundimage'];
-    follows = json['follows'].cast<String>();
+    follows = json['follows'] == null ? [] : json['follows'].cast<String>();
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
   }

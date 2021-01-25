@@ -9,6 +9,10 @@ class PostBloc extends ChangeNotifier {
 
   List<PostModel> posts = [];
 
+  void reload() {
+     notifyListeners();
+  }
+
   Future<BaseResponse> getListPost() async {
     try {
       final res = await PostRepo().getList();
@@ -46,10 +50,11 @@ class PostBloc extends ChangeNotifier {
       notifyListeners();
     }
   }
+  
 
   Future<BaseResponse> deletePost(String postId) async {
     try {
-      final res = await PostRepo().delete(postId: postId);
+      final res = await PostRepo().deletePost(postId: postId);
       posts.removeWhere((element) => element.id == postId);
       return BaseResponse.success(res);
     } catch (e) {

@@ -43,6 +43,7 @@ class _StoryPageState extends State<StoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ptDarkColor(context),
       appBar: StoryAppbar(),
       body: SafeArea(
         child: Stack(

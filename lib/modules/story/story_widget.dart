@@ -255,9 +255,16 @@ class _StoryWidgetState extends State<StoryWidget>
                 color: Colors.white,
               )),
         ],
-        onClickMenu: (val) {
-          if (val.menuTitle == 'Voice call') {}
-          if (val.menuTitle == 'Video call') {}
+        onClickMenu: (val) async {
+          if (val.menuTitle == 'Delete post') {
+            _postBloc.posts
+                .removeWhere((element) => element.id == widget.post.id);
+            _postBloc.reload();
+            final res = await _postBloc.deletePost(widget.post.id);
+            if (!res.isSuccess) showToast(res.errMessage, context);
+          }
+          if (val.menuTitle == 'Report') {}
+          if (val.menuTitle == 'Save post') {}
         },
         stateChanged: (val) {},
         onDismiss: () {});
