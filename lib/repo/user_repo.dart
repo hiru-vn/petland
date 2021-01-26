@@ -1,5 +1,7 @@
 import 'package:petland/services/user_srv.dart';
 
+import 'filter.dart';
+
 class UserRepo {
   Future register({String name, String email, String password}) async {
     final res = await UserSrv().mutate(
@@ -30,4 +32,9 @@ idToken: "$idToken"
     final res = await UserSrv().getItem(id);
     return res;
   }
+
+  // Future getAllUser({GraphqlFilter filter}) async {
+  //   final res = await UserSrv().getItem(id);
+  //   return res;
+  // }
 }
