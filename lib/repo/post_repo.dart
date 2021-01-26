@@ -53,4 +53,19 @@ class PostRepo {
     final res = await PostSrv().delete(postId);
     return res;
   }
+
+  Future createComment({String postId, String uid, String content}) async {
+    final res = await CommentSrv().add('''
+content: "$content"
+userId: "$uid"
+postId: "$postId"
+like: 0
+    ''', fragment: '''
+    id
+    userId
+    postId
+    like
+    ''');
+    return res;
+  }
 }

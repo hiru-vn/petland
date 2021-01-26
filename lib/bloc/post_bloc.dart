@@ -1,3 +1,4 @@
+import 'package:petland/model/comment.dart';
 import 'package:petland/model/post.dart';
 import 'package:petland/repo/post_repo.dart';
 import 'package:petland/services/base_response.dart';
@@ -10,7 +11,7 @@ class PostBloc extends ChangeNotifier {
   List<PostModel> posts = [];
 
   void reload() {
-     notifyListeners();
+    notifyListeners();
   }
 
   Future<BaseResponse> getListPost() async {
@@ -50,7 +51,6 @@ class PostBloc extends ChangeNotifier {
       notifyListeners();
     }
   }
-  
 
   Future<BaseResponse> deletePost(String postId) async {
     try {
@@ -90,9 +90,20 @@ class PostBloc extends ChangeNotifier {
     try {
       final res = await PostRepo().getAllComment(postId: postId);
       final List listRaw = res['data'];
-      final list = listRaw.map((e) => PostModel.fromJson(e)).toList();
-      posts = list;
+      final list = listRaw.map((e) => CommentModel.fromJson(e)).toList();
       return BaseResponse.success(list);
+    } catch (e) {
+      return BaseResponse.fail(e.message?.toString());
+    } finally {
+      notifyListeners();
+    }
+  }
+
+  Future<BaseResponse> createComment(String postId, String content) async {
+    try {
+      final uid = await SPref.instance.get('id');
+      final res = await PostRepo().createComment(postId: postId, uid: uid, content: content);
+      return BaseResponse.success(res);
     } catch (e) {
       return BaseResponse.fail(e.message?.toString());
     } finally {

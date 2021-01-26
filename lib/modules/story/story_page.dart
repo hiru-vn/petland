@@ -49,16 +49,17 @@ class _StoryPageState extends State<StoryPage> {
         child: Stack(
           children: [
             Positioned(
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                child: PageView(
-                  controller: _pageController,
-                  scrollDirection: Axis.vertical,
-                  children:
-                      _postBloc.posts.map((e) => StoryWidget(post: e)).toList(),
-                )),
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: PageView(
+                controller: _pageController,
+                scrollDirection: Axis.vertical,
+                children:
+                    _postBloc.posts.map((e) => StoryWidget(post: e)).toList(),
+              ),
+            ),
           ],
         ),
       ),

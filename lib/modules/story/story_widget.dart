@@ -202,7 +202,10 @@ class _StoryWidgetState extends State<StoryWidget>
                                     ),
                                   ),
                                 ),
-                                Expanded(child: CommentPage()),
+                                Expanded(
+                                    child: CommentPage(
+                                  post: widget.post,
+                                )),
                               ],
                             ));
                       });
