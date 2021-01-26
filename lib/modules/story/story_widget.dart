@@ -1,6 +1,7 @@
 import 'package:petland/bloc/pet_bloc.dart';
 import 'package:petland/bloc/post_bloc.dart';
 import 'package:petland/model/post.dart';
+import 'package:petland/modules/authentication/auth_bloc.dart';
 import 'package:petland/modules/story/comment_page.dart';
 import 'package:petland/share/functions/share_to.dart';
 import 'package:petland/share/import.dart';
@@ -15,7 +16,8 @@ class StoryWidget extends StatefulWidget {
   _StoryWidgetState createState() => _StoryWidgetState();
 }
 
-class _StoryWidgetState extends State<StoryWidget> {
+class _StoryWidgetState extends State<StoryWidget>
+    with AutomaticKeepAliveClientMixin {
   PostModel _post;
   PostBloc _postBloc;
   bool _isLike = false;
@@ -23,9 +25,11 @@ class _StoryWidgetState extends State<StoryWidget> {
       GlobalKey<State<StatefulWidget>>();
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   void initState() {
     _post = widget.post;
-    initMenu();
     super.initState();
   }
 
@@ -38,8 +42,16 @@ class _StoryWidgetState extends State<StoryWidget> {
   }
 
   @override
+  void dispose() {
+    menu.dismiss();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     PopupMenu.context = context;
+    initMenu();
     return Stack(
       children: [
         Container(
@@ -117,15 +129,15 @@ class _StoryWidgetState extends State<StoryWidget> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: widget.post.images.length > 0
-                    ? Image.asset(widget.post.images[0])
+                    ? Image.network(widget.post.images[0])
                     : Container(),
               ),
               // Padding(
               //   padding: const EdgeInsets.all(8.0).copyWith(top: 0),
               //   child: Row(children: [
-              //     Image.asset(widget.post.images[1]),
+              //     Image.network(widget.post.images[1]),
               //     SizedBox(width: 8),
-              //     Image.asset(widget.post.images[2]),
+              //     Image.network(widget.post.images[2]),
               //   ]),
               // ),
             ],
@@ -190,7 +202,10 @@ class _StoryWidgetState extends State<StoryWidget> {
                                     ),
                                   ),
                                 ),
-                                Expanded(child: CommentPage()),
+                                Expanded(
+                                    child: CommentPage(
+                                  post: widget.post,
+                                )),
                               ],
                             ));
                       });
@@ -222,12 +237,20 @@ class _StoryWidgetState extends State<StoryWidget> {
   initMenu() {
     menu = PopupMenu(
         items: [
-          MenuItem(
-              title: 'Save post',
-              image: Icon(
-                Icons.post_add,
-                color: Colors.white,
-              )),
+          if (_post.userId != AuthBloc.instance.userModel.id)
+            MenuItem(
+                title: 'Save post',
+                image: Icon(
+                  Icons.post_add,
+                  color: Colors.white,
+                )),
+          if (_post.userId == AuthBloc.instance.userModel.id)
+            MenuItem(
+                title: 'Delete post',
+                image: Icon(
+                  Icons.delete,
+                  color: Colors.white,
+                )),
           MenuItem(
               title: 'Report',
               image: Icon(
@@ -235,9 +258,16 @@ class _StoryWidgetState extends State<StoryWidget> {
                 color: Colors.white,
               )),
         ],
-        onClickMenu: (val) {
-          if (val.menuTitle == 'Voice call') {}
-          if (val.menuTitle == 'Video call') {}
+        onClickMenu: (val) async {
+          if (val.menuTitle == 'Delete post') {
+            _postBloc.posts
+                .removeWhere((element) => element.id == widget.post.id);
+            _postBloc.reload();
+            final res = await _postBloc.deletePost(widget.post.id);
+            if (!res.isSuccess) showToast(res.errMessage, context);
+          }
+          if (val.menuTitle == 'Report') {}
+          if (val.menuTitle == 'Save post') {}
         },
         stateChanged: (val) {},
         onDismiss: () {});

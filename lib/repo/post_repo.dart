@@ -26,11 +26,6 @@ class PostRepo {
     return res;
   }
 
-  Future delete({String postId}) async {
-    final res = await PostSrv().delete(postId);
-    return res;
-  }
-
   Future increaseLikePost({String postId}) async {
     final res = await PostSrv().mutate(
       'increaseLikePost',
@@ -51,6 +46,26 @@ class PostRepo {
 
   Future getAllComment({String postId}) async {
     final res = await CommentSrv().getList(limit: 20);
+    return res;
+  }
+
+  Future deletePost({String postId}) async {
+    final res = await PostSrv().delete(postId);
+    return res;
+  }
+
+  Future createComment({String postId, String uid, String content}) async {
+    final res = await CommentSrv().add('''
+content: "$content"
+userId: "$uid"
+postId: "$postId"
+like: 0
+    ''', fragment: '''
+    id
+    userId
+    postId
+    like
+    ''');
     return res;
   }
 }
