@@ -44,7 +44,7 @@ class _StoryPageState extends State<StoryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ptDarkColor(context),
-      appBar: StoryAppbar(),
+      appBar: StoryAppbar(optionChange: (option) {},),
       body: SafeArea(
         child: Stack(
           children: [
