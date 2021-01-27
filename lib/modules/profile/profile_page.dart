@@ -98,7 +98,7 @@ class _ProfilePageState extends State<ProfilePage> {
       appBar: MyAppBar(
         title: 'Profile',
         actions: [
-          Center(child: AnimatedSearchBar()),
+          //Center(child: AnimatedSearchBar()),
           IconButton(
               icon: Icon(
                 Icons.message,

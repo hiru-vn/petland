@@ -98,10 +98,9 @@ class _StoryWidgetState extends State<StoryWidget>
                                       ptTitle().copyWith(color: Colors.white),
                                 ),
                                 if (_post.petTags.length > 0 &&
-                                    PetBloc.instance.pets.contains(
-                                            (element) =>
-                                                element.id ==
-                                                _post.petTags[0]?.toString())) ...[
+                                    PetBloc.instance.pets.contains((element) =>
+                                        element.id ==
+                                        _post.petTags[0]?.toString())) ...[
                                   TextSpan(
                                     text: ' with ',
                                     style:
