@@ -2,8 +2,10 @@ import 'package:petland/share/import.dart';
 import 'package:petland/share/widgets/spin_loader.dart';
 
 class PostDetailPage extends StatefulWidget {
-  static Future navigate() {
-    return navigatorKey.currentState.push(pageBuilder(PostDetailPage()));
+  final String link;
+  PostDetailPage(this.link);
+  static Future navigate(String link) {
+    return navigatorKey.currentState.push(pageBuilder(PostDetailPage(link)));
   }
 
   @override
@@ -32,7 +34,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
         children: [
           WebView(
             initialUrl:
-                'https://sites.google.com/gm.uit.edu.vn/petland-post-1/home',
+                widget.link??'https://sites.google.com/gm.uit.edu.vn/petland-post-1/home',
             onPageStarted: (str) {},
             onPageFinished: (str) {
               setState(() {

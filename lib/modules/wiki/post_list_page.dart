@@ -1,38 +1,47 @@
+import 'package:petland/bloc/wiki_bloc.dart';
+import 'package:petland/model/wiki_category.dart';
+import 'package:petland/model/wiki_post.dart';
 import 'package:petland/modules/wiki/post_detail_page.dart';
 import 'package:petland/share/functions/share_to.dart';
 import 'package:petland/share/import.dart';
 
-class PostListPage extends StatelessWidget {
-  static navigate() {
-    return navigatorKey.currentState.push(pageBuilder(PostListPage()));
+class PostListPage extends StatefulWidget {
+  final WikiCategoryModel category;
+  PostListPage(this.category);
+  static navigate(WikiCategoryModel category) {
+    return navigatorKey.currentState.push(pageBuilder(PostListPage(category)));
+  }
+
+  @override
+  _PostListPageState createState() => _PostListPageState();
+}
+
+class _PostListPageState extends State<PostListPage> {
+  WikiBloc _wikiBloc;
+  List<WikiPostModel> list;
+
+  @override
+  void didChangeDependencies() {
+    if (_wikiBloc == null) {
+      _wikiBloc = Provider.of<WikiBloc>(context);
+      _getList();
+    }
+    super.didChangeDependencies();
+  }
+
+  _getList() async {
+    final res = await _wikiBloc.getListWikiPost(widget.category.id);
+    if (res.isSuccess) {
+      setState(() {
+        list = res.data;
+      });
+    } else {
+      showToast(res.errMessage, context);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final list = [
-      {
-        "title": "Các bệnh tiêu hóa hay gặp ở mèo",
-        "image": "assets/image/cat_cover.webp",
-        "content":
-            "Sau đây là những bệnh tiêu hóa khá phổ biến ở mèo với các triệu chứng có vẻ thường gặp, khi thấy mèo có bất kì biểu hiện nào hãy đi khám bác sĩ để được chuẩn đoán và chữa trị đúng cách nhé.",
-        "date": DateTime.now(),
-        "writer": 'Edison Mal',
-        "avatar": 'assets/image/avatar.png',
-        "seen": 1521,
-        "like": 12,
-      },
-      {
-        "title": "Các bệnh tiêu hóa hay gặp ở chó",
-        "image": "assets/image/dog_cover.jpg",
-        "content":
-            "Sau đây là những bệnh tiêu hóa khá phổ biến ở chó với các triệu chứng có vẻ thường gặp, khi thấy chó của bạn có bất kì biểu hiện nào hãy đi khám bác sĩ để được chuẩn đoán và chữa trị đúng cách nhé.",
-        "date": DateTime.now(),
-        "writer": 'Adersion Alter',
-        "avatar": 'assets/image/avatar.png',
-        "seen": 212,
-        "like": 12,
-      },
-    ];
     return Scaffold(
         backgroundColor: ptBackgroundColor(context),
         appBar: MyAppBar(
@@ -41,22 +50,25 @@ class PostListPage extends StatelessWidget {
           centerTitle: true,
           bgColor: Colors.white,
         ),
-        body: ListView.separated(
-          padding: EdgeInsets.symmetric(vertical: 15),
-          itemCount: list.length,
-          itemBuilder: (context, index) => PostCard(
-              content: list[index]['content'],
-              image: list[index]["image"],
-              title: list[index]["title"],
-              date: list[index]["date"],
-              avatar: list[index]["avatar"],
-              writer: list[index]["writer"],
-              seen: list[index]["seen"],
-              like: list[index]['like']),
-          separatorBuilder: (context, index) => SizedBox(
-            height: 15,
-          ),
-        ));
+        body: list != null
+            ? ListView.separated(
+                padding: EdgeInsets.symmetric(vertical: 15),
+                itemCount: list.length,
+                itemBuilder: (context, index) => PostCard(
+                    content: list[index].content,
+                    image: list[index].image,
+                    title: list[index].title,
+                    date: DateTime.tryParse(list[index].updatedAt),
+                    avatar: list[index].avatarWritter,
+                    writer: list[index].nameWritter,
+                    seen: list[index].seen,
+                    like: list[index].like,
+                    link: list[index].link),
+                separatorBuilder: (context, index) => SizedBox(
+                  height: 15,
+                ),
+              )
+            : kLoadingSpinner);
   }
 }
 
@@ -69,6 +81,7 @@ class PostCard extends StatefulWidget {
   final String avatar;
   final int seen;
   final int like;
+  final String link;
 
   const PostCard(
       {Key key,
@@ -79,7 +92,8 @@ class PostCard extends StatefulWidget {
       this.writer,
       this.avatar,
       this.seen,
-      this.like})
+      this.like,
+      this.link})
       : super(key: key);
 
   @override
@@ -102,7 +116,7 @@ class _PostCardState extends State<PostCard> {
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: InkWell(
         onTap: () {
-          PostDetailPage.navigate();
+          PostDetailPage.navigate(widget.link);
         },
         child: Card(
           elevation: 1,
@@ -119,10 +133,12 @@ class _PostCardState extends State<PostCard> {
                 ),
                 child: SizedBox(
                   width: deviceWidth(context),
-                  child: Image.asset(
-                    widget.image,
-                    fit: BoxFit.fitWidth,
-                  ),
+                  child: widget.image != null
+                      ? Image.network(
+                          widget.image,
+                          fit: BoxFit.fitWidth,
+                        )
+                      : Image.asset('assets/image/dog_cover.jpg'),
                 ),
               ),
               Padding(
@@ -220,10 +236,12 @@ class _PostCardState extends State<PostCard> {
                 child: Row(children: [
                   CircleAvatar(
                     radius: 12,
-                    backgroundImage: AssetImage(widget.avatar),
+                    backgroundImage: widget.avatar != null
+                        ? NetworkImage(widget.avatar)
+                        : AssetImage('assets/image/avatar.png'),
                   ),
                   SizedBox(width: 7),
-                  Text(widget.writer,
+                  Text(widget.writer ?? '',
                       style: ptSmall().copyWith(fontWeight: FontWeight.w700)),
                   Spacer(),
                   Text(

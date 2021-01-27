@@ -14,7 +14,8 @@ Color ptBackgroundColor(BuildContext context) =>
 Color ptAccentColor(BuildContext context) => HexColor('#ffe7e7');
 Color ptLineColor(BuildContext context) => Colors.black.withOpacity(0.2);
 Color ptGreyColor(BuildContext context) => HexColor('#d1d1d1');
-Color ptDarkColor(BuildContext context) => HexColor('#21323A');
+// Color ptDarkColor(BuildContext context) => HexColor('#21323A');
+Color ptDarkColor(BuildContext context) => Colors.black87;
 
 class HexColor extends Color {
   static const MethodChannel _channel = const MethodChannel('hexcolor');
