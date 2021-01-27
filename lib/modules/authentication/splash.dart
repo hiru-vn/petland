@@ -1,3 +1,4 @@
+import 'package:petland/bloc/wiki_bloc.dart';
 import 'package:petland/main.dart';
 import 'package:petland/modules/authentication/auth_bloc.dart';
 import 'package:petland/modules/authentication/welcome.dart';
@@ -29,8 +30,10 @@ class _SplashPageState extends State<SplashPage> {
             WelcomePage.navigate();
           else {
             final res = await _authBloc.getUserInfo();
-            if (res.isSuccess)
+            if (res.isSuccess) {
               HomePage.navigate();
+              WikiBloc.instance.init();
+            }
             else
               WelcomePage.navigate();
           }
