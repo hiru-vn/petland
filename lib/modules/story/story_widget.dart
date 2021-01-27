@@ -251,12 +251,13 @@ class _StoryWidgetState extends State<StoryWidget>
                   Icons.delete,
                   color: Colors.white,
                 )),
-          MenuItem(
-              title: 'Report',
-              image: Icon(
-                Icons.report,
-                color: Colors.white,
-              )),
+          if (_post.userId != AuthBloc.instance.userModel.id)
+            MenuItem(
+                title: 'Report',
+                image: Icon(
+                  Icons.report,
+                  color: Colors.white,
+                )),
         ],
         onClickMenu: (val) async {
           if (val.menuTitle == 'Delete post') {

@@ -47,11 +47,13 @@ class _CommentPageState extends State<CommentPage> {
   _comment(String text) async {
     if (comments == null) await Future.delayed(Duration(seconds: 1));
     _commentC.clear();
-    comments.insert(0, CommentModel(
-        content: text,
-        like: 0,
-        user: AuthBloc.instance.userModel,
-        updatedAt: DateTime.now().toIso8601String()));
+    comments.insert(
+        0,
+        CommentModel(
+            content: text,
+            like: 0,
+            user: AuthBloc.instance.userModel,
+            updatedAt: DateTime.now().toIso8601String()));
     FocusScope.of(context).unfocus();
     final res = await _postBloc.createComment(widget.post.id, text);
     if (!res.isSuccess) {
