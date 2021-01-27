@@ -33,7 +33,7 @@ class _ProfilePageState extends State<ProfilePage> {
         "name": "My Pets",
         "img": "assets/image/my_pet_icon.png",
         "action": () {
-          PickMyPetListpage.navigate();
+          PickMyPetListpage.navigate(isPick: false);
         }
       },
       {

@@ -2,6 +2,7 @@ import 'package:petland/bloc/pet_bloc.dart';
 import 'package:petland/model/pet.dart';
 import 'package:petland/modules/authentication/auth_bloc.dart';
 import 'package:petland/modules/inbox/inbox_bloc.dart';
+import 'package:petland/modules/my_pet/pet_profile.dart';
 import 'package:petland/share/import.dart';
 
 class OwnerProfilePage extends StatefulWidget {
@@ -138,10 +139,7 @@ class OwnerProfileHeader extends StatelessWidget {
   final UserModel user;
   final bool isMe;
 
-  const OwnerProfileHeader(
-      {Key key,
-      this.user,
-      this.isMe = true})
+  const OwnerProfileHeader({Key key, this.user, this.isMe = true})
       : super(key: key);
 
   @override
@@ -175,7 +173,8 @@ class OwnerProfileHeader extends StatelessWidget {
                     if (user.backgroundimage != null)
                       SizedBox(
                           width: deviceWidth(context),
-                          child: Image.network(user.backgroundimage, fit: BoxFit.cover)),
+                          child: Image.network(user.backgroundimage,
+                              fit: BoxFit.cover)),
                   ],
                 ),
               ),
@@ -376,7 +375,8 @@ class OwnerPetListWidget extends StatelessWidget {
           children: List.generate(petBloc.pets.length, (index) {
             return PetCard(
               pet: petBloc.pets[index],
-              onTap: () => navigatorKey.currentState.maybePop(),
+              onTap: () =>
+                  PetProfilePage.navigate(petId: petBloc.pets[index].id),
             );
           }),
         ),

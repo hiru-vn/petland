@@ -1,9 +1,15 @@
 import 'package:petland/bloc/pet_bloc.dart';
+import 'package:petland/modules/my_pet/pet_profile.dart';
 import 'package:petland/share/import.dart';
 
 class PickMyPetListpage extends StatefulWidget {
-  static Future navigate() {
-    return navigatorKey.currentState.push(pageBuilder(PickMyPetListpage()));
+  final bool isPick;
+
+  const PickMyPetListpage({Key key, this.isPick}) : super(key: key);
+  static Future navigate({bool isPick = true}) {
+    return navigatorKey.currentState.push(pageBuilder(PickMyPetListpage(
+      isPick: isPick,
+    )));
   }
 
   @override
@@ -23,7 +29,6 @@ class _PickMyPetListpageState extends State<PickMyPetListpage> {
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       appBar: innerAppBar(context, 'My pets'),
       body: SingleChildScrollView(
@@ -33,12 +38,15 @@ class _PickMyPetListpageState extends State<PickMyPetListpage> {
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
             crossAxisCount: 2,
-            staggeredTiles: _petBloc.pets.map((_) => StaggeredTile.fit(1)).toList(),
+            staggeredTiles:
+                _petBloc.pets.map((_) => StaggeredTile.fit(1)).toList(),
             children: List.generate(_petBloc.pets.length, (index) {
               return PetCard(
                 title: _petBloc.pets[index].name,
                 image: _petBloc.pets[index].avatar,
-                onTap: () => navigatorKey.currentState.maybePop(_petBloc.pets[index]),
+                onTap: () => (!widget.isPick)
+                    ? PetProfilePage.navigate(petId: _petBloc.pets[index].id)
+                    : navigatorKey.currentState.maybePop(_petBloc.pets[index]),
               );
             }),
           ),
