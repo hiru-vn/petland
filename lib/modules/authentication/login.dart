@@ -1,3 +1,4 @@
+import 'package:petland/bloc/pet_bloc.dart';
 import 'package:petland/modules/authentication/register.dart';
 import 'package:petland/modules/authentication/auth_bloc.dart';
 import 'package:petland/modules/home_page.dart';
@@ -38,6 +39,7 @@ class _LoginPageState extends State<LoginPage> {
       showToast(res.errMessage, context);
       return;
     }
+    await PetBloc.instance.getAllPet();
     HomePage.navigate();
   }
 
@@ -50,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
           extendBodyBehindAppBar: true,
           appBar: MyAppBar(
             leading: BackBtn(),
-            bgColor: ptDarkColor(context),
+            bgColor: HexColor('#21323A'),
           ),
           backgroundColor: HexColor('#21323A'),
           body: SingleChildScrollView(

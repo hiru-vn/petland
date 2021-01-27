@@ -148,7 +148,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         SizedBox(height: 3),
                         GestureDetector(
                           onTap: () {
-                            OwnerProfilePage.navigate();
+                            OwnerProfilePage.navigate(_authBloc.userModel);
                           },
                           child: Text(
                             'Change profile infomation',

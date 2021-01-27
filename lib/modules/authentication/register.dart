@@ -66,7 +66,7 @@ class _RegisterPageState extends State<RegisterPage> {
           extendBodyBehindAppBar: true,
           appBar: MyAppBar(
             leading: BackBtn(),
-            bgColor: ptDarkColor(context),
+            bgColor: HexColor('#21323A'),
           ),
           backgroundColor: HexColor('#21323A'),
           body: SingleChildScrollView(

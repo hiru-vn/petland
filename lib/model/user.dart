@@ -11,6 +11,8 @@ class UserModel {
   List<String> follows;
   String createdAt;
   String updatedAt;
+  String gender;
+  String country;
 
   UserModel(
       {this.id,
@@ -24,7 +26,9 @@ class UserModel {
       this.backgroundimage,
       this.follows,
       this.createdAt,
-      this.updatedAt});
+      this.updatedAt,
+      this.gender,
+      this.country});
 
   UserModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -39,6 +43,8 @@ class UserModel {
     follows = json['follows'] == null ? [] : json['follows'].cast<String>();
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
+    gender = json['gender'];
+    country = json['country'];
   }
 
   Map<String, dynamic> toJson() {
@@ -55,6 +61,8 @@ class UserModel {
     data['follows'] = this.follows;
     data['createdAt'] = this.createdAt;
     data['updatedAt'] = this.updatedAt;
+    data['gender'] = this.gender;
+    data['country'] = this.country;
     return data;
   }
 }

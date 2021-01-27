@@ -27,25 +27,19 @@ class PostRepo {
   }
 
   Future increaseLikePost({String postId}) async {
-    final res = await PostSrv().mutate(
-      'increaseLikePost',
-      'postId: "$postId"',
-      fragment: 'id'
-    );
+    final res = await PostSrv()
+        .mutate('increaseLikePost', 'postId: "$postId"', fragment: 'id');
     return res;
   }
 
   Future decreaseLikePost({String postId}) async {
-    final res = await PostSrv().mutate(
-      'decreaseLikePost',
-      'postId: "$postId"',
-      fragment: 'id'
-    );
+    final res = await PostSrv()
+        .mutate('decreaseLikePost', 'postId: "$postId"', fragment: 'id');
     return res;
   }
 
   Future getAllComment({String postId}) async {
-    final res = await CommentSrv().getList(limit: 20);
+    final res = await CommentSrv().getList(limit: 20, filter: '{postId: "$postId"}');
     return res;
   }
 

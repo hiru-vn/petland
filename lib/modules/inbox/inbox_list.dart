@@ -106,6 +106,8 @@ class _InboxListState extends State<InboxList>
                 ),
                 subtitle: Text(
                   groups[index].lastMessage,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: ptTiny().copyWith(
                       fontWeight:
                           groups[index].reader.contains(_authBloc.userModel.id)

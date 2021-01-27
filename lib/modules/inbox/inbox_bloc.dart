@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:petland/modules/authentication/auth_bloc.dart';
 
+import 'inbox_chat.dart';
 import 'inbox_model.dart';
 
 class InboxBloc extends ChangeNotifier {
@@ -17,16 +19,51 @@ class InboxBloc extends ChangeNotifier {
   final groupCollection = 'group';
   final messageCollection = 'messages';
 
-  Future<void> createGroup(String lastUser, DateTime time, String lastMessage,
-      String image, List<String> users) async {
-    await firestore.collection(groupCollection).add({
+  Future<void> createGroup(String lastUser, String lastAvatar, DateTime time,
+      String lastMessage, String image, List<String> users) async {
+    await firestore.collection(groupCollection).doc(users.join("-")).set({
       'lastUser': lastUser,
+      'lastAvatar': lastAvatar,
       'time': time.toIso8601String(),
       'lastMessage': lastMessage,
       'image': image,
       'users': users,
     });
   }
+
+  Future<void> navigateToChatWith(
+      String lastUser, // the other user
+      String lastAvatar,
+      DateTime time,
+      String lastMessage,
+      String image,
+      List<String> users) async {
+    final snap =
+        await firestore.collection(groupCollection).doc(users.join("-")).get();
+    if (!snap.exists) {
+      await firestore.collection(groupCollection).doc(users.join("-")).set({
+        'lastUser': lastUser,
+        'lastAvatar': lastAvatar,
+        'time': time.toIso8601String(),
+        'lastMessage': lastMessage,
+        'image': image,
+        'users': users,
+      });
+      users.forEach((uid) {
+        firestore.collection(userCollection).doc(uid).set({
+          'groups': [users.join("-")]
+        });
+      });
+    }
+    await InboxChat.navigate(
+        FbInboxGroupModel(users.join("-"), lastAvatar, lastMessage, lastUser,
+            time.toIso8601String(), [], users),
+        lastUser);
+    getList20Inbox(AuthBloc.instance.userModel.id);
+    return;
+  }
+
+  Future<void> userJoinGroupChat(String uid, String groupId) async {}
 
   Future<void> updateGroupOnMessage(String groupid, String lastUser,
       DateTime time, String lastMessage, String image) async {

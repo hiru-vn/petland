@@ -1,3 +1,4 @@
+import 'package:petland/bloc/pet_bloc.dart';
 import 'package:petland/bloc/wiki_bloc.dart';
 import 'package:petland/main.dart';
 import 'package:petland/modules/authentication/auth_bloc.dart';
@@ -31,10 +32,10 @@ class _SplashPageState extends State<SplashPage> {
           else {
             final res = await _authBloc.getUserInfo();
             if (res.isSuccess) {
+              await PetBloc.instance.getAllPet();
               HomePage.navigate();
               WikiBloc.instance.init();
-            }
-            else
+            } else
               WelcomePage.navigate();
           }
         },

@@ -40,6 +40,7 @@ class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
   @override
   void initState() {
     if (widget.petId != null) _isUpdate = true;
+
     super.initState();
   }
 
@@ -52,6 +53,7 @@ class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
             _petBloc.pets.firstWhere((element) => element.id == widget.petId);
       else
         _pet = PetModel();
+      petNameC.text = _pet.name ?? '';
     }
     super.didChangeDependencies();
   }
@@ -238,8 +240,7 @@ class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
             left: deviceWidth(context) / 10 + 125,
             bottom: 10,
             child: TextFormField(
-              controller: petName == null ? petNameC : null,
-              initialValue: petName,
+              controller: petNameC,
               style: ptBigTitle().copyWith(fontSize: 19.5),
               decoration: InputDecoration(
                 hintText: 'Pet name',

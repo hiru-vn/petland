@@ -11,6 +11,34 @@ enum DialogAction {
 typedef TapButtonListener(DialogAction action);
 typedef TapConfirm();
 
+showSimpleLoadingDialog(BuildContext context) {
+  return showDialog(
+      context: context,
+      builder: (context) {
+        return Center(
+          child: Material(
+            child: Container(
+              width: deviceWidth(context) / 1.4,
+              padding: EdgeInsets.all(20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  kLoadingSpinner,
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    'Vui lòng chờ giây lát',
+                    style: ptBigBody(),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      });
+}
+
 void showWaitingDialog(BuildContext context, {String message}) {
   showDialog(
       context: context,

@@ -1,21 +1,20 @@
 import 'package:petland/bloc/pet_bloc.dart';
 import 'package:petland/model/pet.dart';
 import 'package:petland/modules/authentication/auth_bloc.dart';
-import 'package:petland/modules/my_pet/pet_data_update.dart';
-import 'package:petland/modules/my_pet/records/birthday_page.dart';
-import 'package:petland/modules/my_pet/records/vaccine_page.dart';
+import 'package:petland/modules/inbox/inbox_bloc.dart';
 import 'package:petland/share/import.dart';
-import 'package:petland/share/widgets/image_view.dart';
 
 class OwnerProfilePage extends StatefulWidget {
-  const OwnerProfilePage({
-    Key key,
-  }) : super(key: key);
+  final UserModel user;
 
-  static navigate() {
+  const OwnerProfilePage({Key key, this.user}) : super(key: key);
+
+  static navigate(UserModel user) {
     navigatorKey.currentState.push(
       pageBuilder(
-        OwnerProfilePage(),
+        OwnerProfilePage(
+          user: user,
+        ),
       ),
     );
   }
@@ -30,6 +29,7 @@ class _OwnerProfilePageState extends State<OwnerProfilePage>
   TabController _tabController;
   AuthBloc _authBloc;
   PetBloc _petBloc;
+  bool isMe = true;
 
   @override
   void initState() {
@@ -42,6 +42,11 @@ class _OwnerProfilePageState extends State<OwnerProfilePage>
     if (_authBloc == null) {
       _authBloc = Provider.of<AuthBloc>(context);
       _petBloc = Provider.of<PetBloc>(context);
+      _user = widget.user;
+      if (_user.id == AuthBloc.instance.userModel.id)
+        isMe = true;
+      else
+        isMe = false;
     }
     super.didChangeDependencies();
   }
@@ -69,11 +74,10 @@ class _OwnerProfilePageState extends State<OwnerProfilePage>
       ]),
       body: Column(children: [
         OwnerProfileHeader(
-            imgUrl: _authBloc.userModel?.avatar,
-            imageCover: _authBloc.userModel?.backgroundimage,
-            name: _authBloc.userModel?.name,
-            description: _authBloc.userModel?.description),
-        SpacingBox(h: 3),
+          user: _user,
+          isMe: isMe,
+        ),
+        SpacingBox(h: isMe ? 3 : 0.6),
         Align(
           alignment: Alignment.center,
           child: TabBar(
@@ -109,10 +113,10 @@ class _OwnerProfilePageState extends State<OwnerProfilePage>
               controller: _tabController,
               children: [
                 OwnerDataWidget(
-                  nickName: _authBloc.userModel?.nickName,
-                  gender: 'MALE',
-                  country: 'Viet nam',
-                  email: _authBloc.userModel?.email,
+                  nickName: _user?.nickName,
+                  gender: _user?.gender,
+                  country: _user?.country,
+                  email: _user?.email,
                 ),
                 Container(
                     width: deviceWidth(context),
@@ -131,89 +135,122 @@ class _OwnerProfilePageState extends State<OwnerProfilePage>
 }
 
 class OwnerProfileHeader extends StatelessWidget {
-  final String imageCover;
-  final String imgUrl;
-  final String name;
-  final String description;
+  final UserModel user;
+  final bool isMe;
 
   const OwnerProfileHeader(
-      {Key key, this.imageCover, this.imgUrl, this.name, this.description})
+      {Key key,
+      this.user,
+      this.isMe = true})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 180,
-      child: Stack(
-        children: [
-          Container(
-            width: deviceWidth(context),
-            height: 120,
-            color: HexColor('#383838'),
-            child: Stack(
-              children: [
-                Center(
-                  child: Icon(
-                    Icons.pets,
-                    size: 100,
-                    color: ptPrimaryColor(context),
-                  ),
-                ),
-                Center(
-                  child: Icon(
-                    MdiIcons.camera,
-                    size: 50,
-                    color: Colors.white30,
-                  ),
-                ),
-                if (imageCover != null)
-                  SizedBox(
-                      width: deviceWidth(context),
-                      child: Image.network(imageCover, fit: BoxFit.cover)),
-              ],
-            ),
-          ),
-          Positioned(
-            left: deviceWidth(context) / 10,
-            top: 65,
-            child: Container(
-              width: 110,
-              height: 110,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: ptPrimaryColor(context),
-                border: Border.all(width: 2.5, color: Colors.white),
-              ),
-              child: imgUrl != null
-                  ? ClipRRect(
-                      borderRadius: BorderRadius.circular(55),
-                      child: Image.network(imgUrl, fit: BoxFit.cover))
-                  : Icon(
-                      MdiIcons.camera,
-                      size: 70,
-                      color: Colors.white30,
+    return Column(
+      children: [
+        Container(
+          height: 180,
+          child: Stack(
+            children: [
+              Container(
+                width: deviceWidth(context),
+                height: 120,
+                color: HexColor('#383838'),
+                child: Stack(
+                  children: [
+                    Center(
+                      child: Icon(
+                        Icons.pets,
+                        size: 100,
+                        color: ptPrimaryColor(context),
+                      ),
                     ),
-            ),
+                    Center(
+                      child: Icon(
+                        MdiIcons.camera,
+                        size: 50,
+                        color: Colors.white30,
+                      ),
+                    ),
+                    if (user.backgroundimage != null)
+                      SizedBox(
+                          width: deviceWidth(context),
+                          child: Image.network(user.backgroundimage, fit: BoxFit.cover)),
+                  ],
+                ),
+              ),
+              Positioned(
+                left: deviceWidth(context) / 10,
+                top: 65,
+                child: Container(
+                  width: 110,
+                  height: 110,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: ptPrimaryColor(context),
+                    border: Border.all(width: 2.5, color: Colors.white),
+                  ),
+                  child: user.avatar != null
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.circular(55),
+                          child: Image.network(user.avatar, fit: BoxFit.cover))
+                      : Icon(
+                          MdiIcons.camera,
+                          size: 70,
+                          color: Colors.white30,
+                        ),
+                ),
+              ),
+              Positioned(
+                right: 15,
+                left: deviceWidth(context) / 10 + 130,
+                bottom: 10,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      user.name ?? '',
+                      style: ptBigTitle().copyWith(fontSize: 19.5),
+                    ),
+                    Text(
+                      user.description ?? "",
+                    ),
+                  ],
+                ),
+              )
+            ],
           ),
-          Positioned(
-            right: 15,
-            left: deviceWidth(context) / 10 + 130,
-            bottom: 10,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  name ?? '',
-                  style: ptBigTitle().copyWith(fontSize: 19.5),
-                ),
-                Text(
-                  description ?? "",
-                ),
-              ],
-            ),
-          )
-        ],
-      ),
+        ),
+        if (!isMe)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              RaisedButton(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                onPressed: () {},
+                child: Text('Follow'),
+              ),
+              SizedBox(width: 10),
+              RaisedButton(
+                color: Colors.blueAccent,
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                onPressed: () async {
+                  showSimpleLoadingDialog(context);
+                  await InboxBloc.instance.navigateToChatWith(
+                      user.name,
+                      user.avatar,
+                      DateTime.now(),
+                      'Bạn và ${user.name} đã trở thành bạn bè',
+                      user.avatar,
+                      [AuthBloc.instance.userModel.id, user.id]);
+                  navigatorKey.currentState.maybePop();
+                },
+                child: Text('Nhắn tin'),
+              ),
+              SizedBox(width: 20),
+            ],
+          ),
+      ],
     );
   }
 }

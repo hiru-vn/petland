@@ -13,6 +13,9 @@ description: String
 nickName: String
 backgroundimage: String
 follows: [String]
+gender: String
+birthday: DateTime
+country: String
 createdAt: DateTime
 updatedAt: DateTime
   ''');

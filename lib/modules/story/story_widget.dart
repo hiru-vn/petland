@@ -2,6 +2,7 @@ import 'package:petland/bloc/pet_bloc.dart';
 import 'package:petland/bloc/post_bloc.dart';
 import 'package:petland/model/post.dart';
 import 'package:petland/modules/authentication/auth_bloc.dart';
+import 'package:petland/modules/profile/profile_owner.dart';
 import 'package:petland/modules/story/comment_page.dart';
 import 'package:petland/share/functions/share_to.dart';
 import 'package:petland/share/import.dart';
@@ -75,10 +76,15 @@ class _StoryWidgetState extends State<StoryWidget>
                       const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
                   child: Row(
                     children: [
-                      CircleAvatar(
-                        backgroundImage: _post.user.avatar != null
-                            ? NetworkImage(_post.user.avatar)
-                            : AssetImage('assets/image/avatar.png'),
+                      GestureDetector(
+                        onTap: () {
+                          OwnerProfilePage.navigate(_post.user);
+                        },
+                        child: CircleAvatar(
+                          backgroundImage: _post.user.avatar != null
+                              ? NetworkImage(_post.user.avatar)
+                              : AssetImage('assets/image/avatar.png'),
+                        ),
                       ),
                       SizedBox(width: 10),
                       Column(

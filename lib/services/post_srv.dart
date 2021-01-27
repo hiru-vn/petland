@@ -23,6 +23,11 @@ description
 nickName
 backgroundimage
 follows
+gender
+birthday
+country
+createdAt
+updatedAt
 }
 userId
 createdAt
