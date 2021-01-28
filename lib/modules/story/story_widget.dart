@@ -176,8 +176,10 @@ class _StoryWidgetState extends State<StoryWidget>
                       _isLike = !_isLike;
                       if (_isLike) {
                         _postBloc.likePost(_post.id);
+                        _post.like++;
                       } else {
                         _postBloc.unlikePost(_post.id);
+                        if (_post.like > 0) _post.like--;
                       }
                     });
                   },

@@ -108,7 +108,7 @@ class _PetProfilePageState extends State<PetProfilePage>
                 ),
                 PetPictureWidget(),
                 PetVideoWidget(),
-                PetRecordWidget(),
+                PetRecordWidget(_pet),
               ],
             ),
           ),
@@ -407,6 +407,8 @@ class PetVideoWidget extends StatelessWidget {
 }
 
 class PetRecordWidget extends StatelessWidget {
+  final PetModel pet;
+  PetRecordWidget(this.pet);
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -422,7 +424,7 @@ class PetRecordWidget extends StatelessWidget {
             height: 3,
           ),
           _buildRecordTile(context, 'BIRTHDAYS', () {
-            BirthdayPage.navigate();
+            BirthdayPage.navigate(pet);
           }),
           Divider(
             height: 3,

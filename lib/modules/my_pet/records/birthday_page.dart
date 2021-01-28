@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:petland/model/pet.dart';
 import 'package:petland/modules/my_pet/records/add_birthday.dart';
 import 'package:petland/share/import.dart';
 
 class BirthdayPage extends StatelessWidget {
-  static navigate() {
-    return navigatorKey.currentState.push(pageBuilder(BirthdayPage()));
+  final PetModel pet;
+  BirthdayPage(this.pet);
+  static navigate(PetModel pet) {
+    return navigatorKey.currentState.push(pageBuilder(BirthdayPage(pet)));
   }
 
   @override
@@ -46,7 +49,7 @@ class BirthdayPage extends StatelessWidget {
           ExpandRectangleButton(
             text: 'ADD NEW MOMENT',
             onTap: () {
-              AddBirthdayPage.navigate();
+              AddBirthdayPage.navigate(pet);
             },
           )
         ],

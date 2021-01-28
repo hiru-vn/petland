@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:petland/bloc/pet_bloc.dart';
 import 'package:petland/bloc/post_bloc.dart';
+import 'package:petland/bloc/record_bloc.dart';
 import 'package:petland/bloc/wiki_bloc.dart';
 import 'package:petland/modules/authentication/auth_bloc.dart';
 import 'package:petland/modules/authentication/splash.dart';
@@ -69,6 +70,9 @@ class Petland extends StatelessWidget {
                   ),
                   ChangeNotifierProvider(
                     create: (context) => WikiBloc.instance,
+                  ),
+                  ChangeNotifierProvider(
+                    create: (context) => RecordBloc.instance,
                   ),
                 ],
                 child: MaterialApp(
