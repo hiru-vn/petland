@@ -3,6 +3,7 @@ import 'package:petland/bloc/post_bloc.dart';
 import 'package:petland/modules/story/story_appbar.dart';
 import 'package:petland/modules/story/story_widget.dart';
 import 'package:petland/share/import.dart';
+import 'package:preload_page_view/preload_page_view.dart';
 
 class StoryPage extends StatefulWidget {
   @override
@@ -11,8 +12,8 @@ class StoryPage extends StatefulWidget {
 
 class _StoryPageState extends State<StoryPage> {
   PostBloc _postBloc;
-  PageController _pageController1 = PageController();
-  PageController _pageController2 = PageController();
+  PreloadPageController _pageController1 = PreloadPageController();
+  PreloadPageController _pageController2 = PreloadPageController();
   PageController _tabController = PageController(initialPage: 1);
   // int _currentPage = 1;
   // int _postCounter = 0;
@@ -79,7 +80,7 @@ class _StoryPageState extends State<StoryPage> {
                           return;
                         },
                         color: ptPrimaryColor(context),
-                        child: PageView(
+                        child: PreloadPageView(
                           controller: _pageController1,
                           scrollDirection: Axis.vertical,
                           children: _postBloc.posts
@@ -92,7 +93,7 @@ class _StoryPageState extends State<StoryPage> {
                         return;
                       },
                       color: ptPrimaryColor(context),
-                      child: PageView(
+                      child: PreloadPageView(
                         controller: _pageController2,
                         scrollDirection: Axis.vertical,
                         children: _postBloc.posts

@@ -56,22 +56,23 @@ class _OwnerProfilePageState extends State<OwnerProfilePage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: innerAppBar(context, 'My profile', actions: [
-        IconButton(
-          onPressed: () {
-            // OwnerDataUpdatePage.navigate(
-            //     race: 'Bristish short-hair',
-            //     birthdate: DateTime.now(),
-            //     gender: 'male',
-            //     bgUrl: 'https://www.coversden.com/images/covers/1/690.jpg',
-            //     imgUrl:
-            //         'https://ca-times.brightspotcdn.com/dims4/default/33c083b/2147483647/strip/true/crop/1611x906+0+0/resize/840x472!/quality/90/?url=https%3A%2F%2Fcalifornia-times-brightspot.s3.amazonaws.com%2Ffd%2Fef%2F05c1aab3e76c3d902aa0548c0046%2Fla-la-hm-pet-issue-18-jpg-20150615',
-            //     petName: 'Mick');
-          },
-          icon: Icon(
-            Icons.settings,
-            color: Colors.white,
+        if (widget.user.id == _authBloc.userModel.id)
+          IconButton(
+            onPressed: () {
+              // OwnerDataUpdatePage.navigate(
+              //     race: 'Bristish short-hair',
+              //     birthdate: DateTime.now(),
+              //     gender: 'male',
+              //     bgUrl: 'https://www.coversden.com/images/covers/1/690.jpg',
+              //     imgUrl:
+              //         'https://ca-times.brightspotcdn.com/dims4/default/33c083b/2147483647/strip/true/crop/1611x906+0+0/resize/840x472!/quality/90/?url=https%3A%2F%2Fcalifornia-times-brightspot.s3.amazonaws.com%2Ffd%2Fef%2F05c1aab3e76c3d902aa0548c0046%2Fla-la-hm-pet-issue-18-jpg-20150615',
+              //     petName: 'Mick');
+            },
+            icon: Icon(
+              Icons.settings,
+              color: Colors.white,
+            ),
           ),
-        ),
       ]),
       body: Column(children: [
         OwnerProfileHeader(
@@ -357,10 +358,32 @@ class OwnerDataWidget extends StatelessWidget {
   }
 }
 
-class OwnerPetListWidget extends StatelessWidget {
+class OwnerPetListWidget extends StatefulWidget {
   final PetBloc petBloc;
+  final bool isMe;
 
-  const OwnerPetListWidget({Key key, this.petBloc}) : super(key: key);
+  const OwnerPetListWidget({Key key, this.petBloc, this.isMe = true}) : super(key: key);
+
+  @override
+  _OwnerPetListWidgetState createState() => _OwnerPetListWidgetState();
+}
+
+class _OwnerPetListWidgetState extends State<OwnerPetListWidget> {
+  List<PetModel> pets = [];
+
+  @override
+  void initState() {
+    if (widget.isMe) pets = widget.petBloc.pets;
+    else {
+      _getListPet();
+    }
+    super.initState();
+  }
+
+  Future _getListPet() async {
+    
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -371,12 +394,12 @@ class OwnerPetListWidget extends StatelessWidget {
           physics: NeverScrollableScrollPhysics(),
           crossAxisCount: 2,
           staggeredTiles:
-              petBloc.pets.map((_) => StaggeredTile.fit(1)).toList(),
-          children: List.generate(petBloc.pets.length, (index) {
+              pets.map((_) => StaggeredTile.fit(1)).toList(),
+          children: List.generate(pets.length, (index) {
             return PetCard(
-              pet: petBloc.pets[index],
+              pet: pets[index],
               onTap: () =>
-                  PetProfilePage.navigate(petId: petBloc.pets[index].id),
+                  PetProfilePage.navigate(petId: pets[index].id),
             );
           }),
         ),

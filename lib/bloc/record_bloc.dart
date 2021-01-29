@@ -36,7 +36,7 @@ class RecordBloc extends ChangeNotifier {
   Future<BaseResponse> deleteBirthdayEvent(String eventId) async {
     try {
       final res = await RecordRepo().deleteBirthdayEvent(eventId: eventId);
-      
+
       return BaseResponse.success(res);
     } catch (e) {
       return BaseResponse.fail(e.message?.toString());

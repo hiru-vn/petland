@@ -43,74 +43,80 @@ class _BirthdayPageState extends State<BirthdayPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: innerAppBar(context, 'Birthday', ),
-      body: events == null
-          ? kLoadingSpinner
-          : Column(
-              children: [
-                Expanded(
-                  child: events.length != 0
-                      ? ListView.separated(
-                          itemCount: events.length,
-                          itemBuilder: (context, index) {
-                            final item = events[index];
-                            return CustomListTile(
-                              onTap: () =>
-                                  UpdateBirthdayPage.navigate(widget.pet, item),
-                              leading: CircleAvatar(
-                                backgroundImage: item.images.length > 0
-                                    ? NetworkImage(item.images[0])
-                                    : NetworkImage(widget.pet.avatar),
-                              ),
-                              title: Text(
-                                  '${DateTime.tryParse(item.date).year - DateTime.now().year} years old'),
-                              subtitle: Text(item.content ?? ''),
-                              trailing: Icon(
-                                Icons.cake_outlined,
-                                color: Colors.pink,
-                              ),
-                            );
-                          },
-                          separatorBuilder: (context, index) {
-                            return Divider(
-                              height: 3,
-                            );
-                          },
-                        )
-                      : Center(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              SizedBox(
-                                  width: deviceWidth(context) / 1.2,
-                                  child: Image.asset(
-                                      'assets/image/pet_birthday.jpg')),
-                              SpacingBox(h: 2),
-                              Text(
-                                'Where you save birthday moments of your Pet',
-                                style:
-                                    ptBigBody().copyWith(color: Colors.black54),
-                              ),
-                              SpacingBox(h: 1),
-                              Text(
-                                'Click on the button below to celebrate',
-                                style: ptBody().copyWith(color: Colors.black54),
-                              ),
-                              SpacingBox(h: 5),
-                            ],
-                          ),
+    return Stack(
+      children: [
+        Scaffold(
+          backgroundColor: Colors.white,
+          appBar: innerAppBar(
+            context,
+            'Birthday',
+          ),
+          body: Column(
+            children: [
+              Expanded(
+                child: events != null && events.length != 0
+                    ? ListView.separated(
+                        itemCount: events.length,
+                        itemBuilder: (context, index) {
+                          final item = events[index];
+                          return CustomListTile(
+                            onTap: () =>
+                                UpdateBirthdayPage.navigate(widget.pet, item),
+                            leading: CircleAvatar(
+                              backgroundImage: item.images.length > 0
+                                  ? NetworkImage(item.images[0])
+                                  : NetworkImage(widget.pet.avatar),
+                            ),
+                            title: Text(
+                                '${DateTime.tryParse(item.date).year - DateTime.now().year} years old'),
+                            subtitle: Text(item.content ?? ''),
+                            trailing: Icon(
+                              Icons.cake_outlined,
+                              color: Colors.pink,
+                            ),
+                          );
+                        },
+                        separatorBuilder: (context, index) {
+                          return Divider(
+                            height: 3,
+                          );
+                        },
+                      )
+                    : Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SizedBox(
+                                width: deviceWidth(context) / 1.2,
+                                child: Image.asset(
+                                    'assets/image/pet_birthday.jpg')),
+                            SpacingBox(h: 2),
+                            Text(
+                              'Where you save birthday moments of your Pet',
+                              style:
+                                  ptBigBody().copyWith(color: Colors.black54),
+                            ),
+                            SpacingBox(h: 1),
+                            Text(
+                              'Click on the button below to celebrate',
+                              style: ptBody().copyWith(color: Colors.black54),
+                            ),
+                            SpacingBox(h: 5),
+                          ],
                         ),
-                ),
-                ExpandRectangleButton(
-                  text: 'ADD NEW MOMENT',
-                  onTap: () {
-                    AddBirthdayPage.navigate(widget.pet);
-                  },
-                )
-              ],
-            ),
+                      ),
+              ),
+              ExpandRectangleButton(
+                text: 'ADD NEW MOMENT',
+                onTap: () {
+                  AddBirthdayPage.navigate(widget.pet);
+                },
+              )
+            ],
+          ),
+        ),
+        if (events == null) kLoadingSpinner,
+      ],
     );
   }
 }
