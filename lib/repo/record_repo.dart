@@ -12,8 +12,13 @@ class RecordRepo {
     return res;
   }
 
-  Future getListBirthdayRecord() async {
-    final res = await BirthdaySrv().getList(limit: 50);
+  Future getListBirthdayRecord(String petId) async {
+    final res = await BirthdaySrv().getList(limit: 50, filter: '{petId: "$petId"}');
+    return res;
+  }
+
+  Future deleteBirthdayEvent({String eventId}) async {
+    final res = await BirthdaySrv().delete(eventId);
     return res;
   }
 
