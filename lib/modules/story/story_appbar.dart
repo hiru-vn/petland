@@ -22,7 +22,7 @@ class _StoryAppbarState extends State<StoryAppbar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: ptDarkColor(context) ?? Colors.transparent,
+      backgroundColor: Colors.transparent,
       centerTitle: true,
       elevation: 0,
       automaticallyImplyLeading: false,

@@ -27,12 +27,36 @@ class _PostStoryState extends State<PostStory> {
   List<String> images = [];
   List<String> videos = [];
   List<String> tags = [];
+  List<String> _allVideoAndImage = [];
   PetModel pet;
   TextEditingController _statusC = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+  }
+
+    Future _upload(String filePath) async {
+    try {
+      _allVideoAndImage.add(loadingGif);
+      setState(() {});
+      final res = await FileUtil.uploadFireStorage(File(filePath),
+          path:
+              'posts/user_${AuthBloc.instance.userModel.id}/${Formart.formatToDate(DateTime.now(), seperateChar: '-')}');
+      if (FileUtil.getFbUrlFileType(res) == FileType.image ||
+          FileUtil.getFbUrlFileType(res) == FileType.gif) {
+        images.add(res);
+        _allVideoAndImage.add(res);
+      }
+      if (FileUtil.getFbUrlFileType(res) == FileType.video) {
+        videos.add(res);
+        _allVideoAndImage.add(res);
+      }
+      _allVideoAndImage.remove(loadingGif);
+      setState(() {});
+    } catch (e) {
+      showToast(e.toString(), context);
+    }
   }
 
   @override
@@ -59,22 +83,6 @@ class _PostStoryState extends State<PostStory> {
       _postBloc.getListPost();
       navigatorKey.currentState.maybePop();
     }
-  }
-
-  Future _upload(String img) async {
-    images.add(loadingGif);
-    setState(() {});
-    final res = await FileUtil.uploadFireStorage(File(img),
-        path: 'pets/user_${AuthBloc.instance.userModel.id}');
-    if (FileUtil.getFbUrlFileType(res) == FileType.image ||
-        FileUtil.getFbUrlFileType(res) == FileType.gif) {
-      images.add(res);
-    }
-    if (FileUtil.getFbUrlFileType(res) == FileType.video) {
-      videos.add(res);
-    }
-    images.remove(loadingGif);
-    setState(() {});
   }
 
   @override
@@ -122,7 +130,7 @@ class _PostStoryState extends State<PostStory> {
                       child: SizedBox(
                         height: 110,
                         child: ImageRowPicker(
-                          images,
+                          _allVideoAndImage,
                           onUpdateListImg: (listImg) {
                             print('as');
                           },

@@ -21,9 +21,9 @@ class BottomNavigator extends StatelessWidget {
             icon: Icon(e),
             title: SizedBox.shrink(),
             activeIcon: Container(
-              width: 42,
-              height: 42,
-              margin: EdgeInsets.all(5),
+              width: 40,
+              height: 40,
+              margin: EdgeInsets.all(0),
               decoration: BoxDecoration(
                 color: ptPrimaryColor(context),
                 shape: BoxShape.circle,
@@ -39,7 +39,8 @@ class BottomNavigator extends StatelessWidget {
         )
         .toList();
     return Material(
-      elevation: 4,
+      elevation: selectedIndex!=0? 4: 0,
+      color: Colors.white30,
       borderRadius: BorderRadius.only(
         topRight: Radius.circular(30),
         topLeft: Radius.circular(30),
@@ -47,12 +48,13 @@ class BottomNavigator extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.only(top: 0.15, left: 0.1, right: 0.1),
         child: Container(
-          height: 66,
+          height: 56,
           width: deviceWidth(context),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.only(
               topRight: Radius.circular(30),
               topLeft: Radius.circular(30),
+              
             ),
           ),
           child: ClipRRect(
@@ -61,8 +63,8 @@ class BottomNavigator extends StatelessWidget {
               topLeft: Radius.circular(30),
             ),
             child: BottomNavigationBar(
-              elevation: 3,
-              backgroundColor: ptDarkColor(context),
+              elevation: selectedIndex!= 0? 3: 0,
+              backgroundColor: selectedIndex!=0? ptDarkColor(context): Colors.transparent,
               selectedItemColor: ptPrimaryColor(context),
               unselectedItemColor: Colors.grey,
               type: BottomNavigationBarType.fixed,

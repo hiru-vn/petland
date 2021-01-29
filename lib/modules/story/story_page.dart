@@ -11,18 +11,19 @@ class StoryPage extends StatefulWidget {
 
 class _StoryPageState extends State<StoryPage> {
   PostBloc _postBloc;
-  PageController _pageController = PageController();
-  PageController _tabController = PageController();
-  int _currentPage = 0;
-  int _postCounter = 0;
+  PageController _pageController1 = PageController();
+  PageController _pageController2 = PageController();
+  PageController _tabController = PageController(initialPage: 1);
+  // int _currentPage = 1;
+  // int _postCounter = 0;
 
   @override
   void initState() {
-    _pageController.addListener(() {
-      setState(() {
-        _currentPage = _pageController.page.toInt();
-      });
-    });
+    // _pageController.addListener(() {
+    //   setState(() {
+    //     _currentPage = _pageController.page.toInt();
+    //   });
+    // });
     super.initState();
   }
 
@@ -37,7 +38,9 @@ class _StoryPageState extends State<StoryPage> {
 
   @override
   void dispose() {
-    _pageController.dispose();
+    _pageController1.dispose();
+    _pageController2.dispose();
+    _tabController.dispose();
     super.dispose();
   }
 
@@ -57,36 +60,35 @@ class _StoryPageState extends State<StoryPage> {
                 curve: Curves.decelerate);
         },
       ),
-      body: SafeArea(
-        child: Stack(
-          children: [
-            Positioned(
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                child: PageView(
-                    controller: _tabController,
-                    scrollDirection: Axis.horizontal,
-                    physics: NeverScrollableScrollPhysics(),
-                    children: [
-                      PageView(
-                        controller: _pageController,
-                        scrollDirection: Axis.vertical,
-                        children: _postBloc.posts
-                            .map((e) => StoryWidget(post: e))
-                            .toList(),
-                      ),
-                      PageView(
-                        controller: _pageController,
-                        scrollDirection: Axis.vertical,
-                        children: _postBloc.posts
-                            .map((e) => StoryWidget(post: e))
-                            .toList(),
-                      ),
-                    ])),
-          ],
-        ),
+      extendBodyBehindAppBar: true,
+      body: Stack(
+        children: [
+          Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: PageView(
+                  controller: _tabController,
+                  scrollDirection: Axis.horizontal,
+                  physics: NeverScrollableScrollPhysics(),
+                  children: [
+                    PageView(
+                      controller: _pageController1,
+                      scrollDirection: Axis.vertical,
+                      children: _postBloc.posts
+                          .map((e) => StoryWidget(post: e))
+                          .toList(),
+                    ),
+                    PageView(
+                      controller: _pageController2,
+                      scrollDirection: Axis.vertical,
+                      children: _postBloc.posts
+                          .map((e) => StoryWidget(post: e))
+                          .toList(),
+                    ),
+                  ])),
+        ],
       ),
     );
   }

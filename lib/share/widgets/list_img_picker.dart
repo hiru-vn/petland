@@ -6,8 +6,11 @@
 // **** CURRENT SELECTED IMAGE URL ****
 // WHEN IMAGE URL IS UPLOAD OR REMOVE - IMPLEMENT FROM FATHER WIDGET
 
+
 import 'package:petland/share/import.dart';
-import 'package:petland/share/widgets/image_view.dart';
+import 'package:petland/utils/file_util.dart';
+
+import 'video_view.dart';
 
 class ImageRowPicker extends StatefulWidget {
   final List<String> listImg;
@@ -54,8 +57,14 @@ class _ImageRowPickerState extends State<ImageRowPicker>
                     width: 100,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
-                      child: ImageViewNetwork(
-                          url: widget.listImg[index], w: 100, h: 100),
+                      child: FileUtil.getFbUrlFileType(widget.listImg[index]) ==
+                              FileType.video
+                          ? VideoViewNetwork(
+                              url: widget.listImg[index],
+                              w: 100,
+                              h: 100)
+                          : ImageViewNetwork(
+                              url: widget.listImg[index], w: 100, h: 100),
                     ),
                   ),
                 ),

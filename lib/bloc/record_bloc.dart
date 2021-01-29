@@ -1,8 +1,4 @@
-import 'package:petland/model/type_wiki.dart';
-import 'package:petland/model/wiki_category.dart';
-import 'package:petland/model/wiki_post.dart';
 import 'package:petland/repo/record_repo.dart';
-import 'package:petland/repo/wiki_repo.dart';
 import 'package:petland/services/base_response.dart';
 import 'package:petland/share/import.dart';
 
@@ -20,10 +16,7 @@ class RecordBloc extends ChangeNotifier {
   }
 
   Future<BaseResponse> init() async {
-    try {
-    } catch (e) {
-    } finally {
-    }
+    try {} catch (e) {} finally {}
   }
 
   // Future<BaseResponse> getListVaccineRecord() async {
@@ -38,11 +31,15 @@ class RecordBloc extends ChangeNotifier {
   //   } finally {}
   // }
 
-  Future<BaseResponse> createBirthdayRecord(String petId, List<String> listImage, List<String> listVideo,
-      String date, bool publicity) async {
+  Future<BaseResponse> createBirthdayRecord(
+      String petId,
+      List<String> listImage,
+      List<String> listVideo,
+      String date,
+      bool publicity) async {
     try {
-      
-      final res = await RecordRepo().createBirthdayRecord(petId, listImage , listVideo, date, publicity);
+      final res = await RecordRepo()
+          .createBirthdayRecord(petId, listImage, listVideo, date, publicity);
       return BaseResponse.success(res);
     } catch (e) {
       return BaseResponse.fail(e?.toString());

@@ -41,9 +41,9 @@ class Formart {
     return '${formatToDate(date)} ${formatToTime(date)}';
   }
 
-  static String formatToDate(DateTime date) {
+  static String formatToDate(DateTime date, {String seperateChar = '/'}) {
     if (date == null) return null;
-    return '${date.day}/${date.month}/${date.year}';
+    return '${date.day}$seperateChar${date.month}$seperateChar${date.year}';
   }
 
   static String formatToTime(DateTime time) {

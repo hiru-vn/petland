@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'dart:math';
+import 'package:video_player/video_player.dart';
 import 'package:petland/bloc/pet_bloc.dart';
 import 'package:petland/bloc/post_bloc.dart';
 import 'package:petland/model/post.dart';
@@ -6,6 +9,7 @@ import 'package:petland/modules/profile/profile_owner.dart';
 import 'package:petland/modules/story/comment_page.dart';
 import 'package:petland/share/functions/share_to.dart';
 import 'package:petland/share/import.dart';
+import 'package:petland/utils/file_util.dart';
 import 'package:popup_menu/popup_menu.dart';
 
 class StoryWidget extends StatefulWidget {
@@ -21,6 +25,7 @@ class _StoryWidgetState extends State<StoryWidget>
     with AutomaticKeepAliveClientMixin {
   PostModel _post;
   PostBloc _postBloc;
+
   bool _isLike = false;
   GlobalKey<State<StatefulWidget>> moreBtnKey =
       GlobalKey<State<StatefulWidget>>();
@@ -62,15 +67,20 @@ class _StoryWidgetState extends State<StoryWidget>
             bottom: 0,
             child: Container(
               width: deviceWidth(context),
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: widget.post.images.length > 0
-                  ? Center(child: ImageViewNetwork(url: widget.post.images[0]))
-                  : Container(),
+              child: (widget.post.videos.length > 0)
+                  ? (widget.post.videos.length > 0
+                      ? Center(child: VideoContent(url: widget.post.videos[0]))
+                      : Container())
+                  : (widget.post.images.length > 0
+                      ? Center(
+                          child: ImageViewNetwork(url: widget.post.images[0]))
+                      : Container()),
             ),
           ),
           Container(
             child: Column(
               children: [
+                SizedBox(height: MediaQuery.of(context).padding.top),
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
@@ -297,4 +307,85 @@ class _StoryWidgetState extends State<StoryWidget>
   }
 
   PopupMenu menu;
+}
+
+class VideoContent extends StatelessWidget {
+  final String url;
+  final String tag;
+  final int w, h;
+  VideoContent({@required this.url, this.tag, this.w, this.h});
+  @override
+  Widget build(BuildContext context) {
+    String genTag = tag ?? url + Random().nextInt(10000000).toString();
+    return DetailVideoScreen(
+      url,
+      tag: genTag,
+      scaleW: w,
+      scaleH: h,
+    );
+  }
+}
+
+class DetailVideoScreen extends StatefulWidget {
+  final String url;
+  final String tag;
+  final int scaleW, scaleH;
+  DetailVideoScreen(this.url, {this.tag, this.scaleW, this.scaleH});
+
+  @override
+  _DetailVideoScreenState createState() => _DetailVideoScreenState();
+}
+
+class _DetailVideoScreenState extends State<DetailVideoScreen> {
+  VideoPlayerController _controller;
+  bool videoEnded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = VideoPlayerController.network(widget.url)
+      ..initialize().then(
+        (_) {
+          if (mounted)
+            setState(() {
+              _controller.play();
+            });
+        },
+      );
+    _controller.addListener(() {
+      if (_controller.value.position == _controller.value.duration) {
+        setState(() {
+          _controller.play();
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Stack(fit: StackFit.expand, children: [
+        Positioned(
+          width: MediaQuery.of(context).size.width,
+          top: kToolbarHeight,
+          bottom: 0,
+          child: Container( 
+            width: MediaQuery.of(context).size.width,
+            child: _controller.value.initialized
+                ? AspectRatio(
+                    aspectRatio: _controller.value.aspectRatio,
+                    child: VideoPlayer(_controller),
+                  )
+                : kLoadingSpinner,
+          ),
+        ),
+      ]),
+    );
+  }
 }
