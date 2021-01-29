@@ -2,26 +2,23 @@ import 'base_graphql.dart';
 
 class VaccineSrv extends BaseService {
   VaccineSrv() : super(module: 'Vaccine', fragment: ''' 
-id: String
+vaccineTypeId: String
+vaccineType {
+  id: String
+name: String
+raceType: String
+createdAt: DateTime
+updatedAt: DateTime
+}
 petId: String
-type: String
-raceId: String
 images: [String]
 videos: [String]
 date: DateTime
 publicity: Boolean
 remider: Boolean
-pet {
-  id
-}
-race {
-  id
-}
-createdAt: DateTime
-updatedAt: DateTime
+content: String
   ''');
 }
-
 
 class BirthdaySrv extends BaseService {
   BirthdaySrv() : super(module: 'Birthday', fragment: ''' 

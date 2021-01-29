@@ -1,5 +1,6 @@
 import 'package:petland/model/birthday_event_model.dart';
 import 'package:petland/model/pet.dart';
+import 'package:petland/model/vaccince_event_model.dart';
 import 'package:petland/model/vaccine_type_model.dart';
 import 'package:petland/repo/record_repo.dart';
 import 'package:petland/services/base_response.dart';
@@ -22,17 +23,16 @@ class RecordBloc extends ChangeNotifier {
     try {} catch (e) {} finally {}
   }
 
-  // Future<BaseResponse> getListVaccineRecord() async {
-  //   try {
-  //     final res = await RecordRepo().getListVaccineRecord();
-  //     final List listRaw = res['data'];
-  //     final list = listRaw.map((e) => RecordCategoryModel.fromJson(e)).toList();
-  //     categories = list;
-  //     return BaseResponse.success(list);
-  //   } catch (e) {
-  //     return BaseResponse.fail(e.message?.toString());
-  //   } finally {}
-  // }
+  Future<BaseResponse> getListVaccineRecord(String petId) async {
+    try {
+      final res = await RecordRepo().getListVaccineRecord(petId);
+      final List listRaw = res['data'];
+      final list = listRaw.map((e) => VaccineEventModel.fromJson(e)).toList();
+      return BaseResponse.success(list);
+    } catch (e) {
+      return BaseResponse.fail(e.message?.toString());
+    } finally {}
+  }
 
   Future<BaseResponse> getListVaccineType(String raceType) async {
     try {
@@ -57,6 +57,19 @@ class RecordBloc extends ChangeNotifier {
     }
   }
 
+  Future<BaseResponse> deleteVaccineEvent(String eventId) async {
+    try {
+      final res = await RecordRepo().deleteVaccineEvent(eventId: eventId);
+
+      return BaseResponse.success(res);
+    } catch (e) {
+      return BaseResponse.fail(e.message?.toString());
+    } finally {
+      notifyListeners();
+    }
+  }
+
+
   Future<BaseResponse> getListBirthdayRecord(String petId) async {
     try {
       final res = await RecordRepo().getListBirthdayRecord(petId);
@@ -80,7 +93,7 @@ class RecordBloc extends ChangeNotifier {
     try {
       final res = await RecordRepo().createBirthdayRecord(
           petId, listImage, listVideo, date, publicity, content);
-      return BaseResponse.success(res);
+      return BaseResponse.success(BirthdayEventModel.fromJson(res));
     } catch (e) {
       return BaseResponse.fail(e?.toString());
     } finally {
@@ -89,7 +102,7 @@ class RecordBloc extends ChangeNotifier {
   }
 
   Future<BaseResponse> createVaccineRecord(
-      String type,
+      String vaccineTypeId,
       String petId,
       List<String> listImage,
       List<String> listVideo,
@@ -98,9 +111,9 @@ class RecordBloc extends ChangeNotifier {
       bool reminder,
       String content) async {
     try {
-      final res = await RecordRepo().createVaccineRecord(type, petId, listImage,
+      final res = await RecordRepo().createVaccineRecord(vaccineTypeId, petId, listImage,
           listVideo, date, publicity, reminder, content);
-      return BaseResponse.success(res);
+      return BaseResponse.success(VaccineEventModel.fromJson(res));
     } catch (e) {
       return BaseResponse.fail(e?.toString());
     } finally {

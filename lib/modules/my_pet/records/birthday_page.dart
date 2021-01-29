@@ -108,8 +108,12 @@ class _BirthdayPageState extends State<BirthdayPage> {
               ),
               ExpandRectangleButton(
                 text: 'ADD NEW MOMENT',
-                onTap: () {
-                  AddBirthdayPage.navigate(widget.pet);
+                onTap: () async{
+                  final res = await AddBirthdayPage.navigate(widget.pet);
+                  if (res is BirthdayEventModel) {
+                    events.add(res);
+                    setState(() {});
+                  }
                 },
               )
             ],

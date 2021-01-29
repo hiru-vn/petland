@@ -1,37 +1,52 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:petland/bloc/record_bloc.dart';
 import 'package:petland/model/pet.dart';
-import 'package:petland/modules/authentication/auth_bloc.dart';
+import 'package:petland/model/vaccince_event_model.dart';
+import 'package:petland/model/vaccine_type_model.dart';
+import 'package:petland/modules/my_pet/records/vaccine_type.dart';
 import 'package:petland/share/import.dart';
-import 'package:petland/utils/file_util.dart';
 
-class AddBirthdayPage extends StatefulWidget {
+class DetailVaccinePage extends StatefulWidget {
   final PetModel pet;
-  AddBirthdayPage(this.pet);
-  static navigate(PetModel pet) {
-    return navigatorKey.currentState.push(pageBuilder(AddBirthdayPage(pet)));
+  final VaccineEventModel event;
+
+  const DetailVaccinePage({Key key, this.pet, this.event}) : super(key: key);
+  static Future navigate(PetModel pet, VaccineEventModel event) {
+    return navigatorKey.currentState.push(pageBuilder(DetailVaccinePage(
+      pet: pet,
+      event: event,
+    )));
   }
 
   @override
-  _AddBirthdayPageState createState() => _AddBirthdayPageState();
+  _DetailVaccinePageState createState() => _DetailVaccinePageState();
 }
 
-class _AddBirthdayPageState extends State<AddBirthdayPage> {
+class _DetailVaccinePageState extends State<DetailVaccinePage> {
+  bool _checkRemider = false;
   bool _checkCreatePost = false;
-  RecordBloc _recordBloc;
+  VaccineTypeModel selectedVaccine;
   DateTime date;
   List<String> images = [];
   List<String> videos = [];
   List<String> _allVideoAndImage = [];
   TextEditingController _contentC = TextEditingController();
   bool isLoading = false;
+  RecordBloc _recordBloc;
 
   @override
   void initState() {
-    date = DateTime.tryParse(widget.pet.birthday ?? '');
+    date = DateTime.tryParse(widget.event.date ?? widget.pet.birthday);
+    _checkCreatePost = widget.event.publicity;
+    images = widget.event.images;
+    videos = widget.event.videos;
+    _allVideoAndImage = [...images, ...videos];
+    _contentC.text = widget.event.content;
     _contentC.text = 'Happy birthday ${widget.pet.name}';
+    _checkCreatePost = widget.event.publicity;
+    _checkRemider = widget.event.remider;
+    selectedVaccine = widget.event.vaccineType;
     super.initState();
   }
 
@@ -43,55 +58,26 @@ class _AddBirthdayPageState extends State<AddBirthdayPage> {
     super.didChangeDependencies();
   }
 
-  _addBirthday() async {
-    if (_allVideoAndImage.isEmpty) {
-      showToast('Please post atleast 1 image or video', context);
-      return;
+  Future _delete() async {
+    setState(() {
+      isLoading = true;
+    });
+    final confirm = await showConfirmImageDialog(
+        context,
+        'Bạn chắc chứ?',
+        'Kỉ niệm bị xóa của ${widget.pet.name} sẽ không thể khôi phục lại.',
+        'assets/image/pet_delete_dialog.jpg');
+    if (confirm) {
+      final res = await _recordBloc.deleteBirthdayEvent(widget.event.id);
+      if (!res.isSuccess) {
+        showToast('Có lỗi xảy ra, vui lòng thử lại', context);
+      }
+      await navigatorKey.currentState.maybePop();
+      await navigatorKey.currentState.maybePop();
     }
-    try {
-      setState(() {
-        isLoading = true;
-      });
-      if (date == null || images.length + videos.length == 0) {
-        showToast('Chưa có đủ thông tin', context);
-        return;
-      }
-      final res = await _recordBloc.createBirthdayRecord(widget.pet.id, images,
-          videos, date.toIso8601String(), _checkCreatePost, _contentC.text);
-      if (res.isSuccess) {
-        showToast('Đã lưu vào profile của pet', context, isSuccess: true);
-        navigatorKey.currentState.maybePop(res);
-      } else {
-        showToast(res.errMessage, context);
-      }
-    } catch (e) {} finally {
-      setState(() {
-        isLoading = false;
-      });
-    }
-  }
-
-  Future _upload(String filePath) async {
-    try {
-      _allVideoAndImage.add(loadingGif);
-      setState(() {});
-      final res = await FileUtil.uploadFireStorage(File(filePath),
-          path:
-              'posts/user_${AuthBloc.instance.userModel.id}/${Formart.formatToDate(DateTime.now(), seperateChar: '-')}');
-      if (FileUtil.getFbUrlFileType(res) == FileType.image ||
-          FileUtil.getFbUrlFileType(res) == FileType.gif) {
-        images.add(res);
-        _allVideoAndImage.add(res);
-      }
-      if (FileUtil.getFbUrlFileType(res) == FileType.video) {
-        videos.add(res);
-        _allVideoAndImage.add(res);
-      }
-      _allVideoAndImage.remove(loadingGif);
-      setState(() {});
-    } catch (e) {
-      showToast(e.toString(), context);
-    }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
@@ -99,7 +85,7 @@ class _AddBirthdayPageState extends State<AddBirthdayPage> {
     return Stack(
       children: [
         Scaffold(
-          appBar: innerAppBar(context, 'This birthday'),
+          appBar: innerAppBar(context, 'New vaccine'),
           body: Column(
             children: [
               Expanded(
@@ -107,6 +93,34 @@ class _AddBirthdayPageState extends State<AddBirthdayPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      InkWell(
+                        highlightColor: ptAccentColor(context),
+                        splashColor: ptPrimaryColor(context),
+                        onTap: () {
+                          VaccineTypePage.navigate(widget.pet.race.type)
+                              .then((value) => setState(() {
+                                    selectedVaccine = value;
+                                  }));
+                        },
+                        child: ListTile(
+                          title: Text(
+                            'TYPE OF VACCINES',
+                            style: ptTitle().copyWith(
+                                fontWeight: FontWeight.w800,
+                                color: Colors.black54,
+                                fontSize: 14),
+                          ),
+                          subtitle: Text(selectedVaccine?.name ?? 'Cần chọn'),
+                          trailing: Icon(
+                            MdiIcons.arrowRightCircle,
+                            size: 20,
+                            color: ptPrimaryColor(context),
+                          ),
+                        ),
+                      ),
+                      Divider(
+                        height: 3,
+                      ),
                       Padding(
                         padding: const EdgeInsets.all(16).copyWith(bottom: 0),
                         child: Text(
@@ -124,15 +138,12 @@ class _AddBirthdayPageState extends State<AddBirthdayPage> {
                           child: ImageRowPicker(
                             _allVideoAndImage,
                             onUpdateListImg: (listImg) {},
-                            onAddImg: _upload,
+                            onAddImg: (str) {},
                           ),
                         ),
                       ),
                       SizedBox(
                         height: 10,
-                      ),
-                      Divider(
-                        height: 3,
                       ),
                       InkWell(
                         highlightColor: ptAccentColor(context),
@@ -143,7 +154,8 @@ class _AddBirthdayPageState extends State<AddBirthdayPage> {
                           child: TextField(
                             controller: _contentC,
                             decoration: InputDecoration(
-                                hintText: 'Happy birthday ${widget.pet.name}',
+                                hintText:
+                                    'Tiêm vac-xin cho pet cưng ${widget.pet.name}',
                                 border: InputBorder.none),
                           ),
                         ),
@@ -159,8 +171,8 @@ class _AddBirthdayPageState extends State<AddBirthdayPage> {
                             context: context,
                             initialDate: DateTime.now(),
                             firstDate:
-                                DateTime.now().subtract(Duration(days: 500)),
-                            lastDate: DateTime.now(),
+                                DateTime.now().subtract(Duration(days: 300)),
+                            lastDate: DateTime.now().add(Duration(days: 300)),
                           ).then((value) => setState(() {
                                 date = value;
                               }));
@@ -176,9 +188,7 @@ class _AddBirthdayPageState extends State<AddBirthdayPage> {
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Text(date != null
-                                  ? Formart.formatToDate(date)
-                                  : 'Select'),
+                              Text(Formart.formatToDate(date) ?? 'Select'),
                               SizedBox(width: 10),
                               Icon(
                                 MdiIcons.calendar,
@@ -213,18 +223,35 @@ class _AddBirthdayPageState extends State<AddBirthdayPage> {
                       Divider(
                         height: 3,
                       ),
+                      ListTile(
+                        title: Text(
+                          'REMIDER',
+                          style: ptTitle().copyWith(
+                              fontWeight: FontWeight.w800,
+                              color: Colors.black54,
+                              fontSize: 14),
+                        ),
+                        trailing: Switch(
+                          activeColor: ptPrimaryColor(context),
+                          value: _checkRemider,
+                          onChanged: (val) {
+                            setState(() {
+                              _checkRemider = val;
+                            });
+                          },
+                        ),
+                      ),
+                      Divider(
+                        height: 3,
+                      ),
                     ],
                   ),
                 ),
               ),
-              ExpandRectangleButton(
-                text: 'SAVE',
-                onTap: _addBirthday,
-              )
             ],
           ),
         ),
-        if (isLoading) kLoadingSpinner
+        if (isLoading) kLoadingSpinner,
       ],
     );
   }
