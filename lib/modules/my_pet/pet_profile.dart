@@ -418,7 +418,7 @@ class PetRecordWidget extends StatelessWidget {
             height: 3,
           ),
           _buildRecordTile(context, 'VACCINES', () {
-            VaccinePage.navigate();
+            VaccinePage.navigate(pet);
           }),
           Divider(
             height: 3,

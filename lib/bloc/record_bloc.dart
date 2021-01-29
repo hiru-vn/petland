@@ -1,5 +1,6 @@
 import 'package:petland/model/birthday_event_model.dart';
 import 'package:petland/model/pet.dart';
+import 'package:petland/model/vaccine_type_model.dart';
 import 'package:petland/repo/record_repo.dart';
 import 'package:petland/services/base_response.dart';
 import 'package:petland/share/import.dart';
@@ -33,6 +34,17 @@ class RecordBloc extends ChangeNotifier {
   //   } finally {}
   // }
 
+  Future<BaseResponse> getListVaccineType(String raceType) async {
+    try {
+      final res = await RecordRepo().getListVaccineType(raceType);
+      final List listRaw = res['data'];
+      final list = listRaw.map((e) => VaccineTypeModel.fromJson(e)).toList();
+      return BaseResponse.success(list);
+    } catch (e) {
+      return BaseResponse.fail(e.message?.toString());
+    } finally {}
+  }
+
   Future<BaseResponse> deleteBirthdayEvent(String eventId) async {
     try {
       final res = await RecordRepo().deleteBirthdayEvent(eventId: eventId);
@@ -63,10 +75,31 @@ class RecordBloc extends ChangeNotifier {
       List<String> listImage,
       List<String> listVideo,
       String date,
-      bool publicity) async {
+      bool publicity,
+      String content) async {
     try {
-      final res = await RecordRepo()
-          .createBirthdayRecord(petId, listImage, listVideo, date, publicity);
+      final res = await RecordRepo().createBirthdayRecord(
+          petId, listImage, listVideo, date, publicity, content);
+      return BaseResponse.success(res);
+    } catch (e) {
+      return BaseResponse.fail(e?.toString());
+    } finally {
+      notifyListeners();
+    }
+  }
+
+  Future<BaseResponse> createVaccineRecord(
+      String type,
+      String petId,
+      List<String> listImage,
+      List<String> listVideo,
+      String date,
+      bool publicity,
+      bool reminder,
+      String content) async {
+    try {
+      final res = await RecordRepo().createVaccineRecord(type, petId, listImage,
+          listVideo, date, publicity, reminder, content);
       return BaseResponse.success(res);
     } catch (e) {
       return BaseResponse.fail(e?.toString());

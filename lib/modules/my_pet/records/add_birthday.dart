@@ -57,7 +57,7 @@ class _AddBirthdayPageState extends State<AddBirthdayPage> {
         return;
       }
       final res = await _recordBloc.createBirthdayRecord(widget.pet.id, images,
-          videos, date.toIso8601String(), _checkCreatePost);
+          videos, date.toIso8601String(), _checkCreatePost, _contentC.text);
       if (res.isSuccess) {
         showToast('Đã lưu vào profile của pet', context, isSuccess: true);
         navigatorKey.currentState.maybePop();

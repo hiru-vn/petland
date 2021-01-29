@@ -43,8 +43,7 @@ class VaccineTypeSrv extends BaseService {
   VaccineTypeSrv() : super(module: 'VaccineType', fragment: ''' 
 id: String
 name: String
-raceId: String
-race: Race
+raceType: String
 createdAt: DateTime
 updatedAt: DateTime
   ''');

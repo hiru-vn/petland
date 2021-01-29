@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:petland/model/pet.dart';
 import 'package:petland/modules/my_pet/records/add_vaccine.dart';
 import 'package:petland/share/import.dart';
 
-class VaccinePage extends StatelessWidget {
-  static navigate() {
-    return navigatorKey.currentState.push(pageBuilder(VaccinePage()));
+class VaccinePage extends StatefulWidget {
+  final PetModel pet;
+
+  const VaccinePage({Key key, this.pet}) : super(key: key);
+  static navigate(PetModel pet) {
+    return navigatorKey.currentState.push(pageBuilder(VaccinePage(pet: pet)));
   }
 
+  @override
+  _VaccinePageState createState() => _VaccinePageState();
+}
+
+class _VaccinePageState extends State<VaccinePage> {
   @override
   Widget build(BuildContext context) {
     final list = [];
@@ -46,7 +55,7 @@ class VaccinePage extends StatelessWidget {
           ExpandRectangleButton(
             text: 'ADD NEW',
             onTap: () {
-              AddVaccinePage.navigate();
+              AddVaccinePage.navigate(widget.pet);
             },
           )
         ],
