@@ -27,7 +27,6 @@ class _InboxListState extends State<InboxList>
     with SingleTickerProviderStateMixin {
   InboxBloc _inboxBloc;
   AuthBloc _authBloc;
-  List<FbInboxGroupModel> groups;
 
   @override
   void initState() {
@@ -47,16 +46,16 @@ class _InboxListState extends State<InboxList>
   init() async {
     await _inboxBloc.createUser(_authBloc.userModel.id,
         _authBloc.userModel.name, _authBloc.userModel.avatar);
-    final res = await _inboxBloc.getList20Inbox(_authBloc.userModel.id);
+    final res = await _inboxBloc.getList20InboxGroup(_authBloc.userModel.id);
     setState(() {
-      groups = res;
+      _inboxBloc.groupInboxList = res;
     });
   }
 
   reload() async {
-    final res = await _inboxBloc.getList20Inbox(_authBloc.userModel.id);
+    final res = await _inboxBloc.getList20InboxGroup(_authBloc.userModel.id);
     setState(() {
-      groups = res;
+      _inboxBloc.groupInboxList = res;
     });
   }
 
@@ -75,50 +74,50 @@ class _InboxListState extends State<InboxList>
           ),
         ],
       ),
-      body: groups != null
+      body: _inboxBloc.groupInboxList != null
           ? ListView.separated(
               shrinkWrap: true,
-              itemCount: groups.length,
+              itemCount: _inboxBloc.groupInboxList.length,
               itemBuilder: (context, index) => ListTile(
                 onTap: () {
-                  InboxChat.navigate(groups[index], groups[index].lastUser)
+                  InboxChat.navigate(_inboxBloc.groupInboxList[index], _inboxBloc.groupInboxList[index].lastUser)
                       .then((value) => reload());
                 },
-                tileColor: groups[index].reader.contains(_authBloc.userModel.id)
+                tileColor: _inboxBloc.groupInboxList[index].reader.contains(_authBloc.userModel.id)
                     ? Colors.white
                     : ptBackgroundColor(context),
                 leading: CircleAvatar(
                   radius: 22,
                   backgroundImage: AssetImage(
-                      groups[index].image ?? 'assets/image/avatar.png'),
+                      _inboxBloc.groupInboxList[index].image ?? 'assets/image/avatar.png'),
                 ),
                 title: Text(
-                  groups[index].lastUser,
+                  _inboxBloc.groupInboxList[index].lastUser,
                   style: ptTitle().copyWith(
                       color:
-                          groups[index].reader.contains(_authBloc.userModel.id)
+                          _inboxBloc.groupInboxList[index].reader.contains(_authBloc.userModel.id)
                               ? Colors.black54
                               : Colors.black87,
                       fontSize:
-                          groups[index].reader.contains(_authBloc.userModel.id)
+                          _inboxBloc.groupInboxList[index].reader.contains(_authBloc.userModel.id)
                               ? 15
                               : 16),
                 ),
                 subtitle: Text(
-                  groups[index].lastMessage,
+                  _inboxBloc.groupInboxList[index].lastMessage,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: ptTiny().copyWith(
                       fontWeight:
-                          groups[index].reader.contains(_authBloc.userModel.id)
+                          _inboxBloc.groupInboxList[index].reader.contains(_authBloc.userModel.id)
                               ? FontWeight.w400
                               : FontWeight.w500,
                       color:
-                          groups[index].reader.contains(_authBloc.userModel.id)
+                          _inboxBloc.groupInboxList[index].reader.contains(_authBloc.userModel.id)
                               ? Colors.black54
                               : Colors.black87,
                       fontSize:
-                          groups[index].reader.contains(_authBloc.userModel.id)
+                          _inboxBloc.groupInboxList[index].reader.contains(_authBloc.userModel.id)
                               ? 12
                               : 13.5),
                 ),
@@ -126,19 +125,19 @@ class _InboxListState extends State<InboxList>
                   children: [
                     SizedBox(height: 12),
                     Text(
-                      Formart.timeByDay(DateTime.tryParse(groups[index].time)),
+                      Formart.timeByDay(DateTime.tryParse(_inboxBloc.groupInboxList[index].time)),
                       style: ptSmall().copyWith(
-                          fontWeight: groups[index]
+                          fontWeight: _inboxBloc.groupInboxList[index]
                                   .reader
                                   .contains(_authBloc.userModel.id)
                               ? FontWeight.w500
                               : FontWeight.w600,
-                          color: groups[index]
+                          color: _inboxBloc.groupInboxList[index]
                                   .reader
                                   .contains(_authBloc.userModel.id)
                               ? Colors.black54
                               : Colors.black87,
-                          fontSize: groups[index]
+                          fontSize: _inboxBloc.groupInboxList[index]
                                   .reader
                                   .contains(_authBloc.userModel.id)
                               ? 12

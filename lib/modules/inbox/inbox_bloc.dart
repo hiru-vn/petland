@@ -15,21 +15,11 @@ class InboxBloc extends ChangeNotifier {
     return firestore.collection('group').doc(id);
   }
 
+  List<FbInboxGroupModel> groupInboxList = [];
+
   final userCollection = 'user';
   final groupCollection = 'group';
   final messageCollection = 'messages';
-
-  Future<void> createGroup(String lastUser, String lastAvatar, DateTime time,
-      String lastMessage, String image, List<String> users) async {
-    await firestore.collection(groupCollection).doc(users.join("-")).set({
-      'lastUser': lastUser,
-      'lastAvatar': lastAvatar,
-      'time': time.toIso8601String(),
-      'lastMessage': lastMessage,
-      'image': image,
-      'users': users,
-    });
-  }
 
   Future<void> navigateToChatWith(
       String lastUser, // the other user
@@ -50,8 +40,8 @@ class InboxBloc extends ChangeNotifier {
         'users': users,
       });
       users.forEach((uid) {
-        firestore.collection(userCollection).doc(uid).set({
-          'groups': [users.join("-")]
+        firestore.collection(userCollection).doc(uid).update({
+          'groups': FieldValue.arrayUnion([users.join("-")])
         });
       });
     }
@@ -59,11 +49,23 @@ class InboxBloc extends ChangeNotifier {
         FbInboxGroupModel(users.join("-"), lastAvatar, lastMessage, lastUser,
             time.toIso8601String(), [], users),
         lastUser);
-    getList20Inbox(AuthBloc.instance.userModel.id);
+    getList20InboxGroup(AuthBloc.instance.userModel.id);
     return;
   }
 
   Future<void> userJoinGroupChat(String uid, String groupId) async {}
+
+  Future<void> createGroup(String lastUser, String lastAvatar, DateTime time,
+      String lastMessage, String image, List<String> users) async {
+    await firestore.collection(groupCollection).doc(users.join("-")).set({
+      'lastUser': lastUser,
+      'lastAvatar': lastAvatar,
+      'time': time.toIso8601String(),
+      'lastMessage': lastMessage,
+      'image': image,
+      'users': users,
+    });
+  }
 
   Future<void> updateGroupOnMessage(String groupid, String lastUser,
       DateTime time, String lastMessage, String image) async {
@@ -71,13 +73,14 @@ class InboxBloc extends ChangeNotifier {
         await firestore.collection(groupCollection).doc(groupid).get();
     if (snapShot.exists) {
       await getGroup(groupid).update({
-        'lastUser': lastUser,
+        //'lastUser': lastUser,
         'time': time.toIso8601String(),
         'lastMessage': lastMessage,
         'image': image,
       });
     }
   }
+
 
   Future<List<FbInboxUserModel>> getUsers(List<String> users) async {
     final List<DocumentSnapshot> snapShots = await Future.wait(
@@ -186,7 +189,7 @@ class InboxBloc extends ChangeNotifier {
     return list;
   }
 
-  Future<List<FbInboxGroupModel>> getList20Inbox(String idUser) async {
+  Future<List<FbInboxGroupModel>> getList20InboxGroup(String idUser) async {
     final groups = await get20UserGroupInboxList(idUser);
     final inboxes = await getGroupInboxList(groups);
     return inboxes;

@@ -45,6 +45,7 @@ class DetailImageScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       body: Container(
         child: Stack(fit: StackFit.expand, children: [
           Center(
@@ -76,7 +77,7 @@ class DetailImageScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(20)),
                 width: 40,
                 height: 40,
-                child: Icon(Icons.close),
+                child: Icon(Icons.close,),
               ),
             ),
           ),
