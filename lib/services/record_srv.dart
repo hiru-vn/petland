@@ -38,3 +38,14 @@ createdAt: DateTime
 updatedAt: DateTime
   ''');
 }
+
+class VaccineTypeSrv extends BaseService {
+  VaccineTypeSrv() : super(module: 'VaccineType', fragment: ''' 
+id: String
+name: String
+raceId: String
+race: Race
+createdAt: DateTime
+updatedAt: DateTime
+  ''');
+}

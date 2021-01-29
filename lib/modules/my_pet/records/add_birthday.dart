@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:petland/bloc/record_bloc.dart';
 import 'package:petland/model/pet.dart';
+import 'package:petland/modules/authentication/auth_bloc.dart';
 import 'package:petland/share/import.dart';
+import 'package:petland/utils/file_util.dart';
 
 class AddBirthdayPage extends StatefulWidget {
   final PetModel pet;
@@ -20,11 +24,14 @@ class _AddBirthdayPageState extends State<AddBirthdayPage> {
   DateTime date;
   List<String> images = [];
   List<String> videos = [];
+  List<String> _allVideoAndImage = [];
+  TextEditingController _contentC = TextEditingController();
   bool isLoading = false;
 
   @override
   void initState() {
     date = DateTime.tryParse(widget.pet.birthday ?? '');
+    _contentC.text = 'Happy birthday ${widget.pet.name}';
     super.initState();
   }
 
@@ -37,6 +44,10 @@ class _AddBirthdayPageState extends State<AddBirthdayPage> {
   }
 
   _addBirthday() async {
+    if (_allVideoAndImage.isEmpty) {
+      showToast('Please post atleast 1 image or video', context);
+      return;
+    }
     try {
       setState(() {
         isLoading = true;
@@ -57,6 +68,29 @@ class _AddBirthdayPageState extends State<AddBirthdayPage> {
       setState(() {
         isLoading = false;
       });
+    }
+  }
+
+  Future _upload(String filePath) async {
+    try {
+      _allVideoAndImage.add(loadingGif);
+      setState(() {});
+      final res = await FileUtil.uploadFireStorage(File(filePath),
+          path:
+              'posts/user_${AuthBloc.instance.userModel.id}/${Formart.formatToDate(DateTime.now(), seperateChar: '-')}');
+      if (FileUtil.getFbUrlFileType(res) == FileType.image ||
+          FileUtil.getFbUrlFileType(res) == FileType.gif) {
+        images.add(res);
+        _allVideoAndImage.add(res);
+      }
+      if (FileUtil.getFbUrlFileType(res) == FileType.video) {
+        videos.add(res);
+        _allVideoAndImage.add(res);
+      }
+      _allVideoAndImage.remove(loadingGif);
+      setState(() {});
+    } catch (e) {
+      showToast(e.toString(), context);
     }
   }
 
@@ -88,13 +122,34 @@ class _AddBirthdayPageState extends State<AddBirthdayPage> {
                         child: SizedBox(
                           height: 110,
                           child: ImageRowPicker(
-                            images,
+                            _allVideoAndImage,
                             onUpdateListImg: (listImg) {},
+                            onAddImg: _upload,
                           ),
                         ),
                       ),
                       SizedBox(
                         height: 10,
+                      ),
+                      Divider(
+                        height: 3,
+                      ),
+                      InkWell(
+                        highlightColor: ptAccentColor(context),
+                        splashColor: ptPrimaryColor(context),
+                        child: Padding(
+                          padding:
+                              EdgeInsets.symmetric(vertical: 5, horizontal: 18),
+                          child: TextField(
+                            controller: _contentC,
+                            decoration: InputDecoration(
+                                hintText: 'Happy birthday ${widget.pet.name}',
+                                border: InputBorder.none),
+                          ),
+                        ),
+                      ),
+                      Divider(
+                        height: 3,
                       ),
                       InkWell(
                         highlightColor: ptAccentColor(context),

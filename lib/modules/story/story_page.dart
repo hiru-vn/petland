@@ -73,19 +73,32 @@ class _StoryPageState extends State<StoryPage> {
                   scrollDirection: Axis.horizontal,
                   physics: NeverScrollableScrollPhysics(),
                   children: [
-                    PageView(
-                      controller: _pageController1,
-                      scrollDirection: Axis.vertical,
-                      children: _postBloc.posts
-                          .map((e) => StoryWidget(post: e))
-                          .toList(),
-                    ),
-                    PageView(
-                      controller: _pageController2,
-                      scrollDirection: Axis.vertical,
-                      children: _postBloc.posts
-                          .map((e) => StoryWidget(post: e))
-                          .toList(),
+                    RefreshIndicator(
+                        onRefresh: () async {
+                          await _postBloc.getListPost();
+                          return;
+                        },
+                        color: ptPrimaryColor(context),
+                        child: PageView(
+                          controller: _pageController1,
+                          scrollDirection: Axis.vertical,
+                          children: _postBloc.posts
+                              .map((e) => StoryWidget(post: e))
+                              .toList(),
+                        )),
+                    RefreshIndicator(
+                      onRefresh: () async {
+                        await _postBloc.getListPost();
+                        return;
+                      },
+                      color: ptPrimaryColor(context),
+                      child: PageView(
+                        controller: _pageController2,
+                        scrollDirection: Axis.vertical,
+                        children: _postBloc.posts
+                            .map((e) => StoryWidget(post: e))
+                            .toList(),
+                      ),
                     ),
                   ])),
         ],
