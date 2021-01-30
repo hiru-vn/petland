@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:petland/bloc/pet_bloc.dart';
 import 'package:petland/model/pet.dart';
 import 'package:petland/modules/authentication/auth_bloc.dart';
 import 'package:petland/modules/inbox/inbox_bloc.dart';
 import 'package:petland/modules/my_pet/pet_profile.dart';
+import 'package:petland/modules/profile/profile_owner_update.dart';
 import 'package:petland/share/import.dart';
+import 'package:petland/utils/file_util.dart';
 
 class OwnerProfilePage extends StatefulWidget {
   final UserModel user;
@@ -30,6 +34,7 @@ class _OwnerProfilePageState extends State<OwnerProfilePage>
   TabController _tabController;
   AuthBloc _authBloc;
   PetBloc _petBloc;
+  List<PetModel> pets = [];
   bool isMe = true;
 
   @override
@@ -55,25 +60,24 @@ class _OwnerProfilePageState extends State<OwnerProfilePage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: innerAppBar(context, 'My profile', actions: [
-        if (widget.user.id == _authBloc.userModel.id)
-          IconButton(
-            onPressed: () {
-              // OwnerDataUpdatePage.navigate(
-              //     race: 'Bristish short-hair',
-              //     birthdate: DateTime.now(),
-              //     gender: 'male',
-              //     bgUrl: 'https://www.coversden.com/images/covers/1/690.jpg',
-              //     imgUrl:
-              //         'https://ca-times.brightspotcdn.com/dims4/default/33c083b/2147483647/strip/true/crop/1611x906+0+0/resize/840x472!/quality/90/?url=https%3A%2F%2Fcalifornia-times-brightspot.s3.amazonaws.com%2Ffd%2Fef%2F05c1aab3e76c3d902aa0548c0046%2Fla-la-hm-pet-issue-18-jpg-20150615',
-              //     petName: 'Mick');
-            },
-            icon: Icon(
-              Icons.settings,
-              color: Colors.white,
-            ),
-          ),
-      ]),
+      appBar: innerAppBar(
+          context,
+          widget.user.id == _authBloc.userModel.id
+              ? 'My profile'
+              : widget.user.name,
+          actions: [
+            if (widget.user.id == _authBloc.userModel.id)
+              IconButton(
+                onPressed: () {
+                  OwnerProfileUpdatePage.navigate(_user)
+                      .then((value) => setState(() {}));
+                },
+                icon: Icon(
+                  Icons.settings,
+                  color: Colors.white,
+                ),
+              ),
+          ]),
       body: Column(children: [
         OwnerProfileHeader(
           user: _user,
@@ -136,12 +140,37 @@ class _OwnerProfilePageState extends State<OwnerProfilePage>
   }
 }
 
-class OwnerProfileHeader extends StatelessWidget {
+class OwnerProfileHeader extends StatefulWidget {
   final UserModel user;
   final bool isMe;
 
   const OwnerProfileHeader({Key key, this.user, this.isMe = true})
       : super(key: key);
+
+  @override
+  _OwnerProfileHeaderState createState() => _OwnerProfileHeaderState();
+}
+
+class _OwnerProfileHeaderState extends State<OwnerProfileHeader> {
+  _updateAvatar(String filePath) async {
+    setState(() {
+      widget.user.avatar = loadingGif;
+    });
+    final url = await FileUtil.uploadFireStorage(File(filePath));
+    setState(() {
+      widget.user.avatar = url;
+    });
+  }
+
+  _updateCoverImage(String filePath) async {
+    setState(() {
+      widget.user.backgroundimage = loadingGif;
+    });
+    final url = await FileUtil.uploadFireStorage(File(filePath));
+    setState(() {
+      widget.user.backgroundimage = url;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -164,17 +193,24 @@ class OwnerProfileHeader extends StatelessWidget {
                         color: ptPrimaryColor(context),
                       ),
                     ),
-                    Center(
-                      child: Icon(
-                        MdiIcons.camera,
-                        size: 50,
-                        color: Colors.white30,
+                    GestureDetector(
+                      onLongPress: () {
+                        imagePicker(context,
+                            onCameraPick: _updateCoverImage,
+                            onImagePick: _updateCoverImage);
+                      },
+                      child: Center(
+                        child: Icon(
+                          MdiIcons.camera,
+                          size: 50,
+                          color: Colors.white30,
+                        ),
                       ),
                     ),
-                    if (user.backgroundimage != null)
+                    if (widget.user.backgroundimage != null)
                       SizedBox(
                           width: deviceWidth(context),
-                          child: Image.network(user.backgroundimage,
+                          child: Image.network(widget.user.backgroundimage,
                               fit: BoxFit.cover)),
                   ],
                 ),
@@ -190,14 +226,22 @@ class OwnerProfileHeader extends StatelessWidget {
                     color: ptPrimaryColor(context),
                     border: Border.all(width: 2.5, color: Colors.white),
                   ),
-                  child: user.avatar != null
+                  child: widget.user.avatar != null
                       ? ClipRRect(
                           borderRadius: BorderRadius.circular(55),
-                          child: Image.network(user.avatar, fit: BoxFit.cover))
-                      : Icon(
-                          MdiIcons.camera,
-                          size: 70,
-                          color: Colors.white30,
+                          child: Image.network(widget.user.avatar,
+                              fit: BoxFit.cover))
+                      : GestureDetector(
+                          onLongPress: () {
+                            imagePicker(context,
+                                onCameraPick: _updateAvatar,
+                                onImagePick: _updateAvatar);
+                          },
+                          child: Icon(
+                            MdiIcons.camera,
+                            size: 70,
+                            color: Colors.white30,
+                          ),
                         ),
                 ),
               ),
@@ -209,11 +253,11 @@ class OwnerProfileHeader extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      user.name ?? '',
+                      widget.user.name ?? '',
                       style: ptBigTitle().copyWith(fontSize: 19.5),
                     ),
                     Text(
-                      user.description ?? "",
+                      widget.user.description ?? "",
                     ),
                   ],
                 ),
@@ -221,7 +265,7 @@ class OwnerProfileHeader extends StatelessWidget {
             ],
           ),
         ),
-        if (!isMe)
+        if (!widget.isMe)
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -240,12 +284,12 @@ class OwnerProfileHeader extends StatelessWidget {
                 onPressed: () async {
                   showSimpleLoadingDialog(context);
                   await InboxBloc.instance.navigateToChatWith(
-                      user.name,
-                      user.avatar,
+                      widget.user.name,
+                      widget.user.avatar,
                       DateTime.now(),
-                      'Bạn và ${user.name} đã trở thành bạn bè',
-                      user.avatar,
-                      [AuthBloc.instance.userModel.id, user.id]);
+                      'Bạn và ${widget.user.name} đã trở thành bạn bè',
+                      widget.user.avatar,
+                      [AuthBloc.instance.userModel.id, widget.user.id]);
                   navigatorKey.currentState.maybePop();
                 },
                 child: Text(

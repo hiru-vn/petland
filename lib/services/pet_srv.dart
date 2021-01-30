@@ -17,6 +17,8 @@ race {
   name
   type
 }
+images
+videos
 createdAt: DateTime
 updatedAt: DateTime
 ''');

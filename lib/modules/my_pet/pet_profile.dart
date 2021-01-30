@@ -332,19 +332,19 @@ class PetPictureWidget extends StatelessWidget {
   PetPictureWidget(this.pet);
   @override
   Widget build(BuildContext context) {
-    final list = [
-      'https://static.toiimg.com/photo/msid-67586673/67586673.jpg?3918697',
-      'https://c.files.bbci.co.uk/106B9/production/_114675276_catindex.jpg',
-      'https://img.webmd.com/dtmcms/live/webmd/consumer_assets/site_images/article_thumbnails/other/cat_relaxing_on_patio_other/1800x1200_cat_relaxing_on_patio_other.jpg',
-      'https://ebahana.com/wp-content/uploads/2019/02/maxresdefault-1-1.jpg',
-      'https://i.pinimg.com/564x/0d/0a/65/0d0a65ab7a9935b9635684fb80836e4e.jpg',
-      'https://i.pinimg.com/564x/0d/0a/65/0d0a65ab7a9935b9635684fb80836e4e.jpg',
-      'https://www.iflr.com/Media/images/iflr/1-abstract/AdobeStock_324008934.jpeg',
-      'https://ichef.bbci.co.uk/news/1024/cpsprodpb/151AB/production/_111434468_gettyimages-1143489763.jpg',
-      'https://static01.nyt.com/images/2020/04/22/science/22VIRUS-PETCATS1/22VIRUS-PETCATS1-mediumSquareAt3X.jpg',
-      'https://www.humanesociety.org/sites/default/files/styles/1240x698/public/2020-07/cat-410261.jpg?h=191a1c11&itok=c4ksCwxz',
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLkK5QsywkQyr89y6adF2dgs96uAbsWHD_fg&usqp=CAU'
-    ];
+    // final list = [
+    //   'https://static.toiimg.com/photo/msid-67586673/67586673.jpg?3918697',
+    //   'https://c.files.bbci.co.uk/106B9/production/_114675276_catindex.jpg',
+    //   'https://img.webmd.com/dtmcms/live/webmd/consumer_assets/site_images/article_thumbnails/other/cat_relaxing_on_patio_other/1800x1200_cat_relaxing_on_patio_other.jpg',
+    //   'https://ebahana.com/wp-content/uploads/2019/02/maxresdefault-1-1.jpg',
+    //   'https://i.pinimg.com/564x/0d/0a/65/0d0a65ab7a9935b9635684fb80836e4e.jpg',
+    //   'https://i.pinimg.com/564x/0d/0a/65/0d0a65ab7a9935b9635684fb80836e4e.jpg',
+    //   'https://www.iflr.com/Media/images/iflr/1-abstract/AdobeStock_324008934.jpeg',
+    //   'https://ichef.bbci.co.uk/news/1024/cpsprodpb/151AB/production/_111434468_gettyimages-1143489763.jpg',
+    //   'https://static01.nyt.com/images/2020/04/22/science/22VIRUS-PETCATS1/22VIRUS-PETCATS1-mediumSquareAt3X.jpg',
+    //   'https://www.humanesociety.org/sites/default/files/styles/1240x698/public/2020-07/cat-410261.jpg?h=191a1c11&itok=c4ksCwxz',
+    //   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLkK5QsywkQyr89y6adF2dgs96uAbsWHD_fg&usqp=CAU'
+    // ];
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -352,11 +352,11 @@ class PetPictureWidget extends StatelessWidget {
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
           crossAxisCount: 3,
-          staggeredTiles: list.map((_) => StaggeredTile.fit(1)).toList(),
-          children: List.generate(list.length, (index) {
+          staggeredTiles: pet.images.map((_) => StaggeredTile.fit(1)).toList(),
+          children: List.generate(pet.images.length, (index) {
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
-              child: ImageViewNetwork(url: list[index]),
+              child: ImageViewNetwork(url: pet.images[index]),
             );
           }),
         ),

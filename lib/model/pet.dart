@@ -13,6 +13,8 @@ class PetModel {
   RaceModel race;
   String createdAt;
   String updatedAt;
+  List<String> images;
+  List<String> videos;
 
   PetModel({
     this.id,
@@ -27,6 +29,7 @@ class PetModel {
     this.race,
     this.createdAt,
     this.updatedAt,
+    this.images, this.videos
   });
 
   PetModel.fromJson(Map<String, dynamic> json) {
@@ -42,6 +45,8 @@ class PetModel {
     race = json['race'] != null ? new RaceModel.fromJson(json['race']) : null;
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
+    images  = json['images']!=null? json['images'].cast<String>() :[];
+    videos = json['videos']!= null? json['videos'].cast<String>():[];
   }
 
   Map<String, dynamic> toJson() {
