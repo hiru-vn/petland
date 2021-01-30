@@ -248,7 +248,7 @@ class _StoryWidgetState extends State<StoryWidget>
                 SizedBox(height: 20),
                 GestureDetector(
                   onTap: () {
-                    shareTo(context);
+                    shareTo(context, content: _post.content, image: _post.images[0]);
                   },
                   child: Icon(
                     MdiIcons.share,

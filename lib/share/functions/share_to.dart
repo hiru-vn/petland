@@ -1,6 +1,10 @@
-import '../import.dart';
+import 'package:petland/share/functions/down_load_url_file.dart';
 
-void shareTo(BuildContext context) {
+import '../import.dart';
+import 'package:social_share/social_share.dart';
+
+void shareTo(BuildContext context,
+    {String content = '', String image = '', String video}) {
   showModalBottomSheet(
       useRootNavigator: true,
       context: context,
@@ -33,8 +37,18 @@ void shareTo(BuildContext context) {
                         child: Row(
                           children: [
                             GestureDetector(
-                              onTap: () {
-                                navigatorKey.currentState.maybePop();
+                              onTap: () async {
+                                try {
+                                  showSimpleLoadingDialog(context);
+                                  final file = await downLoadUrlFile(image);
+                                  navigatorKey.currentState.maybePop();
+                                  SocialShare.shareFacebookStory(
+                                      file.path, "#ffffff", "#000000", image,
+                                      appId: "3591217134294975");
+                                  navigatorKey.currentState.maybePop();
+                                } catch (e) {
+                                  showToast('Lỗi: $e', context);
+                                }
                               },
                               child: ShareItem(
                                 img: 'assets/image/facebook.webp',
@@ -45,24 +59,30 @@ void shareTo(BuildContext context) {
                               width: 20,
                             ),
                             GestureDetector(
-                              onTap: () {
-                                navigatorKey.currentState.maybePop();
+                              onTap: () async {
+                                showSimpleLoadingDialog(context);
+                                  final file = await downLoadUrlFile(image);
+                                  navigatorKey.currentState.maybePop();
+                                  SocialShare.shareInstagramStory(
+                                      file.path, "#ffffff", "#000000", image,);
+                                  navigatorKey.currentState.maybePop();
                               },
                               child: ShareItem(
-                                img: 'assets/image/gmail.webp',
-                                name: 'Gmail',
+                                img: 'assets/image/instagram.jpg',
+                                name: 'Instagram',
                               ),
                             ),
                             SizedBox(
                               width: 25,
                             ),
                             GestureDetector(
-                              onTap: () {
-                                navigatorKey.currentState.maybePop();
+                              onTap: () async {
+                                  await SocialShare.shareWhatsapp(image);
+                                  navigatorKey.currentState.maybePop();
                               },
                               child: ShareItem(
-                                img: 'assets/image/workplace.webp',
-                                name: 'Workplace',
+                                img: 'assets/image/whatsapp.png',
+                                name: 'Whatsapp',
                               ),
                             ),
                           ],

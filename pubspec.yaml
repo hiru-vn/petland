@@ -63,6 +63,7 @@ dev_dependencies:
   google_maps_flutter: ^1.1.1
   giffy_dialog: ^1.8.0
   preload_page_view: ^0.1.4
+  social_share: ^2.0.5
 
   # firebase
   firebase_auth: ^0.20.0+1
