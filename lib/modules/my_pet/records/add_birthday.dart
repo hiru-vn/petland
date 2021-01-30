@@ -60,7 +60,7 @@ class _AddBirthdayPageState extends State<AddBirthdayPage> {
           videos, date.toIso8601String(), _checkCreatePost, _contentC.text);
       if (res.isSuccess) {
         showToast('Đã lưu vào profile của pet', context, isSuccess: true);
-        navigatorKey.currentState.maybePop(res);
+        navigatorKey.currentState.maybePop(res.data);
       } else {
         showToast(res.errMessage, context);
       }

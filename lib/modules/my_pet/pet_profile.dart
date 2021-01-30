@@ -57,7 +57,8 @@ class _PetProfilePageState extends State<PetProfilePage>
       appBar: innerAppBar(context, 'Pet\'s profile', actions: [
         IconButton(
             onPressed: () {
-              PetDataUpdatePage.navigate(petId: _pet.id);
+              PetDataUpdatePage.navigate(petId: _pet.id)
+                  .then((value) => setState(() {}));
             },
             icon: Icon(
               Icons.settings,
@@ -106,8 +107,8 @@ class _PetProfilePageState extends State<PetProfilePage>
                   birthdate: DateTime.tryParse(_pet.birthday),
                   characters: _pet.character,
                 ),
-                PetPictureWidget(),
-                PetVideoWidget(),
+                PetPictureWidget(_pet),
+                PetVideoWidget(_pet),
                 PetRecordWidget(_pet),
               ],
             ),
@@ -327,6 +328,8 @@ class PetDataWidget extends StatelessWidget {
 }
 
 class PetPictureWidget extends StatelessWidget {
+  final PetModel pet;
+  PetPictureWidget(this.pet);
   @override
   Widget build(BuildContext context) {
     final list = [
@@ -363,6 +366,8 @@ class PetPictureWidget extends StatelessWidget {
 }
 
 class PetVideoWidget extends StatelessWidget {
+  final PetModel pet;
+  PetVideoWidget(this.pet);
   @override
   Widget build(BuildContext context) {
     final list = [];
@@ -395,7 +400,7 @@ class PetVideoWidget extends StatelessWidget {
               SizedBox(
                 width: deviceWidth(context) / 1.4,
                 child: Text(
-                  'Mick does not have any videos yet',
+                  '${pet.name} does not have any videos yet',
                   style: ptBigBody(),
                   textAlign: TextAlign.center,
                 ),

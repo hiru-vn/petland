@@ -16,11 +16,11 @@ class PetDataUpdatePage extends StatefulWidget {
     this.type,
   }) : super(key: key);
 
-  static navigate({
+  static Future navigate({
     String petId,
     String type,
   }) {
-    navigatorKey.currentState.push(pageBuilder(PetDataUpdatePage(
+   return navigatorKey.currentState.push(pageBuilder(PetDataUpdatePage(
       petId: petId,
       type: type,
     )));
@@ -60,6 +60,10 @@ class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
 
   Future _save() async {
     _pet.name = petNameC.text;
+    if (_pet.race == null) {
+      showToast('Không đủ thông tin', context);
+      return;
+    }
     setState(() {
       isLoading = true;
     });
@@ -416,8 +420,12 @@ class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
           child: TextFieldTags(
-            onTag: (val) {},
-            onDelete: (val) {},
+            onTag: (val) {
+              _pet.character.add(val);
+            },
+            onDelete: (val) {
+              _pet.character.remove(val);
+            },
             initialTags: _pet?.character,
             textFieldStyler: TextFieldStyler(
               hintText: 'CHARACTER',

@@ -228,7 +228,10 @@ class OwnerProfileHeader extends StatelessWidget {
               RaisedButton(
                 padding: EdgeInsets.symmetric(horizontal: 16),
                 onPressed: () {},
-                child: Text('Follow'),
+                child: Text(
+                  'Follow',
+                  style: ptBody(),
+                ),
               ),
               SizedBox(width: 10),
               RaisedButton(
@@ -245,7 +248,10 @@ class OwnerProfileHeader extends StatelessWidget {
                       [AuthBloc.instance.userModel.id, user.id]);
                   navigatorKey.currentState.maybePop();
                 },
-                child: Text('Nhắn tin'),
+                child: Text(
+                  'Nhắn tin',
+                  style: ptBody(),
+                ),
               ),
               SizedBox(width: 20),
             ],
@@ -362,7 +368,8 @@ class OwnerPetListWidget extends StatefulWidget {
   final PetBloc petBloc;
   final bool isMe;
 
-  const OwnerPetListWidget({Key key, this.petBloc, this.isMe = true}) : super(key: key);
+  const OwnerPetListWidget({Key key, this.petBloc, this.isMe = true})
+      : super(key: key);
 
   @override
   _OwnerPetListWidgetState createState() => _OwnerPetListWidgetState();
@@ -373,16 +380,15 @@ class _OwnerPetListWidgetState extends State<OwnerPetListWidget> {
 
   @override
   void initState() {
-    if (widget.isMe) pets = widget.petBloc.pets;
+    if (widget.isMe)
+      pets = widget.petBloc.pets;
     else {
       _getListPet();
     }
     super.initState();
   }
 
-  Future _getListPet() async {
-    
-  }
+  Future _getListPet() async {}
 
   @override
   Widget build(BuildContext context) {
@@ -393,13 +399,11 @@ class _OwnerPetListWidgetState extends State<OwnerPetListWidget> {
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
           crossAxisCount: 2,
-          staggeredTiles:
-              pets.map((_) => StaggeredTile.fit(1)).toList(),
+          staggeredTiles: pets.map((_) => StaggeredTile.fit(1)).toList(),
           children: List.generate(pets.length, (index) {
             return PetCard(
               pet: pets[index],
-              onTap: () =>
-                  PetProfilePage.navigate(petId: pets[index].id),
+              onTap: () => PetProfilePage.navigate(petId: pets[index].id),
             );
           }),
         ),
