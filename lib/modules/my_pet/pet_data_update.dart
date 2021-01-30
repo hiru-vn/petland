@@ -51,8 +51,11 @@ class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
       if (_isUpdate)
         _pet =
             _petBloc.pets.firstWhere((element) => element.id == widget.petId);
-      else
+      else {
         _pet = PetModel();
+        _petBloc
+          .getAllPetRace(widget.type);
+      }
       petNameC.text = _pet.name ?? '';
     }
     super.didChangeDependencies();
@@ -276,6 +279,7 @@ class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
                 .then((value) {
               if (value != null) _pet?.race = value;
             });
+            FocusScope.of(context).requestFocus(FocusNode());
           },
           child: ListTile(
             title: Text(
@@ -322,7 +326,7 @@ class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
               },
             ).then((value) => setState(() {
                   _pet?.birthday = value.toIso8601String();
-                }));
+                }));FocusScope.of(context).requestFocus(FocusNode());
           },
           child: ListTile(
             title: Text(
@@ -384,6 +388,7 @@ class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
               setState(() {
                 _pet?.gender = value;
               });
+              FocusScope.of(context).requestFocus(FocusNode());
             });
           },
           child: ListTile(
