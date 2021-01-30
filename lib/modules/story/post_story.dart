@@ -80,6 +80,7 @@ class _PostStoryState extends State<PostStory> {
         petTags: [pet.id],
         tags: tags,
         makePublic: _makePublic));
+
     setState(() {
       isLoading = false;
     });
@@ -88,6 +89,7 @@ class _PostStoryState extends State<PostStory> {
     } else {
       showToast('Đăng thành công', context, isSuccess: true);
       _postBloc.getListPost();
+      PetBloc.instance.getAllPet();
       navigatorKey.currentState.maybePop();
     }
   }

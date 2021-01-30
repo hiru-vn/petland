@@ -82,7 +82,12 @@ class _ProfilePageState extends State<ProfilePage> {
         "name": "Feedback",
         "img": "assets/image/feedback.png",
         "action": () {
-          FeedbackPage.navigate();
+          FeedbackPage.navigate().then((value) => showConfirmImageDialog(
+              context,
+              'Cảm ơn đã phản hồi',
+              'Góp ý của bạn giúp Petland ngày càng hoàn thiện hơn',
+              'assets/image/pet_delete_dialog.jpg',
+              onlyOkButton: true));
         }
       },
       {

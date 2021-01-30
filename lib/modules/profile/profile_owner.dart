@@ -8,6 +8,7 @@ import 'package:petland/modules/inbox/inbox_bloc.dart';
 import 'package:petland/modules/my_pet/pet_profile.dart';
 import 'package:petland/modules/profile/profile_owner_update.dart';
 import 'package:petland/share/import.dart';
+import 'package:petland/share/widgets/empty_widget.dart';
 import 'package:petland/utils/file_util.dart';
 
 class OwnerProfilePage extends StatefulWidget {
@@ -132,7 +133,10 @@ class _OwnerProfilePageState extends State<OwnerProfilePage>
                       user: _user,
                       isMe: isMe,
                     )),
-                Container()
+                EmptyWidget(
+                  assetImg: 'assets/image/no_user.png',
+                  title: 'Chưa có người theo dõi nào',
+                ),
               ],
             ),
           ),

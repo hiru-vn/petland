@@ -2,11 +2,12 @@ import 'package:giffy_dialog/giffy_dialog.dart';
 import 'package:petland/share/import.dart';
 
 Future<bool> showConfirmImageDialog(
-    BuildContext context, String title, String message, String image) async {
+    BuildContext context, String title, String message, String image, {bool onlyOkButton = false}) async {
   bool val = false;
   await showDialog(
       context: context,
       builder: (_) => AssetGiffyDialog(
+        onlyOkButton: onlyOkButton,
             image: Image.asset(
               image,
               fit: BoxFit.contain,
