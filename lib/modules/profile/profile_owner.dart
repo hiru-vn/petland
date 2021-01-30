@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:petland/bloc/pet_bloc.dart';
+import 'package:petland/bloc/post_bloc.dart';
 import 'package:petland/model/pet.dart';
 import 'package:petland/modules/authentication/auth_bloc.dart';
 import 'package:petland/modules/inbox/inbox_bloc.dart';
@@ -128,7 +129,8 @@ class _OwnerProfilePageState extends State<OwnerProfilePage>
                     width: deviceWidth(context),
                     height: 500,
                     child: OwnerPetListWidget(
-                      petBloc: _petBloc,
+                      user: _user,
+                      isMe: isMe,
                     )),
                 Container()
               ],
@@ -174,133 +176,155 @@ class _OwnerProfileHeaderState extends State<OwnerProfileHeader> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          height: 180,
-          child: Stack(
-            children: [
-              Container(
-                width: deviceWidth(context),
-                height: 120,
-                color: HexColor('#383838'),
-                child: Stack(
-                  children: [
-                    Center(
-                      child: Icon(
-                        Icons.pets,
-                        size: 100,
-                        color: ptPrimaryColor(context),
-                      ),
-                    ),
-                    GestureDetector(
-                      onLongPress: () {
-                        imagePicker(context,
-                            onCameraPick: _updateCoverImage,
-                            onImagePick: _updateCoverImage);
-                      },
-                      child: Center(
+    return WillPopScope(
+      onWillPop: () {
+        PostBloc.instance.reload();
+        return Future.value(true);
+      },
+      child: Column(
+        children: [
+          Container(
+            height: 180,
+            child: Stack(
+              children: [
+                Container(
+                  width: deviceWidth(context),
+                  height: 120,
+                  color: HexColor('#383838'),
+                  child: Stack(
+                    children: [
+                      Center(
                         child: Icon(
-                          MdiIcons.camera,
-                          size: 50,
-                          color: Colors.white30,
+                          Icons.pets,
+                          size: 100,
+                          color: ptPrimaryColor(context),
                         ),
                       ),
-                    ),
-                    if (widget.user.backgroundimage != null)
-                      SizedBox(
-                          width: deviceWidth(context),
-                          child: Image.network(widget.user.backgroundimage,
-                              fit: BoxFit.cover)),
-                  ],
-                ),
-              ),
-              Positioned(
-                left: deviceWidth(context) / 10,
-                top: 65,
-                child: Container(
-                  width: 110,
-                  height: 110,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: ptPrimaryColor(context),
-                    border: Border.all(width: 2.5, color: Colors.white),
-                  ),
-                  child: widget.user.avatar != null
-                      ? ClipRRect(
-                          borderRadius: BorderRadius.circular(55),
-                          child: Image.network(widget.user.avatar,
-                              fit: BoxFit.cover))
-                      : GestureDetector(
-                          onLongPress: () {
-                            imagePicker(context,
-                                onCameraPick: _updateAvatar,
-                                onImagePick: _updateAvatar);
-                          },
+                      GestureDetector(
+                        onLongPress: () {
+                          imagePicker(context,
+                              onCameraPick: _updateCoverImage,
+                              onImagePick: _updateCoverImage);
+                        },
+                        child: Center(
                           child: Icon(
                             MdiIcons.camera,
-                            size: 70,
+                            size: 50,
                             color: Colors.white30,
                           ),
                         ),
+                      ),
+                      if (widget.user.backgroundimage != null)
+                        SizedBox(
+                            width: deviceWidth(context),
+                            child: Image.network(widget.user.backgroundimage,
+                                fit: BoxFit.cover)),
+                    ],
+                  ),
                 ),
-              ),
-              Positioned(
-                right: 15,
-                left: deviceWidth(context) / 10 + 130,
-                bottom: 10,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      widget.user.name ?? '',
-                      style: ptBigTitle().copyWith(fontSize: 19.5),
+                Positioned(
+                  left: deviceWidth(context) / 10,
+                  top: 65,
+                  child: Container(
+                    width: 110,
+                    height: 110,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: ptPrimaryColor(context),
+                      border: Border.all(width: 2.5, color: Colors.white),
                     ),
-                    Text(
-                      widget.user.description ?? "",
-                    ),
-                  ],
+                    child: widget.user.avatar != null
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(55),
+                            child: Image.network(widget.user.avatar,
+                                fit: BoxFit.cover))
+                        : GestureDetector(
+                            onLongPress: () {
+                              imagePicker(context,
+                                  onCameraPick: _updateAvatar,
+                                  onImagePick: _updateAvatar);
+                            },
+                            child: Icon(
+                              MdiIcons.camera,
+                              size: 70,
+                              color: Colors.white30,
+                            ),
+                          ),
+                  ),
                 ),
-              )
-            ],
+                Positioned(
+                  right: 15,
+                  left: deviceWidth(context) / 10 + 130,
+                  bottom: 10,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.user.name ?? '',
+                        style: ptBigTitle().copyWith(fontSize: 19.5),
+                      ),
+                      Text(
+                        widget.user.description ?? "",
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
-        ),
-        if (!widget.isMe)
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              RaisedButton(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                onPressed: () {},
-                child: Text(
-                  'Follow',
-                  style: ptBody(),
+          if (!widget.isMe)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                RaisedButton(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  onPressed: () {
+                    if (AuthBloc.instance.userModel.follows
+                        .contains(widget.user.id))
+                      AuthBloc.instance.userModel.follows
+                          .remove(widget.user.id);
+                    else {
+                      AuthBloc.instance.userModel.follows.add(widget.user.id);
+                    }
+                    PostBloc.instance.reload();
+                    setState(() {});
+                  },
+                  child: Text(
+                    AuthBloc.instance.userModel.follows.contains(widget.user.id)
+                        ? 'Unfollow'
+                        : 'Follow',
+                    style: ptBody(),
+                  ),
+                  color: AuthBloc.instance.userModel.follows
+                          .contains(widget.user.id)
+                      ? Colors.pink
+                      : ptPrimaryColor(context),
                 ),
-              ),
-              SizedBox(width: 10),
-              RaisedButton(
-                color: Colors.blueAccent,
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                onPressed: () async {
-                  showSimpleLoadingDialog(context);
-                  await InboxBloc.instance.navigateToChatWith(
-                      widget.user.name,
-                      widget.user.avatar,
-                      DateTime.now(),
-                      'Bạn và ${widget.user.name} đã trở thành bạn bè',
-                      widget.user.avatar,
-                      [AuthBloc.instance.userModel.id, widget.user.id]);
-                  navigatorKey.currentState.maybePop();
-                },
-                child: Text(
-                  'Nhắn tin',
-                  style: ptBody(),
+                SizedBox(width: 10),
+                RaisedButton(
+                  color: Colors.blueAccent,
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  onPressed: () async {
+                    showSimpleLoadingDialog(context);
+                    await InboxBloc.instance.navigateToChatWith(
+                        widget.user.name,
+                        widget.user.avatar,
+                        DateTime.now(),
+                        'Bạn và ${widget.user.name} đã trở thành bạn bè',
+                        widget.user.avatar,
+                        [AuthBloc.instance.userModel.id, widget.user.id]);
+                    navigatorKey.currentState.maybePop();
+                  },
+                  child: Text(
+                    'Nhắn tin',
+                    style: ptBody(),
+                  ),
                 ),
-              ),
-              SizedBox(width: 20),
-            ],
-          ),
-      ],
+                SizedBox(width: 20),
+              ],
+            ),
+        ],
+      ),
     );
   }
 }
@@ -409,10 +433,10 @@ class OwnerDataWidget extends StatelessWidget {
 }
 
 class OwnerPetListWidget extends StatefulWidget {
-  final PetBloc petBloc;
+  final UserModel user;
   final bool isMe;
 
-  const OwnerPetListWidget({Key key, this.petBloc, this.isMe = true})
+  const OwnerPetListWidget({Key key, this.user, this.isMe = true})
       : super(key: key);
 
   @override
@@ -420,39 +444,57 @@ class OwnerPetListWidget extends StatefulWidget {
 }
 
 class _OwnerPetListWidgetState extends State<OwnerPetListWidget> {
-  List<PetModel> pets = [];
+  List<PetModel> pets;
+  PetBloc _petBloc;
 
   @override
   void initState() {
     if (widget.isMe)
-      pets = widget.petBloc.pets;
-    else {
-      _getListPet();
-    }
+      pets = _petBloc.pets;
+    else {}
     super.initState();
   }
 
-  Future _getListPet() async {}
+  didChangeDependencies() {
+    if (_petBloc == null) {
+      _petBloc = Provider.of<PetBloc>(context);
+      _getListPet();
+    }
+    super.didChangeDependencies();
+  }
+
+  Future _getListPet() async {
+    final res = await _petBloc.getAllPet(uid: widget.user.id);
+
+    if (res.isSuccess) {
+      pets = res.data;
+    } else {
+      showToast(res.errMessage, context);
+    }
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: StaggeredGridView.count(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          crossAxisCount: 2,
-          staggeredTiles: pets.map((_) => StaggeredTile.fit(1)).toList(),
-          children: List.generate(pets.length, (index) {
-            return PetCard(
-              pet: pets[index],
-              onTap: () => PetProfilePage.navigate(petId: pets[index].id),
-            );
-          }),
-        ),
-      ),
-    );
+    return pets != null
+        ? SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: StaggeredGridView.count(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                crossAxisCount: 2,
+                staggeredTiles: pets.map((_) => StaggeredTile.fit(1)).toList(),
+                children: List.generate(pets.length, (index) {
+                  return PetCard(
+                    pet: pets[index],
+                    onTap: () => PetProfilePage.navigate(petId: pets[index].id),
+                  );
+                }),
+              ),
+            ),
+          )
+        : kLoadingSpinner;
   }
 }
 

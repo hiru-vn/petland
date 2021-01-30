@@ -40,7 +40,7 @@ void shareTo(BuildContext context,
                               onTap: () async {
                                 try {
                                   showSimpleLoadingDialog(context);
-                                  final file = await downLoadUrlFile(image);
+                                  final file = await downLoadUrlFile(image??video);
                                   navigatorKey.currentState.maybePop();
                                   SocialShare.shareFacebookStory(
                                       file.path, "#ffffff", "#000000", image,
@@ -61,7 +61,7 @@ void shareTo(BuildContext context,
                             GestureDetector(
                               onTap: () async {
                                 showSimpleLoadingDialog(context);
-                                  final file = await downLoadUrlFile(image);
+                                  final file = await downLoadUrlFile(image??video);
                                   navigatorKey.currentState.maybePop();
                                   SocialShare.shareInstagramStory(
                                       file.path, "#ffffff", "#000000", image,);
@@ -77,7 +77,7 @@ void shareTo(BuildContext context,
                             ),
                             GestureDetector(
                               onTap: () async {
-                                  await SocialShare.shareWhatsapp(image);
+                                  await SocialShare.shareWhatsapp(image??video);
                                   navigatorKey.currentState.maybePop();
                               },
                               child: ShareItem(

@@ -13,10 +13,10 @@ class PetBloc extends ChangeNotifier {
   List<PetModel> pets = [];
   List<RaceModel> races = [];
 
-  Future<BaseResponse> getAllPet() async {
+  Future<BaseResponse> getAllPet({String uid}) async {
     try {
       final String id = await SPref.instance.get('id');
-      final res = await PetRepo().getAll(userId: id);
+      final res = await PetRepo().getAll(userId: uid??id);
       final List listRaw = res['data'];
       final list = listRaw.map((e) => PetModel.fromJson(e)).toList();
       pets = list;

@@ -30,13 +30,14 @@ class _PostStoryState extends State<PostStory> {
   List<String> _allVideoAndImage = [];
   PetModel pet;
   TextEditingController _statusC = TextEditingController();
+  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
   }
 
-    Future _upload(String filePath) async {
+  Future _upload(String filePath) async {
     try {
       _allVideoAndImage.add(loadingGif);
       setState(() {});
@@ -69,6 +70,9 @@ class _PostStoryState extends State<PostStory> {
   }
 
   Future _submit() async {
+    setState(() {
+      isLoading = true;
+    });
     final res = await _postBloc.createPost(PostModel(
         content: _statusC.text,
         images: images,
@@ -76,6 +80,9 @@ class _PostStoryState extends State<PostStory> {
         petTags: [pet.id],
         tags: tags,
         makePublic: _makePublic));
+    setState(() {
+      isLoading = false;
+    });
     if (!res.isSuccess) {
       showToast(res.errMessage, context);
     } else {
@@ -181,7 +188,8 @@ class _PostStoryState extends State<PostStory> {
                   ],
                 ),
               ),
-            )
+            ),
+            if (isLoading) kLoadingSpinner
           ],
         ),
       ),
@@ -206,6 +214,7 @@ class _PostStoryState extends State<PostStory> {
                 });
               }
             });
+            FocusScope.of(context).requestFocus(FocusNode());
           },
           child: CustomListTile(
             leading: Icon(

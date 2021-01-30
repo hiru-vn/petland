@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:petland/bloc/post_bloc.dart';
+import 'package:petland/modules/authentication/auth_bloc.dart';
 import 'package:petland/modules/story/story_appbar.dart';
 import 'package:petland/modules/story/story_widget.dart';
 import 'package:petland/share/import.dart';
@@ -84,6 +85,9 @@ class _StoryPageState extends State<StoryPage> {
                           controller: _pageController1,
                           scrollDirection: Axis.vertical,
                           children: _postBloc.posts
+                              .where((element) => AuthBloc
+                                  .instance.userModel.follows
+                                  .contains(element.userId))
                               .map((e) => StoryWidget(post: e))
                               .toList(),
                         )),

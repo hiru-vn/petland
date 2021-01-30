@@ -13,6 +13,7 @@ class UserModel {
   String updatedAt;
   String gender;
   String country;
+  List<UserModel> followingUser = [];
 
   UserModel(
       {this.id,

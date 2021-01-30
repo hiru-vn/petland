@@ -107,6 +107,8 @@ class AuthBloc extends ChangeNotifier {
   }
 
   void logout() async {
+    await SPref.instance.remove('token');
+    await SPref.instance.remove('id');
     await googleSignIn.signOut();
     print('User Sign Out');
   }
