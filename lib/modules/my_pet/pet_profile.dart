@@ -286,8 +286,12 @@ class PetDataWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
             child: TextFieldTags(
-              onTag: (val) {},
-              onDelete: (val) {},
+              onTag: (val) {
+                // characters.add(val);
+              },
+              onDelete: (val) {
+                // characters.remove(val);
+              },
               initialTags: characters,
               textFieldStyler: TextFieldStyler(
                 textFieldEnabled: false,

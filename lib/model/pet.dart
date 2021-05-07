@@ -16,21 +16,21 @@ class PetModel {
   List<String> images;
   List<String> videos;
 
-  PetModel({
-    this.id,
-    this.name,
-    this.raceId,
-    this.birthday,
-    this.gender,
-    this.character,
-    this.userId,
-    this.avatar,
-    this.coverImage,
-    this.race,
-    this.createdAt,
-    this.updatedAt,
-    this.images, this.videos
-  });
+  PetModel(
+      {this.id,
+      this.name,
+      this.raceId,
+      this.birthday,
+      this.gender,
+      this.character,
+      this.userId,
+      this.avatar,
+      this.coverImage,
+      this.race,
+      this.createdAt,
+      this.updatedAt,
+      this.images,
+      this.videos});
 
   PetModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -38,15 +38,16 @@ class PetModel {
     raceId = json['raceId'];
     birthday = json['birthday'];
     gender = json['gender'];
-    character = json['character'].cast<String>();
+    character =
+        json['character'] != null ? json['character'].cast<String>() : [];
     userId = json['userId'];
     avatar = json['avatar'];
     coverImage = json['coverImage'];
     race = json['race'] != null ? new RaceModel.fromJson(json['race']) : null;
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
-    images  = json['images']!=null? json['images'].cast<String>() :[];
-    videos = json['videos']!= null? json['videos'].cast<String>():[];
+    images = json['images'] != null ? json['images'].cast<String>() : [];
+    videos = json['videos'] != null ? json['videos'].cast<String>() : [];
   }
 
   Map<String, dynamic> toJson() {
@@ -65,7 +66,7 @@ class PetModel {
     }
     data['createdAt'] = this.createdAt;
     data['updatedAt'] = this.updatedAt;
-    
+
     return data;
   }
 }

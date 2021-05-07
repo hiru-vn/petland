@@ -20,7 +20,7 @@ class PetDataUpdatePage extends StatefulWidget {
     String petId,
     String type,
   }) {
-   return navigatorKey.currentState.push(pageBuilder(PetDataUpdatePage(
+    return navigatorKey.currentState.push(pageBuilder(PetDataUpdatePage(
       petId: petId,
       type: type,
     )));
@@ -52,9 +52,8 @@ class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
         _pet =
             _petBloc.pets.firstWhere((element) => element.id == widget.petId);
       else {
-        _pet = PetModel();
-        _petBloc
-          .getAllPetRace(widget.type);
+        _pet = PetModel(character: []);
+        _petBloc.getAllPetRace(widget.type);
       }
       petNameC.text = _pet.name ?? '';
     }
@@ -326,7 +325,8 @@ class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
               },
             ).then((value) => setState(() {
                   _pet?.birthday = value.toIso8601String();
-                }));FocusScope.of(context).requestFocus(FocusNode());
+                }));
+            FocusScope.of(context).requestFocus(FocusNode());
           },
           child: ListTile(
             title: Text(
@@ -426,10 +426,14 @@ class _PetDataUpdatePageState extends State<PetDataUpdatePage> {
           padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
           child: TextFieldTags(
             onTag: (val) {
-              _pet.character.add(val);
+              // if (_pet.character == null) _pet.character = [];
+              // _pet.character.add(val);
+              // setState(() {});
             },
             onDelete: (val) {
-              _pet.character.remove(val);
+              // if (_pet.character == null) _pet.character = [];
+              // _pet.character.remove(val);
+              // setState(() {});
             },
             initialTags: _pet?.character,
             textFieldStyler: TextFieldStyler(
